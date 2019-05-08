@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/home/dutchman/AndroidStudioProjects/Expense/eExpense/cropper/src/main/assets"/><source path="/home/dutchman/AndroidStudioProjects/Expense/eExpense/cropper/build/generated/assets/shaders/release"/></dataSet><dataSet config="release"><source path="/home/dutchman/AndroidStudioProjects/Expense/eExpense/cropper/src/release/assets"/></dataSet></merger>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_debit"
+            android:icon="@drawable/ic_debit"
+            android:title="Debit" />
+        <item
+            android:id="@+id/nav_credit"
+            android:icon="@drawable/ic_credit"
+            android:title="Credit" />
+        <item
+            android:id="@+id/nav_balance"
+            android:icon="@drawable/ic_balance"
+            android:title="Balance" />
+
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_history"
+            android:title="History" />
+
+    </group>
+
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about_us"
+            android:title="About" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help"
+            android:title="Help" />
+    </group>
+
+</menu>

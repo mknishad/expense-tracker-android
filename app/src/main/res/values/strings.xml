@@ -1,0 +1,77 @@
+<!--
+  ~ Copyright (c): All rights reserved by EXCELLENCE ICT, 2017
+  -->
+
+<resources>
+    <string name="app_name">eExpense</string>
+    <string name="add_credit">Add Credit</string>
+    <string name="add_debit">Add Debit</string>
+    <string name="scan">Scan</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_save">Save</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+
+    <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
+    <string name="discard">Discard</string>
+
+    <!-- Dialog button text for the option to keep editing the current credit [CHAR LIMIT=20] -->
+    <string name="keep_editing">Keep Editing</string>
+
+    <string name="action_delete">Delete</string>
+
+    <!-- Dialog button text for the option to cancel deletion of the current credit [CHAR LIMIT=20] -->
+    <string name="cancel">Cancel</string>
+
+    <!-- Toast message in editor when current credit was successfully deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_credit_successful">Credit deleted</string>
+
+    <!-- Toast message in editor when current debit was successfully deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_debit_successful">Debit deleted</string>
+
+    <!-- Toast message in editor when current credit has failed to be deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_credit_failed">Error with deleting credit!</string>
+
+    <!-- Toast message in editor when current debit has failed to be deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_debit_failed">Error with deleting debit!</string>
+
+    <!-- Dialog message to ask the user to confirm deleting the current credit [CHAR LIMIT=NONE] -->
+    <string name="delete_credit_dialog_msg">Delete this credit?</string>
+
+    <!-- Dialog message to ask the user to confirm deleting the current debit [CHAR LIMIT=NONE] -->
+    <string name="delete_debit_dialog_msg">Delete this debit?</string>
+
+    <!-- Dialog button text for the option to confirm deleting the current credit [CHAR LIMIT=20] -->
+    <string name="delete">Delete</string>
+
+    <string-array name="categories">
+        <item>Clothing</item>
+        <item>Charitable Giving</item>
+        <item>Education</item>
+        <item>Electronics</item>
+        <item>Entertainment</item>
+        <item>Fitness</item>
+        <item>Food</item>
+        <item>Gifts</item>
+        <item>Health</item>
+        <item>Household</item>
+        <item>Investments</item>
+        <item>Loan Payment</item>
+        <item>Miscellaneous</item>
+        <item>Rent</item>
+        <item>Transportation</item>
+        <item>Utility Bills</item>
+        <item>Vacation</item>
+    </string-array>
+
+    <string name="title_activity_add_debit">AddDebitActivity</string>
+
+</resources>

@@ -1,0 +1,106 @@
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.theartofdev.edmodo.cropper.CropImageView
+        android:id="@+id/crop_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:minHeight="100dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/et_scan_result_data"
+        android:minHeight="200dp" />
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--<Button-->
+            <!--android:id="@+id/btn_open_gallery"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="@dimen/activity_horizontal_margin"-->
+            <!--android:drawableLeft="@android:drawable/ic_menu_gallery"-->
+            <!--android:text="Load"-->
+            <!--android:onClick="onLoadImageClick"/>-->
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_open_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onLoadImageClick"
+            android:clickable="true"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@android:drawable/ic_menu_gallery"
+            app:backgroundTint="#388E3C" />
+
+
+        <!--<Button-->
+            <!--android:id="@+id/btn_crop_img"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="@dimen/activity_horizontal_margin"-->
+            <!--android:drawableLeft="@android:drawable/ic_menu_crop"-->
+            <!--android:text="Crop"-->
+            <!--android:onClick="onCropImageClick"/>-->
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_crop_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onCropImageClick"
+            android:clickable="true"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@android:drawable/ic_menu_crop"
+            app:backgroundTint="#FF5722" />
+
+
+
+        <!--<Button-->
+            <!--android:id="@+id/btn_save_image_data"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="@dimen/activity_horizontal_margin"-->
+            <!--android:drawableLeft="@android:drawable/ic_menu_save"-->
+            <!--android:text="Save"-->
+            <!--android:onClick="onSaveImageData"/>-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_save_image_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onSaveImageData"
+            android:clickable="true"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@android:drawable/ic_menu_save"
+            app:backgroundTint="#1976D2" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_scan_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+            app:backgroundTint="#D32F2F" />
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

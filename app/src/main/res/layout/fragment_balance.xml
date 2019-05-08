@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="backbencers.nub.dailycostcalc.fragments.BalanceFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pie_chart_balance"></com.github.mikephil.charting.charts.PieChart>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioGroup
+            android:id="@+id/rg_balance_chart"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:checkedButton="@+id/rb_yearly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Yearly"
+                android:id="@+id/rb_yearly"
+                />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Monthly"
+                android:id="@+id/rb_monthly"
+                />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/rg_balance_chart_monthly"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone"
+            android:checkedButton="@+id/rb_debit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Debit"
+                android:id="@+id/rb_debit"
+                />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Credit"
+                android:id="@+id/rb_credit"
+                />
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
