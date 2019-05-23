@@ -454,8 +454,6 @@ public class CropOverlayView extends View {
     /**
      * Set the initial crop window size and position. This is dependent on the
      * size and position of the image being cropped.
-     *
-     * @param mBitmapRect the bounding box around the image being cropped
      */
     private void initCropWindow() {
 

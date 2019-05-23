@@ -1,13 +1,9 @@
-/*
- * Copyright (c): All rights reserved by EXCELLENCE ICT, 2017
- */
-
 apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "backbencers.nub.dailycostcalc"
+        applicationId "com.monir.expensetracker"
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1

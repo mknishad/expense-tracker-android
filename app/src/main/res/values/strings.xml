@@ -3,7 +3,7 @@
   -->
 
 <resources>
-    <string name="app_name">eExpense</string>
+    <string name="app_name">Expense Tracker</string>
     <string name="add_credit">Add Credit</string>
     <string name="add_debit">Add Debit</string>
     <string name="scan">Scan</string>
@@ -13,9 +13,6 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_save">Save</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>

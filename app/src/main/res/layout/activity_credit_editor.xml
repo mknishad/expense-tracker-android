@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="backbencers.nub.dailycostcalc.activities.CreditEditorActivity">
+    tools:context="com.monir.expensetracker.activities.CreditEditorActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
