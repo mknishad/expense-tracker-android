@@ -1,6 +1,7 @@
-package com.monir.expensetracker.fragments;
+package com.monir.expensetracker.ui.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,10 +13,11 @@ import com.monir.expensetracker.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HelpFragment extends Fragment {
+public class AboutFragment extends Fragment {
 
+    private Context context;
 
-    public HelpFragment() {
+    public AboutFragment() {
         // Required empty public constructor
     }
 
@@ -23,11 +25,17 @@ public class HelpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        getActivity().setTitle("Help");
-
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_help, container, false);
+
+        context = getActivity().getApplicationContext();
+
+        getActivity().setTitle("About");
+
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
+
+        return view;
+
+
     }
 
 }

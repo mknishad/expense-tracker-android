@@ -1,12 +1,6 @@
-package com.monir.expensetracker.adapter;
+package com.monir.expensetracker.ui.adapter;
 
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,12 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.monir.expensetracker.R;
-import com.monir.expensetracker.constant.CalendarCollection;
+import com.monir.expensetracker.util.CalendarCollection;
 
-/**
- * Created by dutchman on 5/20/17.
- */
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
 
 public class CalendarAdapter extends BaseAdapter {
     private Context context;
@@ -50,10 +46,10 @@ public class CalendarAdapter extends BaseAdapter {
     private ArrayList<String> items;
     public static List<String> day_string;
     private View previousView;
-    public ArrayList<CalendarCollection>  date_collection_arr;
+    public List<CalendarCollection> date_collection_arr;
 
-    public CalendarAdapter(Context context, GregorianCalendar monthCalendar, ArrayList<CalendarCollection> date_collection_arr) {
-        this.date_collection_arr=date_collection_arr;
+    public CalendarAdapter(Context context, GregorianCalendar monthCalendar, List<CalendarCollection> date_collection_arr) {
+        this.date_collection_arr = date_collection_arr;
         CalendarAdapter.day_string = new ArrayList<String>();
         Locale.setDefault(Locale.US);
         month = monthCalendar;
@@ -151,25 +147,25 @@ public class CalendarAdapter extends BaseAdapter {
 		}
 		*/
 
-        setEventView(v, position,dayView);
+        setEventView(v, position, dayView);
 
         return v;
     }
 
-    public View setSelected(View view,int pos) {
+    public View setSelected(View view, int pos) {
         if (previousView != null) {
             previousView.setBackgroundColor(Color.parseColor("#343434"));
         }
 
         view.setBackgroundColor(Color.CYAN);
 
-        int len=day_string.size();
-        if (len>pos) {
+        int len = day_string.size();
+        if (len > pos) {
             if (day_string.get(pos).equals(curentDateString)) {
 
                 view.setBackgroundColor(Color.GRAY);
 
-            }else{
+            } else {
 
                 previousView = view;
 
@@ -232,17 +228,14 @@ public class CalendarAdapter extends BaseAdapter {
         return maxP;
     }
 
+    public void setEventView(View v, int pos, TextView txt) {
 
-
-
-    public void setEventView(View v,int pos,TextView txt){
-
-        int len=CalendarCollection.date_collection_arr.size();
+        int len = CalendarCollection.calendarCollections.size();
         for (int i = 0; i < len; i++) {
-            CalendarCollection cal_obj=CalendarCollection.date_collection_arr.get(i);
-            String date=cal_obj.date;
-            int len1=day_string.size();
-            if (len1>pos) {
+            CalendarCollection cal_obj = CalendarCollection.calendarCollections.get(i);
+            String date = cal_obj.getDate();
+            int len1 = day_string.size();
+            if (len1 > pos) {
 
                 if (day_string.get(pos).equals(date)) {
                     v.setBackgroundColor(Color.parseColor("#343434"));
@@ -250,41 +243,40 @@ public class CalendarAdapter extends BaseAdapter {
 
                     txt.setTextColor(Color.WHITE);
                 }
-            }}
-
+            }
+        }
 
 
     }
 
 
-    public void getPositionList(String date,final Activity act){
+    public void getPositionList(String date, final Activity act) {
 
-        int len=CalendarCollection.date_collection_arr.size();
+        int len = CalendarCollection.calendarCollections.size();
         for (int i = 0; i < len; i++) {
-            CalendarCollection cal_collection=CalendarCollection.date_collection_arr.get(i);
-            String event_date=cal_collection.date;
+            CalendarCollection cal_collection = CalendarCollection.calendarCollections.get(i);
+            String event_date = cal_collection.getDate();
 
-            String event_message=cal_collection.event_message;
+            String event_message = cal_collection.getEventMessage();
 
             if (date.equals(event_date)) {
 
-                Toast.makeText(context, "You have event on this date: "+event_date, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "You have event on this date: " + event_date, Toast.LENGTH_LONG).show();
                 new AlertDialog.Builder(context)
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Date: "+event_date)
-                        .setMessage("Event: "+event_message)
-                        .setPositiveButton("OK",new android.content.DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which)
-                            {
+                        .setTitle("Date: " + event_date)
+                        .setMessage("Event: " + event_message)
+                        .setPositiveButton("OK", new android.content.DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
                                 act.finish();
                             }
                         }).show();
                 break;
-            }else{
+            } else {
 
 
-            }}
-
+            }
+        }
 
 
     }

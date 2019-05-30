@@ -2,8 +2,8 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="@color/textColorBlack"
-    android:textSize="25sp"
-    android:text="item">
-
+    xmlns:tools="http://schemas.android.com/tools"
+    android:textColor="@android:color/black"
+    android:textSize="24sp"
+    tools:text="Item">
 </TextView>

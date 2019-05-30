@@ -1,8 +1,4 @@
-package com.monir.expensetracker.constant;
-
-/**
- * Created by Invariant-PC on 26-Apr-17.
- */
+package com.monir.expensetracker.util;
 
 public class Constant {
 

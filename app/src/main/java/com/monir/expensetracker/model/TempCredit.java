@@ -1,9 +1,5 @@
 package com.monir.expensetracker.model;
 
-/**
- * Created by Nishad on 4/28/2017.
- */
-
 public class TempCredit {
 
     private String date;

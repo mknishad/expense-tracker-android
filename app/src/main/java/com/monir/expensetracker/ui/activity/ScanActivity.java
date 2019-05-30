@@ -1,4 +1,4 @@
-package com.monir.expensetracker.activities;
+package com.monir.expensetracker.ui.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,12 +20,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-
 import android.system.ErrnoException;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.monir.expensetracker.R;
+import com.monir.expensetracker.util.Constant;
+import com.monir.expensetracker.util.FileCreator;
+import com.monir.expensetracker.object.TessOCR;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,20 +39,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-
-import com.theartofdev.edmodo.cropper.CropImageView;
-
 import java.util.List;
 
-import com.monir.expensetracker.R;
-import com.monir.expensetracker.constant.Constant;
-import com.monir.expensetracker.constant.FileCreator;
-import com.monir.expensetracker.objects.TessOCR;
 
-/**
- * Created by VisH on 19-06-2016.
- */
-public class ScanActivity  extends Activity {
+public class ScanActivity extends Activity {
 
     private static final String TAG = "ScanActivity";
     private CropImageView mCropImageView;
@@ -73,10 +68,10 @@ public class ScanActivity  extends Activity {
 
         category = getIntent().getStringExtra(Constant.CATEGORY_BUNDLE);
 
-        etScanResultData = (EditText)findViewById(R.id.et_scan_result_data);
+        etScanResultData = (EditText) findViewById(R.id.et_scan_result_data);
 
         mCropImageView = (CropImageView) findViewById(R.id.crop_image_view);
-        String[] paths = new String[] { DATA_PATH, DATA_PATH + "tessdata/" };
+        String[] paths = new String[]{DATA_PATH, DATA_PATH + "tessdata/"};
 
         for (String path : paths) {
             File dir = new File(path);
@@ -118,7 +113,7 @@ public class ScanActivity  extends Activity {
 
 
         }
-        mTessOCR =new TessOCR();
+        mTessOCR = new TessOCR();
     }
 
     /**
@@ -133,9 +128,9 @@ public class ScanActivity  extends Activity {
      * On save image data button click, start debit editor activity.
      */
 
-    public void onSaveImageData(View view){
+    public void onSaveImageData(View view) {
 
-        if(etScanResultData.getText().toString().trim().length() > 0){
+        if (etScanResultData.getText().toString().trim().length() > 0) {
 
             //Log.d(TAG, "onSaveImageData: "+etScanResultData.getText().toString());
 
@@ -158,7 +153,7 @@ public class ScanActivity  extends Activity {
      * On open camera button click, start capture image.
      */
 
-    public void onLaunchCamera(View view){
+    public void onLaunchCamera(View view) {
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -179,20 +174,15 @@ public class ScanActivity  extends Activity {
      */
 
     public void onCropImageClick(View view) {
-
-
-
-        if(mCropImageView != null) {
-
+        if (mCropImageView != null) {
             Bitmap cropped = mCropImageView.getCroppedImage(500, 500);
             if (cropped != null) {
                 mCropImageView.setImageBitmap(cropped);
-
-                //mImage.setImageBitmap(converted);
-                doOCR(convertColorIntoBlackAndWhiteImage(cropped));
+                Bitmap bnwBitmap = convertColorIntoBlackAndWhiteImage(cropped);
+                mCropImageView.setImageBitmap(bnwBitmap);
+                doOCR(bnwBitmap);
             }
         }
-
     }
 
     public void doOCR(final Bitmap bitmap) {
@@ -202,8 +192,7 @@ public class ScanActivity  extends Activity {
             // mResult.setVisibility(V.ViewISIBLE);
 
 
-        }
-        else {
+        } else {
             mProgressDialog.show();
         }
 
@@ -226,19 +215,21 @@ public class ScanActivity  extends Activity {
 
                 });
 
-            };
+            }
+
+            ;
         }).start();
 
     }
 
-    private Bitmap convertColorIntoBlackAndWhiteImage(Bitmap orginalBitmap) {
+    private Bitmap convertColorIntoBlackAndWhiteImage(Bitmap originalBitmap) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);
 
         ColorMatrixColorFilter colorMatrixFilter = new ColorMatrixColorFilter(
                 colorMatrix);
 
-        Bitmap blackAndWhiteBitmap = orginalBitmap.copy(
+        Bitmap blackAndWhiteBitmap = originalBitmap.copy(
                 Bitmap.Config.ARGB_8888, true);
 
         Paint paint = new Paint();
@@ -254,7 +245,7 @@ public class ScanActivity  extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
-        if(requestCode == 200) {                        // for open image request
+        if (requestCode == 200) {                        // for open image request
             if (resultCode == Activity.RESULT_OK) {
                 Uri imageUri = getPickImageResultUri(data);
 
@@ -316,7 +307,7 @@ public class ScanActivity  extends Activity {
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-            Log.d(TAG, "onRequestPermissionsResult: "+mCropImageUri.getPath());
+            Log.d(TAG, "onRequestPermissionsResult: " + mCropImageUri.getPath());
             mCropImageView.setImageUriAsync(mCropImageUri);
             mCropImageView.setClickable(true);
         } else {
@@ -389,7 +380,7 @@ public class ScanActivity  extends Activity {
 
         //File file = FileCreator.createFile();
 
-        if(getImage != null){
+        if (getImage != null) {
 
             //mCropImageView.setClickable(true);
             outputFileUri = Uri.fromFile(new File(getImage.getPath(), "pickImageResult.jpeg"));

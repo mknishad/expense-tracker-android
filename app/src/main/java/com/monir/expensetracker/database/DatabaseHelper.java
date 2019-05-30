@@ -4,11 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.monir.expensetracker.constant.Constant;
+import com.monir.expensetracker.util.Constant;
 
-/**
- * Created by Nishad on 21-Jul-16.
- */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // query to create debit table in the database
@@ -21,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static String CREATE_DELETED_CREDIT_TABLE = "CREATE TABLE " + Constant.TABLE_DELETED_CREDIT + " (" + Constant.COL_ID + " INTEGER PRIMARY KEY, " + Constant.COL_CREDIT_DATE + " TEXT, " + Constant.COL_CREDIT_CATEGORY + " TEXT, " + Constant.COL_CREDIT_DESCRIPTION + " TEXT, " + Constant.COL_CREDIT_AMOUNT + " DOUBLE, " + Constant.COL_CREDIT_TIMESTAMP + " INTEGER);";
 
     // query to create category table
-    private static String CREATE_CATEGORY_TABLE = "CREATE TABLE " + Constant.TABLE_CATEGORY + " ("+ Constant.COL_ID + " INTEGER PRIMARY KEY, " + Constant.COL_CATEGORY_NAME + " TEXT);";
+    private static String CREATE_CATEGORY_TABLE = "CREATE TABLE " + Constant.TABLE_CATEGORY + " (" + Constant.COL_ID + " INTEGER PRIMARY KEY, " + Constant.COL_CATEGORY_NAME + " TEXT);";
 
     // constructor
     public DatabaseHelper(Context context) {

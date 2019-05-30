@@ -1,8 +1,4 @@
-package com.monir.expensetracker.objects;
-
-/**
- * Created by VisH on 28-01-2016.
- */
+package com.monir.expensetracker.object;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -17,13 +13,11 @@ public class TessOCR {
     public TessOCR() {
         // TODO Auto-generated constructor stub
 
-
-
         mTess = new TessBaseAPI();
-       // AssetManager assetManager=
+        // AssetManager assetManager=
         String datapath = Environment.getExternalStorageDirectory() + "/DemoOCR/";
         String language = "eng";
-       // AssetManager assetManager = getAssets();
+        // AssetManager assetManager = getAssets();
         File dir = new File(datapath + "/tessdata/");
         if (!dir.exists())
             dir.mkdirs();
@@ -36,11 +30,10 @@ public class TessOCR {
         String result = mTess.getUTF8Text();
 
         return result;
-}
+    }
 
     public void onDestroy() {
         if (mTess != null)
             mTess.end();
     }
-
 }

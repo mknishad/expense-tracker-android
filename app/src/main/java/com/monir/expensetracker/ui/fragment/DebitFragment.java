@@ -1,4 +1,4 @@
-package com.monir.expensetracker.fragments;
+package com.monir.expensetracker.ui.fragment;
 
 
 import android.content.Intent;
@@ -14,17 +14,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.monir.expensetracker.R;
-import com.monir.expensetracker.activities.DebitEditorActivity;
-import com.monir.expensetracker.adapter.CreditListAdapter;
-import com.monir.expensetracker.adapter.DebitListAdapter;
-import com.monir.expensetracker.constant.Constant;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.model.Debit;
+import com.monir.expensetracker.ui.activity.DebitEditorActivity;
+import com.monir.expensetracker.ui.adapter.CreditListAdapter;
+import com.monir.expensetracker.ui.adapter.DebitListAdapter;
+import com.monir.expensetracker.util.Constant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

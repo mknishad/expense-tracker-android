@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.monir.expensetracker.fragments.DebitFragment">
+    tools:context=".ui.fragment.DebitFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -54,6 +54,6 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_add"
-        app:backgroundTint="@color/colorPrimary"/>
+        app:backgroundTint="@color/colorAccent"/>
 
 </RelativeLayout>

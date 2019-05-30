@@ -1,4 +1,4 @@
-package com.monir.expensetracker.fragments;
+package com.monir.expensetracker.ui.fragment;
 
 
 import android.content.Context;
@@ -20,12 +20,11 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.monir.expensetracker.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.monir.expensetracker.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,14 +44,14 @@ public class BalanceFragment extends Fragment {
     private List<Double> yDataList;
     private List<Double> xDataList;
 
-    private String[] months = {"January", "February" , "March" , "April", "May", "June", "July","August","September","October","November","December"};
+    private String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
     private Context context;
 
-    private String[] descriptoins = {"Yearly Cost(In ৳)","Monthly Cost(In ৳)"};
+    private String[] descriptoins = {"Yearly Cost(In ৳)", "Monthly Cost(In ৳)"};
 
-    private List<Integer> colorList = new ArrayList<>(Arrays.asList(Color.GRAY,Color.BLUE,Color.RED,Color.GREEN,Color.CYAN,Color.YELLOW,
-                                                                    Color.MAGENTA,Color.DKGRAY,Color.LTGRAY,Color.CYAN,Color.RED,Color.GREEN));
+    private List<Integer> colorList = new ArrayList<>(Arrays.asList(Color.GRAY, Color.BLUE, Color.RED, Color.GREEN, Color.CYAN, Color.YELLOW,
+            Color.MAGENTA, Color.DKGRAY, Color.LTGRAY, Color.CYAN, Color.RED, Color.GREEN));
 
 //    colors.add(Color.GRAY);
 //            colors.add(Color.BLUE);
@@ -77,7 +76,7 @@ public class BalanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_balance, container, false);
+        View view = inflater.inflate(R.layout.fragment_balance, container, false);
 
         this.context = getActivity().getApplicationContext();
 
@@ -88,7 +87,7 @@ public class BalanceFragment extends Fragment {
         return view;
     }
 
-    private void inits(View view){
+    private void inits(View view) {
 
         pie_chart_balance = (PieChart) view.findViewById(R.id.pie_chart_balance);
 
@@ -144,9 +143,9 @@ public class BalanceFragment extends Fragment {
 
     }
 
-    private void setPieChart(int id){
+    private void setPieChart(int id) {
 
-        if(id == R.id.rb_yearly){
+        if (id == R.id.rb_yearly) {
 
             pie_chart_balance.setDescription(descriptoins[0]);
             pie_chart_balance.setRotationEnabled(true);
@@ -156,7 +155,7 @@ public class BalanceFragment extends Fragment {
             pie_chart_balance.setCenterTextSize(10);
             rg_balance_chart_monthly.setVisibility(View.GONE);
 
-        } else if(id == R.id.rb_monthly){
+        } else if (id == R.id.rb_monthly) {
             pie_chart_balance.setDescription(descriptoins[1]);
             pie_chart_balance.setRotationEnabled(true);
             pie_chart_balance.setHoleRadius(25f);
@@ -171,20 +170,20 @@ public class BalanceFragment extends Fragment {
         addDataSet(id);
     }
 
-    private void setxData(int id){
+    private void setxData(int id) {
 
-        if(id == R.id.rb_yearly){
+        if (id == R.id.rb_yearly) {
 
             xData = new String[2];
 
             xData[0] = "Debit";
             xData[1] = "Credit";
 
-        } else if(id == R.id.rb_monthly){
+        } else if (id == R.id.rb_monthly) {
 
             xData = new String[12];
 
-            for(int i=0; i<12; i++){
+            for (int i = 0; i < 12; i++) {
 
                 xData[i] = months[i];
 
@@ -193,16 +192,16 @@ public class BalanceFragment extends Fragment {
 
     }
 
-    private void setyData(int id){
+    private void setyData(int id) {
 
-        if(id == R.id.rb_yearly){
+        if (id == R.id.rb_yearly) {
 
             yData = new float[2];
 
             yData[0] = getDebitBalance();
             yData[1] = getCreditBalance();
 
-        } else if(id == R.id.rb_monthly){
+        } else if (id == R.id.rb_monthly) {
 
             int mid = rg_balance_chart_monthly.getCheckedRadioButtonId();
             setyDataMonthlyDebitOrCredit(mid);
@@ -212,13 +211,13 @@ public class BalanceFragment extends Fragment {
 
     }
 
-    private float getDebitBalance(){
+    private float getDebitBalance() {
         float debitBal = 300.00f;
 
         return debitBal;
     }
 
-    private float getCreditBalance(){
+    private float getCreditBalance() {
 
         float creditBal = 200.00f;
 
@@ -226,36 +225,36 @@ public class BalanceFragment extends Fragment {
     }
 
 
-    private void setyDataMonthlyDebitOrCredit(int id){
+    private void setyDataMonthlyDebitOrCredit(int id) {
 
         yData = new float[12];
-        for(int i=0; i<12; i++){
+        for (int i = 0; i < 12; i++) {
 
-            if(i <= 4)
-                yData[i] = getMonthlyDebitOrCredit(id,i);
+            if (i <= 4)
+                yData[i] = getMonthlyDebitOrCredit(id, i);
             else
                 yData[i] = 0.0f;
         }
     }
 
-    private float getMonthlyDebitOrCredit(int id,int month){
+    private float getMonthlyDebitOrCredit(int id, int month) {
 
-        if(id == R.id.rb_debit)
+        if (id == R.id.rb_debit)
             return 230.00f;
-        else if(id == R.id.rb_credit){
+        else if (id == R.id.rb_credit) {
             return 120.0f;
         }
         return 0.0f;
     }
 
-    private List<Integer> getColors(int id){
+    private List<Integer> getColors(int id) {
 
         //add colors to dataset
         List<Integer> colors = new ArrayList<>();
 
         colors.clear();
 
-        colors = colorList.subList(0,yData.length);
+        colors = colorList.subList(0, yData.length);
 
 //        if(id == R.id.rb_yearly){
 //
@@ -287,8 +286,8 @@ public class BalanceFragment extends Fragment {
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
         ArrayList<String> xEntrys = new ArrayList<>();
 
-        for(int i = 0; i < yData.length && i<xData.length; i++){
-            if(yData[i] > 0.0) {
+        for (int i = 0; i < yData.length && i < xData.length; i++) {
+            if (yData[i] > 0.0) {
                 yEntrys.add(new PieEntry(yData[i], i));
                 xEntrys.add(xData[i]);
             }
@@ -297,7 +296,6 @@ public class BalanceFragment extends Fragment {
 //        for(int i = 0; i < xData.length; i++){
 //            xEntrys.add(xData[i]);
 //        }
-
 
 
         //create the data set

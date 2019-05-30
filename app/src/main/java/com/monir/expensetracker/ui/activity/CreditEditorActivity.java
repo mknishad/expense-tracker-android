@@ -1,4 +1,4 @@
-package com.monir.expensetracker.activities;
+package com.monir.expensetracker.ui.activity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -22,16 +22,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.ExpenseDataSource;
+import com.monir.expensetracker.model.Category;
+import com.monir.expensetracker.model.Credit;
+import com.monir.expensetracker.util.Constant;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import com.monir.expensetracker.R;
-import com.monir.expensetracker.constant.Constant;
-import com.monir.expensetracker.database.ExpenseDataSource;
-import com.monir.expensetracker.model.Category;
-import com.monir.expensetracker.model.Credit;
 
 public class CreditEditorActivity extends AppCompatActivity {
 

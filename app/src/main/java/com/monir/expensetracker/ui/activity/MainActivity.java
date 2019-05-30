@@ -1,6 +1,5 @@
-package com.monir.expensetracker.activities;
+package com.monir.expensetracker.ui.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -11,21 +10,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-
 import com.monir.expensetracker.R;
-import com.monir.expensetracker.constant.CalendarCollection;
-import com.monir.expensetracker.fragments.AboutFragment;
-import com.monir.expensetracker.fragments.BalanceFragment;
-import com.monir.expensetracker.fragments.CreditFragment;
-import com.monir.expensetracker.fragments.DebitFragment;
-import com.monir.expensetracker.fragments.HistoryFragment;
-import com.monir.expensetracker.fragments.HelpFragment;
+import com.monir.expensetracker.ui.fragment.AboutFragment;
+import com.monir.expensetracker.ui.fragment.BalanceFragment;
+import com.monir.expensetracker.ui.fragment.CreditFragment;
+import com.monir.expensetracker.ui.fragment.DebitFragment;
+import com.monir.expensetracker.ui.fragment.HelpFragment;
+import com.monir.expensetracker.ui.fragment.HistoryFragment;
+import com.monir.expensetracker.util.CalendarCollection;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Context context;
     private FragmentManager manager;
 
     @Override
@@ -35,7 +33,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        context = this;
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -57,12 +54,12 @@ public class MainActivity extends AppCompatActivity
 
         //Add the calendar list
 
-        CalendarCollection.date_collection_arr=new ArrayList<CalendarCollection>();
-        CalendarCollection.date_collection_arr.add(new CalendarCollection("2015-04-01","John Birthday"));
-        CalendarCollection.date_collection_arr.add(new CalendarCollection("2015-04-04","Client Meeting at 5 p.m."));
-        CalendarCollection.date_collection_arr.add(new CalendarCollection("2015-04-06","A Small Party at my office"));
-        CalendarCollection.date_collection_arr.add(new CalendarCollection("2015-05-02","Marriage Anniversary"));
-        CalendarCollection.date_collection_arr.add(new CalendarCollection("2015-04-11","Live Event and Concert of sonu"));
+        CalendarCollection.calendarCollections = new ArrayList<CalendarCollection>();
+        CalendarCollection.calendarCollections.add(new CalendarCollection("2019-05-01", "John Birthday"));
+        CalendarCollection.calendarCollections.add(new CalendarCollection("2015-04-04", "Client Meeting at 5 p.m."));
+        CalendarCollection.calendarCollections.add(new CalendarCollection("2015-04-06", "A Small Party at my office"));
+        CalendarCollection.calendarCollections.add(new CalendarCollection("2015-05-02", "Marriage Anniversary"));
+        CalendarCollection.calendarCollections.add(new CalendarCollection("2015-04-11", "Live Event and Concert of sonu"));
 
 
         // set debit as home fragment
@@ -106,14 +103,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        setFragment(id);
+        //setFragment(id);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void setFragment(int id){
+    private void setFragment(int id) {
         if (id == R.id.nav_debit) {
             // Handle the camera action
 
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity
 //            debitFragment.setContext(context);
 
             manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent,debitFragment,debitFragment.getTag()).commit();
+            manager.beginTransaction().replace(R.id.rlContent, debitFragment, debitFragment.getTag()).commit();
 
         } else if (id == R.id.nav_credit) {
 
@@ -129,7 +126,7 @@ public class MainActivity extends AppCompatActivity
 //            debitFragment.setContext(context);
 
             manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent,creditFragment,creditFragment.getTag()).commit();
+            manager.beginTransaction().replace(R.id.rlContent, creditFragment, creditFragment.getTag()).commit();
 
         } else if (id == R.id.nav_balance) {
 
@@ -137,7 +134,7 @@ public class MainActivity extends AppCompatActivity
 //            debitFragment.setContext(context);
 
             manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent,balanceFragment,balanceFragment.getTag()).commit();
+            manager.beginTransaction().replace(R.id.rlContent, balanceFragment, balanceFragment.getTag()).commit();
 
         } else if (id == R.id.nav_history) {
 
@@ -161,7 +158,7 @@ public class MainActivity extends AppCompatActivity
 //            debitFragment.setContext(context);
 
             manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent,aboutFragment,aboutFragment.getTag()).commit();
+            manager.beginTransaction().replace(R.id.rlContent, aboutFragment, aboutFragment.getTag()).commit();
 
         } else if (id == R.id.nav_help) {
 
@@ -169,7 +166,7 @@ public class MainActivity extends AppCompatActivity
 //            debitFragment.setContext(context);
 
             manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent,helpFragment,helpFragment.getTag()).commit();
+            manager.beginTransaction().replace(R.id.rlContent, helpFragment, helpFragment.getTag()).commit();
 
         }
 

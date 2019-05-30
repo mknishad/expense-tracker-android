@@ -1,4 +1,4 @@
-package com.monir.expensetracker.fragments;
+package com.monir.expensetracker.ui.fragment;
 
 
 import android.content.Context;
@@ -14,17 +14,17 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.ExpenseDataSource;
+import com.monir.expensetracker.model.Debit;
+import com.monir.expensetracker.ui.adapter.CalendarAdapter;
+import com.monir.expensetracker.ui.adapter.DebitListAdapter;
+import com.monir.expensetracker.util.CalendarCollection;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import com.monir.expensetracker.R;
-import com.monir.expensetracker.adapter.CalendarAdapter;
-import com.monir.expensetracker.adapter.DebitListAdapter;
-import com.monir.expensetracker.constant.CalendarCollection;
-import com.monir.expensetracker.database.ExpenseDataSource;
-import com.monir.expensetracker.model.Debit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +42,6 @@ public class HistoryFragment extends Fragment {
     private ExpenseDataSource expenseDataSource;
 
     private Context context;
-
 
 
     public HistoryFragment() {
@@ -66,14 +65,14 @@ public class HistoryFragment extends Fragment {
         cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
         cal_month_copy = (GregorianCalendar) cal_month.clone();
 
-        cal_adapter = new CalendarAdapter(this.context, cal_month, CalendarCollection.date_collection_arr);
+        cal_adapter = new CalendarAdapter(this.context, cal_month, CalendarCollection.calendarCollections);
 
         inits(view);
 
         return view;
     }
 
-    private void inits(View view){
+    private void inits(View view) {
 
         tv_month = (TextView) view.findViewById(R.id.tv_month);
         tv_month.setText(DateFormat.format("MMMM yyyy", cal_month));
@@ -127,7 +126,7 @@ public class HistoryFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-                ((CalendarAdapter) parent.getAdapter()).setSelected(v,position);
+                ((CalendarAdapter) parent.getAdapter()).setSelected(v, position);
                 String selectedGridDate = CalendarAdapter.day_string
                         .get(position);
 
@@ -137,7 +136,7 @@ public class HistoryFragment extends Fragment {
                 setDailyDebitList(tv_selected_date.getText().toString());
 
                 String[] separatedTime = selectedGridDate.split("-");
-                String gridvalueString = separatedTime[2].replaceFirst("^0*","");
+                String gridvalueString = separatedTime[2].replaceFirst("^0*", "");
                 int gridvalue = Integer.parseInt(gridvalueString);
 
                 if ((gridvalue > 10) && (position < 8)) {
@@ -147,7 +146,7 @@ public class HistoryFragment extends Fragment {
                     setNextMonth();
                     refreshCalendar();
                 }
-                ((CalendarAdapter) parent.getAdapter()).setSelected(v,position);
+                ((CalendarAdapter) parent.getAdapter()).setSelected(v, position);
 
 
                 ((CalendarAdapter) parent.getAdapter()).getPositionList(selectedGridDate, getActivity());
@@ -157,7 +156,7 @@ public class HistoryFragment extends Fragment {
 
     }
 
-    private void setDailyDebitList(String date){
+    private void setDailyDebitList(String date) {
 
         List<Debit> debits = expenseDataSource.getDebitsInThisDate(date);
 
@@ -188,16 +187,16 @@ public class HistoryFragment extends Fragment {
 //        }
         DebitListAdapter adapter = null;
 
-       // Log.d("HistoryFragment", "setDailyDebitList: "+debits.size());
+        // Log.d("HistoryFragment", "setDailyDebitList: "+debits.size());
 
-        if(debits != null && debits.size() > 0){
+        if (debits != null && debits.size() > 0) {
 
             adapter = new DebitListAdapter(context, debits);
 
             lv_daily_debit.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-        } else{
+        } else {
             lv_daily_debit.setAdapter(adapter);
             //lv_daily_debit.setEmptyView(empty_view_his_debit);
         }
@@ -205,7 +204,7 @@ public class HistoryFragment extends Fragment {
 
     }
 
-    private String getAmount(String date){
+    private String getAmount(String date) {
 
         String amount = "0";
 

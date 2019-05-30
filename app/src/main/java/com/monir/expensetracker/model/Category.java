@@ -1,8 +1,5 @@
 package com.monir.expensetracker.model;
 
-/**
- * Created by Invariant-PC on 13-Jun-17.
- */
 
 public class Category {
 

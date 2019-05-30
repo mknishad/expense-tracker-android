@@ -1,8 +1,5 @@
 package com.monir.expensetracker.model;
 
-/**
- * Created by Invariant-PC on 26-Apr-17.
- */
 
 public class Debit {
 

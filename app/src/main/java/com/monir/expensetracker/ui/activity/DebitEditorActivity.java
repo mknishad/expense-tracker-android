@@ -1,4 +1,4 @@
-package com.monir.expensetracker.activities;
+package com.monir.expensetracker.ui.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -27,17 +27,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.ExpenseDataSource;
+import com.monir.expensetracker.model.Category;
+import com.monir.expensetracker.model.Debit;
+import com.monir.expensetracker.object.ObjectParser;
+import com.monir.expensetracker.util.Constant;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import com.monir.expensetracker.R;
-import com.monir.expensetracker.constant.Constant;
-import com.monir.expensetracker.database.ExpenseDataSource;
-import com.monir.expensetracker.model.Category;
-import com.monir.expensetracker.model.Debit;
-import com.monir.expensetracker.objects.ObjectParser;
 
 public class DebitEditorActivity extends AppCompatActivity {
 
@@ -76,16 +76,15 @@ public class DebitEditorActivity extends AppCompatActivity {
         String scanData = getIntent().getStringExtra(Constant.INTENT_SCAN_DATA);
 
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         expenseDataSource = new ExpenseDataSource(this);
         initializeViews();
 
-        if(scanData != null && scanData.trim().length() > 0){
+        if (scanData != null && scanData.trim().length() > 0) {
 
             String category = getIntent().getStringExtra(Constant.CATEGORY_BUNDLE);
 
-            if(category != null)
+            if (category != null)
                 actvDebitCategory.setText(category);
 
             ObjectParser objectParser = new ObjectParser(actvDebitCategory.getText().toString(), scanData);
@@ -94,7 +93,7 @@ public class DebitEditorActivity extends AppCompatActivity {
 
             actvDebitCategory.setText(debit.getDebitCategory());
             etDebitDate.setText(debit.getDebitDate());
-            etDebitAmount.setText(debit.getDebitAmount()+"");
+            etDebitAmount.setText(debit.getDebitAmount() + "");
             etDebitDescription.setText(debit.getDebitDescription());
 
         }
@@ -110,7 +109,7 @@ public class DebitEditorActivity extends AppCompatActivity {
         btnScanDebit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hasPermissions())
+                if (hasPermissions())
                     moveToScan();
                 else
                     requestPerms();
@@ -383,30 +382,30 @@ public class DebitEditorActivity extends AppCompatActivity {
     }
 
     //Go to scan activity
-    private void moveToScan(){
+    private void moveToScan() {
         Intent intent = new Intent(this, ScanActivity.class);
         intent.putExtra(Constant.CATEGORY_BUNDLE, actvDebitCategory.getText().toString());
         startActivity(intent);
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
         finish();
     }
 
     //Get the camera permission on runtime
-    private boolean hasPermissions(){
+    private boolean hasPermissions() {
         int res;
         //String[] permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-        for(String permission : permissions){
+        for (String permission : permissions) {
             res = checkCallingOrSelfPermission(permission);
-            if(!(res == PackageManager.PERMISSION_GRANTED)){
+            if (!(res == PackageManager.PERMISSION_GRANTED)) {
                 return false;
             }
         }
         return true;
     }
 
-    private void requestPerms(){
+    private void requestPerms() {
         //String[] permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(permissions, PERMS_REQUEST_CODE);
         }
     }
@@ -438,9 +437,9 @@ public class DebitEditorActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         boolean allowed = true;
 
-        switch (requestCode){
+        switch (requestCode) {
             case PERMS_REQUEST_CODE:
-                for (int res : grantResults){
+                for (int res : grantResults) {
                     // if user granted permissions
                     allowed = allowed && (res == PackageManager.PERMISSION_GRANTED);
                 }
@@ -452,19 +451,19 @@ public class DebitEditorActivity extends AppCompatActivity {
                 break;
         }
 
-        if(allowed){
+        if (allowed) {
             //user granted all permissions we can perform out task
             moveToScan();
-        } else{
+        } else {
             // we will give warning to user that they haven't granted permissions
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if(shouldShowRequestPermissionRationale(permissions[0])){
+                if (shouldShowRequestPermissionRationale(permissions[0])) {
                     Toast.makeText(this, "Camera permission denied!", Toast.LENGTH_SHORT).show();
                 }
-                if(shouldShowRequestPermissionRationale(permissions[1])){
+                if (shouldShowRequestPermissionRationale(permissions[1])) {
                     Toast.makeText(this, "Storage permission denied!", Toast.LENGTH_SHORT).show();
                 }
-                if(shouldShowRequestPermissionRationale(permissions[2])){
+                if (shouldShowRequestPermissionRationale(permissions[2])) {
                     Toast.makeText(this, "Reader permission denied!", Toast.LENGTH_SHORT).show();
                 }
             }

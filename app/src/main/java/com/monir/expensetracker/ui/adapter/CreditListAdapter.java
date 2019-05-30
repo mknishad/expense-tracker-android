@@ -1,4 +1,4 @@
-package com.monir.expensetracker.adapter;
+package com.monir.expensetracker.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,14 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.model.Credit;
 
-/**
- * Created by Nishad on 4/28/2017.
- */
+import java.util.List;
+
 
 public class CreditListAdapter extends ArrayAdapter<Credit> {
 

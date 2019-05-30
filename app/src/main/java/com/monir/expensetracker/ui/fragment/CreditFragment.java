@@ -1,4 +1,4 @@
-package com.monir.expensetracker.fragments;
+package com.monir.expensetracker.ui.fragment;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -26,19 +26,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.ExpenseDataSource;
+import com.monir.expensetracker.model.Category;
+import com.monir.expensetracker.model.Credit;
+import com.monir.expensetracker.ui.activity.CreditEditorActivity;
+import com.monir.expensetracker.ui.adapter.CreditListAdapter;
+import com.monir.expensetracker.util.Constant;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.monir.expensetracker.R;
-import com.monir.expensetracker.activities.CreditEditorActivity;
-import com.monir.expensetracker.adapter.CreditListAdapter;
-import com.monir.expensetracker.constant.Constant;
-import com.monir.expensetracker.database.ExpenseDataSource;
-import com.monir.expensetracker.model.Category;
-import com.monir.expensetracker.model.Credit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -190,11 +190,11 @@ public class CreditFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == PERMISSION_CALLBACK_CONSTANT){
+        if (requestCode == PERMISSION_CALLBACK_CONSTANT) {
             //check if all permissions are granted
             boolean allgranted = false;
-            for(int i=0;i<grantResults.length;i++){
-                if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     allgranted = true;
                 } else {
                     allgranted = false;
@@ -203,9 +203,9 @@ public class CreditFragment extends Fragment {
             }
 
 
-            if(allgranted){
+            if (allgranted) {
                 loadCredits();
-            } else if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),Manifest.permission.READ_SMS)){
+            } else if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Need SMS Permission");
                 builder.setMessage("This app needs SMS permission.");
@@ -213,7 +213,7 @@ public class CreditFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        requestPermissions(new String[]{Manifest.permission.READ_SMS},PERMISSION_CALLBACK_CONSTANT);
+                        requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_CALLBACK_CONSTANT);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -224,7 +224,7 @@ public class CreditFragment extends Fragment {
                 });
                 builder.show();
             } else {
-                Toast.makeText(getActivity(),"Unable to get Permission",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Unable to get Permission", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -323,7 +323,7 @@ public class CreditFragment extends Fragment {
 
                     if (creditCursor.getColumnName(idx).equals("date")) {
                         timestamp = new Timestamp(creditCursor.getLong(idx));
-                        intTimestamp = (int) (timestamp.getTime()%100000000);
+                        intTimestamp = (int) (timestamp.getTime() % 100000000);
                         Log.e(TAG, "message longTimestamp: " + intTimestamp);
                         date = new Date(timestamp.getTime());
 

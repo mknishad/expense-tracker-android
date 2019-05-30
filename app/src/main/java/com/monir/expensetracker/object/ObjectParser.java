@@ -1,22 +1,19 @@
-package com.monir.expensetracker.objects;
+package com.monir.expensetracker.object;
 
 import android.util.Log;
+
+import com.monir.expensetracker.model.Debit;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.monir.expensetracker.model.Debit;
-
-/**
- * Created by dutchman on 4/26/17.
- */
 
 public class ObjectParser {
 
     private String text;
     private String category;
 
-    public ObjectParser(String category, String text){
+    public ObjectParser(String category, String text) {
 
         this.setText(text.trim());
         this.category = category;
@@ -30,7 +27,7 @@ public class ObjectParser {
         this.text = text;
     }
 
-    public Debit parse(){
+    public Debit parse() {
 
         Debit debit = null;
 
@@ -41,7 +38,7 @@ public class ObjectParser {
         String description = "";
         String total = "0.00";
 
-        int len = tokens.length-1;
+        int len = tokens.length - 1;
 
         String tempTotalToken = "";
         boolean isTotal = false;
@@ -50,23 +47,23 @@ public class ObjectParser {
 
         int index = 0;
 
-        for(String token : tokens){
+        for (String token : tokens) {
 
-            if(token.equals("TOTAL") || index == len){
+            if (token.equals("TOTAL") || index == len) {
 
-                Log.d("ObjectParser", "parse Total: "+token);
+                Log.d("ObjectParser", "parse Total: " + token);
                 tempTotalToken = token;
                 String[] tTokens = token.trim().split(" ");
-                total = tTokens[tTokens.length-1];
+                total = tTokens[tTokens.length - 1];
 
                 isTotal = Double.parseDouble(total) == amount;
 
-            } else{
+            } else {
 
-                Log.d("ObjectParser", "parse: "+token);
+                Log.d("ObjectParser", "parse: " + token);
                 description += token + "\n";
                 String[] tTokens = token.trim().split(" ");
-                String tempAmount = tTokens[tTokens.length-1];
+                String tempAmount = tTokens[tTokens.length - 1];
                 amount += Double.parseDouble(tempAmount);
 
             }
@@ -76,17 +73,15 @@ public class ObjectParser {
         }
         String date = new SimpleDateFormat("MMM dd, yyyy").format(new Date());
 
-        if(isTotal){
-            debit = new Debit(date,category, description,Double.parseDouble(total));
+        if (isTotal) {
+            debit = new Debit(date, category, description, Double.parseDouble(total));
 
-        } else{
+        } else {
             //description += tempTotalToken +"\n";
-            Log.d("ObjectParser", "parse: "+description);
+            Log.d("ObjectParser", "parse: " + description);
             double tt = amount + Double.parseDouble(total);
-            debit = new Debit(date,category, text.toUpperCase(),tt);
+            debit = new Debit(date, category, text.toUpperCase(), tt);
         }
-
-
 
 
         return debit;
