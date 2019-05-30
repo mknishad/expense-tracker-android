@@ -29,7 +29,7 @@ import android.widget.Toast;
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.util.Constant;
 import com.monir.expensetracker.util.FileCreator;
-import com.monir.expensetracker.object.TessOCR;
+import com.monir.expensetracker.ocr.TessOCR;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;

@@ -11,20 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.monir.expensetracker.R;
-import com.monir.expensetracker.ui.fragment.AboutFragment;
-import com.monir.expensetracker.ui.fragment.BalanceFragment;
-import com.monir.expensetracker.ui.fragment.CreditFragment;
 import com.monir.expensetracker.ui.fragment.DebitFragment;
-import com.monir.expensetracker.ui.fragment.HelpFragment;
-import com.monir.expensetracker.ui.fragment.HistoryFragment;
+import com.monir.expensetracker.ui.fragment.HomeFragment;
 import com.monir.expensetracker.util.CalendarCollection;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private FragmentManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +57,7 @@ public class MainActivity extends AppCompatActivity
 
 
         // set debit as home fragment
-        setFragment(R.id.nav_debit);
-
+        setFragment(R.id.nav_home);
     }
 
     @Override
@@ -103,7 +96,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        //setFragment(id);
+        setFragment(id);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -111,65 +104,28 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setFragment(int id) {
-        if (id == R.id.nav_debit) {
-            // Handle the camera action
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (id == R.id.nav_home) {
+            HomeFragment homeFragment = new HomeFragment();
+            fragmentManager.beginTransaction().replace(R.id.rlContent, homeFragment, homeFragment.getTag()).commit();
+        } else if (id == R.id.nav_debit) {
             DebitFragment debitFragment = new DebitFragment();
-//            debitFragment.setContext(context);
-
-            manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent, debitFragment, debitFragment.getTag()).commit();
-
-        } else if (id == R.id.nav_credit) {
-
+            fragmentManager.beginTransaction().replace(R.id.rlContent, debitFragment, debitFragment.getTag()).commit();
+        }/* else if (id == R.id.nav_credit) {
             CreditFragment creditFragment = new CreditFragment();
-//            debitFragment.setContext(context);
-
-            manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent, creditFragment, creditFragment.getTag()).commit();
-
+            fragmentManager.beginTransaction().replace(R.id.rlContent, creditFragment, creditFragment.getTag()).commit();
         } else if (id == R.id.nav_balance) {
-
             BalanceFragment balanceFragment = new BalanceFragment();
-//            debitFragment.setContext(context);
-
-            manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent, balanceFragment, balanceFragment.getTag()).commit();
-
+            fragmentManager.beginTransaction().replace(R.id.rlContent, balanceFragment, balanceFragment.getTag()).commit();
         } else if (id == R.id.nav_history) {
-
             HistoryFragment historyFragment = new HistoryFragment();
-//            debitFragment.setContext(context);
-
-            manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent, historyFragment, historyFragment.getTag()).commit();
-
-            //} else if (id == R.id.nav_settings) {
-
-//            DebitFragment debitFragment = new DebitFragment();
-////            debitFragment.setContext(context);
-//
-//            manager = getSupportFragmentManager();
-//            manager.beginTransaction().replace(R.id.rlContent,debitFragment,debitFragment.getTag()).commit();
-
+            fragmentManager.beginTransaction().replace(R.id.rlContent, historyFragment, historyFragment.getTag()).commit();
         } else if (id == R.id.nav_about) {
-
             AboutFragment aboutFragment = new AboutFragment();
-//            debitFragment.setContext(context);
-
-            manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent, aboutFragment, aboutFragment.getTag()).commit();
-
+            fragmentManager.beginTransaction().replace(R.id.rlContent, aboutFragment, aboutFragment.getTag()).commit();
         } else if (id == R.id.nav_help) {
-
             HelpFragment helpFragment = new HelpFragment();
-//            debitFragment.setContext(context);
-
-            manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.rlContent, helpFragment, helpFragment.getTag()).commit();
-
-        }
-
+            fragmentManager.beginTransaction().replace(R.id.rlContent, helpFragment, helpFragment.getTag()).commit();
+        }*/
     }
-
 }

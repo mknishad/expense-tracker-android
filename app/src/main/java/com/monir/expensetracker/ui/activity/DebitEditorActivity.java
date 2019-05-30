@@ -31,7 +31,7 @@ import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Category;
 import com.monir.expensetracker.model.Debit;
-import com.monir.expensetracker.object.ObjectParser;
+import com.monir.expensetracker.util.ObjectParser;
 import com.monir.expensetracker.util.Constant;
 
 import java.text.SimpleDateFormat;

@@ -7,6 +7,10 @@
         android:id="@+id/menu_top"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_home"
+            android:icon="@android:drawable/btn_star_big_off"
+            android:title="Home" />
+        <item
             android:id="@+id/nav_debit"
             android:icon="@drawable/ic_debit"
             android:title="Debit" />

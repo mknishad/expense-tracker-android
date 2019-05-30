@@ -1,4 +1,4 @@
-package com.monir.expensetracker.object;
+package com.monir.expensetracker.ocr;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
