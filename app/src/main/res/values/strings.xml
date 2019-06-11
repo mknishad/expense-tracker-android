@@ -70,5 +70,12 @@
     </string-array>
 
     <string name="title_activity_add_debit">AddDebitActivity</string>
+    <string name="home">Home</string>
+    <string name="debit">Debit</string>
+    <string name="credit">Credit</string>
+    <string name="balance">Balance</string>
+    <string name="history">History</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
 
 </resources>

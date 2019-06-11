@@ -542,7 +542,7 @@ public class SVWindow extends JFrame {
     Matcher matcher = numbers.matcher(sb);
 
     while (matcher.find()) {
-      // Find the next match which resembles a hexadecimal value and convert it
+      // Find the ic_next match which resembles a hexadecimal value and convert it
       // to
       // its char value
       char a = (char) (Integer.decode(matcher.group()).intValue());

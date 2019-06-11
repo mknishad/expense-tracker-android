@@ -8,25 +8,25 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@android:drawable/btn_star_big_off"
-            android:title="Home" />
+            android:icon="@drawable/ic_home_gray_24dp"
+            android:title="@string/home" />
         <item
             android:id="@+id/nav_debit"
-            android:icon="@drawable/ic_debit"
-            android:title="Debit" />
+            android:icon="@drawable/ic_remove_circle_outline_gray_24dp"
+            android:title="@string/debit" />
         <item
             android:id="@+id/nav_credit"
-            android:icon="@drawable/ic_credit"
-            android:title="Credit" />
+            android:icon="@drawable/ic_add_circle_outline_gray_24dp"
+            android:title="@string/credit" />
         <item
             android:id="@+id/nav_balance"
-            android:icon="@drawable/ic_balance"
-            android:title="Balance" />
+            android:icon="@drawable/ic_balance_gray_24dp"
+            android:title="@string/balance" />
 
         <item
             android:id="@+id/nav_history"
-            android:icon="@drawable/ic_history"
-            android:title="History" />
+            android:icon="@drawable/ic_history_gray_24dp"
+            android:title="@string/history" />
 
     </group>
 
@@ -35,12 +35,12 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_about_us"
-            android:title="About" />
+            android:icon="@drawable/ic_info_gray_24dp"
+            android:title="@string/about" />
         <item
             android:id="@+id/nav_help"
-            android:icon="@drawable/ic_help"
-            android:title="Help" />
+            android:icon="@drawable/ic_help_outline_gray_24dp"
+            android:title="@string/help" />
     </group>
 
 </menu>

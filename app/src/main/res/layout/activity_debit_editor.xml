@@ -10,6 +10,7 @@
     <ScrollView
         android:layout_above="@+id/btn_scan_debit"
         android:layout_width="match_parent"
+        android:layout_marginBottom="16dp"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -44,11 +45,11 @@
 
                 <ImageButton
                     android:id="@+id/image_button_debit_calendar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
                     android:layout_gravity="center_vertical"
-                    android:background="#eeeeee"
-                    android:src="@drawable/calendar" />
+                    android:src="@drawable/ic_calendar_gray_24dp" />
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout

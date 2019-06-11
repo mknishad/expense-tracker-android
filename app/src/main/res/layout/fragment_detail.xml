@@ -51,7 +51,7 @@ tools:context=".ui.fragment.HistoryFragment" >
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
-                    android:src="@drawable/prev" />
+                    android:src="@drawable/ic_prev" />
 
             </FrameLayout>
 
@@ -83,7 +83,7 @@ tools:context=".ui.fragment.HistoryFragment" >
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
-                    android:background="@drawable/next" />
+                    android:background="@drawable/ic_next" />
 
             </FrameLayout>
         </LinearLayout>

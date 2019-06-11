@@ -187,7 +187,7 @@ public class ScrollView {
           }
         }
         // If str is not null here, then we have a string with a comma in it.
-        // Append , and the next argument at the next iteration, but check
+        // Append , and the ic_next argument at the ic_next iteration, but check
         // that str is null after the loop terminates in case it was an
         // unterminated string.
       } else if (floatPattern.matcher(argStr).matches()) {

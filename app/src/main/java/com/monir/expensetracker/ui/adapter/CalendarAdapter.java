@@ -193,7 +193,7 @@ public class CalendarAdapter extends BaseAdapter {
         calMaxP = maxP - (firstDay - 1);// calendar offday starting 24,25 ...
         /**
          * Calendar instance for getting a complete gridview including the three
-         * month's (previous,current,next) dates.
+         * month's (previous,current,ic_next) dates.
          */
         pmonthmaxset = (GregorianCalendar) pmonth.clone();
         /**

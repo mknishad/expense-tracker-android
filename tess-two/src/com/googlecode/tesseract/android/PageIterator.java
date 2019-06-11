@@ -42,7 +42,7 @@ public class PageIterator {
     }
 
     /**
-     * Moves to the start of the next object at the given level in the page
+     * Moves to the start of the ic_next object at the given level in the page
      * hierarchy, and returns false if the end of the page was reached.
      * <p>
      * NOTE that {@link PageIteratorLevel#RIL_SYMBOL} will skip non-text blocks,
