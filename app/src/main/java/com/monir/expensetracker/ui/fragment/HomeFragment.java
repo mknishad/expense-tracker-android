@@ -11,17 +11,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.ui.activity.CreditEditorActivity;
 import com.monir.expensetracker.ui.activity.DebitEditorActivity;
 import com.monir.expensetracker.util.Constant;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,8 +36,16 @@ public class HomeFragment extends Fragment {
     private Context context;
     private View view;
 
-    private float[] yData = {2000f, 1000f};
-    PieChart pieChart;
+    private float[] yData;
+    private PieChart pieChart;
+    private TextView balanceTextView;
+    private TextView creditTextView;
+    private TextView debitTextView;
+
+    private ExpenseDataSource expenseDataSource;
+
+    private double creditAmount;
+    private double debitAmount;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -44,12 +55,26 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        context = getActivity();
-        getActivity().setTitle("Home");
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        pieChart = view.findViewById(R.id.pieChart);
+        init();
+        initViews(view);
+        showData();
 
+        return view;
+    }
+
+    private void init() {
+        context = getActivity();
+        getActivity().setTitle("Home");
+        expenseDataSource = new ExpenseDataSource(context);
+    }
+
+    private void initViews(View view) {
+        pieChart = view.findViewById(R.id.pieChart);
+        balanceTextView = view.findViewById(R.id.balanceTextView);
+        creditTextView = view.findViewById(R.id.creditTextView);
+        debitTextView = view.findViewById(R.id.debitTextView);
         view.findViewById(R.id.addCreditImageView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +83,6 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
         view.findViewById(R.id.addDebitImageView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,87 +91,45 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
 
-        //Description description = new Description();
-        //description.setText("Sales by employee (In Thousands $) ");
-        //pieChart.setDescription(description);
-        //pieChart.setRotationEnabled(true);
-        //pieChart.setUsePercentValues(true);
-        //pieChart.setHoleColor(Color.BLUE);
-        //pieChart.setCenterTextColor(Color.BLACK);
-        //pieChart.setTransparentCircleAlpha(0);
-        //pieChart.setCenterText("Super Cool Chart");
-        //pieChart.setCenterTextSize(10);
-        //pieChart.setDrawEntryLabels(true);
-        //pieChart.setEntryLabelTextSize(20);
-        //More options just check out the documentation!
+    private void showData() {
+        creditAmount = expenseDataSource.getTotalCreditAmount();
+        debitAmount = expenseDataSource.getTotalDebitAmount();
+        balanceTextView.setText(String.format(Locale.getDefault(), "৳%.2f",
+                (creditAmount - debitAmount)));
+        creditTextView.setText(String.format(Locale.getDefault(), "৳%.2f", creditAmount));
+        debitTextView.setText(String.format(Locale.getDefault(), "৳%.2f", debitAmount));
 
+        showPieChart();
+    }
+
+    private void showPieChart() {
         pieChart.getDescription().setEnabled(false);
         pieChart.setTransparentCircleColor(Color.WHITE);
         pieChart.setTransparentCircleAlpha(110);
         pieChart.setTransparentCircleRadius(30f);
         pieChart.setHoleRadius(25f);
+        pieChart.setDrawEntryLabels(false);
 
         addDataSet();
-
-        /*pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                Log.d(TAG, "onValueSelected: Value select from chart.");
-                Log.d(TAG, "onValueSelected: " + e.toString());
-                Log.d(TAG, "onValueSelected: " + h.toString());
-
-                int pos1 = e.toString().indexOf("(sum): ");
-                String sales = e.toString().substring(pos1 + 7);
-
-                for(int i = 0; i < yData.length; i++){
-                    if(yData[i] == Float.parseFloat(sales)){
-                        pos1 = i;
-                        break;
-                    }
-                }
-                String employee = xData[pos1 + 1];
-                Toast.makeText(getActivity(), "Employee " + employee + "\n" + "Sales: $" + sales + "K", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });*/
-
-        return view;
     }
 
     private void addDataSet() {
         Log.d(TAG, "addDataSet started");
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
-        //ArrayList<String> xEntrys = new ArrayList<>();
-
-        for(int i = 0; i < yData.length; i++){
-            yEntrys.add(new PieEntry(yData[i] , i));
-        }
-
-        /*for(int i = 1; i < xData.length; i++){
-            xEntrys.add(xData[i]);
-        }*/
+        yEntrys.add(new PieEntry((float) creditAmount, getString(R.string.credit)));
+        yEntrys.add(new PieEntry((float) (debitAmount + 200000.0), getString(R.string.debit)));
 
         //create the data set
         PieDataSet pieDataSet = new PieDataSet(yEntrys, "");
-        //pieDataSet.setSliceSpace(2);
-        //pieDataSet.setValueTextSize(12);
 
-        //add colors to dataset
+        //add colors to data set
         ArrayList<Integer> colors = new ArrayList<>();
         colors.add(ResourcesCompat.getColor(getResources(), android.R.color.holo_green_light, null));
         colors.add(ResourcesCompat.getColor(getResources(), android.R.color.holo_red_light, null));
 
         pieDataSet.setColors(colors);
-
-        //add legend to chart
-        //Legend legend = pieChart.getLegend();
-        //legend.setForm(Legend.LegendForm.CIRCLE);
-        //legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
 
         //create pie data object
         PieData pieData = new PieData(pieDataSet);

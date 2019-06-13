@@ -5,10 +5,13 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -37,6 +40,7 @@ public class CreditEditorActivity extends AppCompatActivity {
 
     private String TAG = CreditEditorActivity.class.getSimpleName();
 
+    private Toolbar toolbar;
     private static EditText etCreditDate;
     private ImageButton ibCreditCalendar;
     private AutoCompleteTextView actvCreditCategory;
@@ -62,7 +66,7 @@ public class CreditEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit_editor);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         expenseDataSource = new ExpenseDataSource(this);
         initializeViews();
         ibCreditCalendar.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +113,8 @@ public class CreditEditorActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        initToolbar();
+
         etCreditDate = (EditText) findViewById(R.id.edit_text_credit_date);
         ibCreditCalendar = (ImageButton) findViewById(R.id.image_button_credit_calendar);
         actvCreditCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_credit_category);
@@ -120,6 +126,23 @@ public class CreditEditorActivity extends AppCompatActivity {
         actvCreditCategory.setOnTouchListener(touchListener);
         etCreditDescription.setOnTouchListener(touchListener);
         etCreditAmount.setOnTouchListener(touchListener);
+    }
+
+    private void initToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorText));
+        toolbar.setTitle(R.string.add_credit);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void setInitialDate() {

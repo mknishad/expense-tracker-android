@@ -36,9 +36,11 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.activity.CreditEditorActivity"
-            android:label="@string/add_credit"/>
+            android:label="@string/add_credit"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.activity.DebitEditorActivity"
-            android:label="@string/add_debit"/>
+            android:label="@string/add_debit"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 </manifest>
