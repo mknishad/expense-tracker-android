@@ -9,7 +9,7 @@
     <android.support.design.card.MaterialCardView
         android:id="@+id/balanceCardView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -22,12 +22,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="24dp"
             android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:text="@string/balance_"
                 android:textColor="@android:color/white"
                 android:textSize="30sp" />
@@ -36,7 +36,7 @@
                 android:id="@+id/balanceTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:text="BDT 1000"
                 android:textColor="@android:color/white"
                 android:textSize="30sp" />
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/balanceCardView">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
@@ -65,23 +65,37 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/creditTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:layout_marginStart="16dp"
                 android:text="@string/credit_"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/creditTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/creditTitleTextView"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="BDT 1000"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
-        </LinearLayout>
+
+            <ImageView
+                android:id="@+id/addCreditImageView"
+                android:src="@drawable/ic_add_circle_outline_gray_24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:onClick="onAddCreditClicked"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+        </RelativeLayout>
     </android.support.design.card.MaterialCardView>
 
     <android.support.design.card.MaterialCardView
@@ -98,7 +112,7 @@
         app:layout_constraintStart_toEndOf="@+id/creditCardView"
         app:layout_constraintTop_toBottomOf="@+id/balanceCardView">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
@@ -106,23 +120,36 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/debitTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:text="@string/debit_"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/debitTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/debitTitleTextView"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="BDT 1000"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
-        </LinearLayout>
+
+            <ImageView
+                android:id="@+id/addDebitImageView"
+                android:src="@drawable/ic_add_circle_outline_gray_24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+        </RelativeLayout>
     </android.support.design.card.MaterialCardView>
 
     <com.github.mikephil.charting.charts.PieChart
