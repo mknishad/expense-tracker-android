@@ -4,10 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".ui.activity.DebitEditorActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <ScrollView
+        android:layout_below="@id/toolbar"
         android:layout_above="@+id/btn_scan_debit"
         android:layout_width="match_parent"
         android:layout_marginBottom="16dp"
@@ -15,8 +24,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:focusable="true"
+            android:padding="16dp"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
@@ -39,11 +49,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Date"
+                        android:focusableInTouchMode="false"
+                        android:drawableEnd="@drawable/ic_calendar_gray_24dp"
                         android:inputType="text|date"
                         android:textSize="22sp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <ImageButton
+                    android:visibility="gone"
                     android:id="@+id/image_button_debit_calendar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"

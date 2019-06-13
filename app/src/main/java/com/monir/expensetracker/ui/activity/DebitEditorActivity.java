@@ -7,12 +7,15 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -31,8 +34,8 @@ import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Category;
 import com.monir.expensetracker.model.Debit;
-import com.monir.expensetracker.util.ObjectParser;
 import com.monir.expensetracker.util.Constant;
+import com.monir.expensetracker.util.ObjectParser;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,6 +46,7 @@ public class DebitEditorActivity extends AppCompatActivity {
 
     private String TAG = DebitEditorActivity.class.getSimpleName();
 
+    private Toolbar toolbar;
     private static EditText etDebitDate;
     private ImageButton ibDebitCalendar;
     private AutoCompleteTextView actvDebitCategory;
@@ -75,8 +79,6 @@ public class DebitEditorActivity extends AppCompatActivity {
 
         String scanData = getIntent().getStringExtra(Constant.INTENT_SCAN_DATA);
 
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         expenseDataSource = new ExpenseDataSource(this);
         initializeViews();
 
@@ -97,6 +99,14 @@ public class DebitEditorActivity extends AppCompatActivity {
             etDebitDescription.setText(debit.getDebitDescription());
 
         }
+
+        etDebitDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
 
         ibDebitCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +156,7 @@ public class DebitEditorActivity extends AppCompatActivity {
 
 
     private void initializeViews() {
+        initToolbar();
         etDebitDate = (EditText) findViewById(R.id.edit_text_debit_date);
         ibDebitCalendar = (ImageButton) findViewById(R.id.image_button_debit_calendar);
         actvDebitCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_debit_category);
@@ -158,6 +169,24 @@ public class DebitEditorActivity extends AppCompatActivity {
         actvDebitCategory.setOnTouchListener(touchListener);
         etDebitDescription.setOnTouchListener(touchListener);
         etDebitAmount.setOnTouchListener(touchListener);
+    }
+
+
+    private void initToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorText));
+        toolbar.setTitle(R.string.add_debit);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void getCategoriesFromDatabase() {

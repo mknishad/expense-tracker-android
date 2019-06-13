@@ -66,7 +66,6 @@ public class CreditEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit_editor);
 
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         expenseDataSource = new ExpenseDataSource(this);
         initializeViews();
         ibCreditCalendar.setOnClickListener(new View.OnClickListener() {
