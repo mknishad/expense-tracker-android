@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -147,7 +148,7 @@ public class BalanceFragment extends Fragment {
 
         if (id == R.id.rb_yearly) {
 
-            pie_chart_balance.setDescription(descriptoins[0]);
+            pie_chart_balance.setDescription(new Description());
             pie_chart_balance.setRotationEnabled(true);
             pie_chart_balance.setHoleRadius(25f);
             pie_chart_balance.setTransparentCircleAlpha(0);
@@ -156,7 +157,7 @@ public class BalanceFragment extends Fragment {
             rg_balance_chart_monthly.setVisibility(View.GONE);
 
         } else if (id == R.id.rb_monthly) {
-            pie_chart_balance.setDescription(descriptoins[1]);
+            pie_chart_balance.setDescription(new Description());
             pie_chart_balance.setRotationEnabled(true);
             pie_chart_balance.setHoleRadius(25f);
             pie_chart_balance.setTransparentCircleAlpha(0);

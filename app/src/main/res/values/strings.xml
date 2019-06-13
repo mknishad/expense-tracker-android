@@ -77,5 +77,8 @@
     <string name="history">History</string>
     <string name="about">About</string>
     <string name="help">Help</string>
+    <string name="debit_">DEBIT:</string>
+    <string name="credit_">CREDIT:</string>
+    <string name="balance_">BALANCE:</string>
 
 </resources>
