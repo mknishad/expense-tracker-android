@@ -307,6 +307,7 @@ public class CreditEditorActivity extends AppCompatActivity {
                 boolean inserted = expenseDataSource.insertCredit(credit);
                 if (inserted) {
                     Toast.makeText(this, "Credit saved!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     Toast.makeText(this, "Failed to save credit!", Toast.LENGTH_SHORT).show();
@@ -315,6 +316,7 @@ public class CreditEditorActivity extends AppCompatActivity {
                 boolean updated = expenseDataSource.updateCredit(creditId, credit);
                 if (updated) {
                     Toast.makeText(this, "Credit updated!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     Toast.makeText(this, "Failed to update credit!", Toast.LENGTH_SHORT).show();

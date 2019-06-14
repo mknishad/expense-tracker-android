@@ -45,7 +45,6 @@ public class DebitFragment extends Fragment {
     private TextView tvFooterDebitAmount;
 
     private boolean sentToDebitEditor = false;
-    private List<String> categoriesString = new ArrayList<>();
 
     public DebitFragment() {
     }

@@ -26,12 +26,17 @@ import com.monir.expensetracker.util.Constant;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
+
+    private static final int RC_ACTIVITY_CREDIT = 1111;
+    private static final int RC_ACTIVITY_DEBIT = 1112;
 
     private Context context;
     private View view;
@@ -80,7 +85,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(context, CreditEditorActivity.class);
                 intent.putExtra(Constant.ACTIVITY_TYPE, Constant.ACTIVITY_TYPE_ADD);
-                startActivity(intent);
+                startActivityForResult(intent, RC_ACTIVITY_CREDIT);
             }
         });
         view.findViewById(R.id.addDebitImageView).setOnClickListener(new View.OnClickListener() {
@@ -88,7 +93,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(context, DebitEditorActivity.class);
                 intent.putExtra(Constant.ACTIVITY_TYPE, Constant.ACTIVITY_TYPE_ADD);
-                startActivity(intent);
+                startActivityForResult(intent, RC_ACTIVITY_DEBIT);
             }
         });
     }
@@ -119,7 +124,7 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "addDataSet started");
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
         yEntrys.add(new PieEntry((float) creditAmount, getString(R.string.credit)));
-        yEntrys.add(new PieEntry((float) (debitAmount + 200000.0), getString(R.string.debit)));
+        yEntrys.add(new PieEntry((float) debitAmount, getString(R.string.debit)));
 
         //create the data set
         PieDataSet pieDataSet = new PieDataSet(yEntrys, "");
@@ -135,5 +140,17 @@ public class HomeFragment extends Fragment {
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
         pieChart.invalidate();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case RC_ACTIVITY_CREDIT:
+                case RC_ACTIVITY_DEBIT:
+                    showData();
+                    break;
+            }
+        }
     }
 }

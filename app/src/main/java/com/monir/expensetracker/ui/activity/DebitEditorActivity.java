@@ -372,6 +372,7 @@ public class DebitEditorActivity extends AppCompatActivity {
                 boolean inserted = expenseDataSource.insertDebit(debit);
                 if (inserted) {
                     Toast.makeText(this, "Debit saved!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     Toast.makeText(this, "Failed to save debit!", Toast.LENGTH_SHORT).show();
@@ -380,6 +381,7 @@ public class DebitEditorActivity extends AppCompatActivity {
                 boolean updated = expenseDataSource.updateDebit(debitId, debit);
                 if (updated) {
                     Toast.makeText(this, "Debit updated!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     Toast.makeText(this, "Failed to update debit!", Toast.LENGTH_SHORT).show();

@@ -8,13 +8,13 @@
             android:icon="@drawable/ic_home_gray_24dp"
             android:title="@string/home" />
         <item
-            android:id="@+id/nav_debit"
-            android:icon="@drawable/ic_remove_circle_outline_gray_24dp"
-            android:title="@string/debit" />
-        <item
             android:id="@+id/nav_credit"
             android:icon="@drawable/ic_add_circle_outline_gray_24dp"
             android:title="@string/credit" />
+        <item
+            android:id="@+id/nav_debit"
+            android:icon="@drawable/ic_remove_circle_outline_gray_24dp"
+            android:title="@string/debit" />
         <item
             android:id="@+id/nav_balance"
             android:icon="@drawable/ic_balance_gray_24dp"

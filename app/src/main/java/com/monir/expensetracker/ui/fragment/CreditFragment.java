@@ -1,43 +1,26 @@
 package com.monir.expensetracker.ui.fragment;
 
-import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.ExpenseDataSource;
-import com.monir.expensetracker.model.Category;
 import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.ui.activity.CreditEditorActivity;
 import com.monir.expensetracker.ui.adapter.CreditListAdapter;
 import com.monir.expensetracker.util.Constant;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,23 +30,24 @@ public class CreditFragment extends Fragment {
 
     private static final String TAG = CreditFragment.class.getSimpleName();
 
-    private static final int PERMISSION_CALLBACK_CONSTANT = 101;
+    //private static final int PERMISSION_CALLBACK_CONSTANT = 101;
     private static final int REQUEST_PERMISSION_SETTING = 102;
     private static final int OPEN_CREDIT_EDITOR_ACTIVITY = 103;
 
     private List<Credit> creditList;
     private ExpenseDataSource expenseDataSource;
-    private ProgressBar loadingCreditProgressBar;
-    private CreditListAdapter adapter;
+    //private ProgressBar loadingCreditProgressBar;
+    private CreditListAdapter creditListAdapter;
     private ListView creditListView;
     private TextView creditEmptyView;
     private View view;
     private TextView tvFooterCreditAmount;
 
-    private SharedPreferences permissionStatus;
-    private boolean sentToSettings = false;
     private boolean sentToCreditEditor = false;
-    private List<String> categoriesString = new ArrayList<>();
+
+    /*private SharedPreferences permissionStatus;
+    private boolean sentToSettings = false;
+    private List<String> categoriesString = new ArrayList<>();*/
 
     // stopped here
     // http://www.androidhive.info/2016/11/android-working-marshmallow-m-runtime-permissions/
@@ -89,14 +73,15 @@ public class CreditFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        permissionStatus = getActivity().getSharedPreferences("permissionStatus", getActivity().MODE_PRIVATE);
+        //permissionStatus = getActivity().getSharedPreferences("permissionStatus", getActivity().MODE_PRIVATE);
 
         if (null != view) {
             creditListView = (ListView) view.findViewById(R.id.lv_credits);
             creditEmptyView = (TextView) view.findViewById(R.id.empty_view_credit);
-            loadingCreditProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading_credits);
-            //Log.e(TAG, "footer amount text view initialized");
+            //loadingCreditProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading_credits);
             tvFooterCreditAmount = (TextView) view.findViewById(R.id.text_view_amount_credit);
+
+            creditListView.setEmptyView(creditEmptyView);
 
             expenseDataSource = new ExpenseDataSource(getContext());
 
@@ -126,7 +111,9 @@ public class CreditFragment extends Fragment {
                 }
             });
 
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            loadCredits();
+
+            /*if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
                     //Show Information about why you need the permission
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -183,11 +170,11 @@ public class CreditFragment extends Fragment {
             } else {
                 //You already have the permission, just go ahead.
                 loadCredits();
-            }
+            }*/
         }
     }
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_CALLBACK_CONSTANT) {
@@ -227,17 +214,18 @@ public class CreditFragment extends Fragment {
                 Toast.makeText(getActivity(), "Unable to get Permission", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    }*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_PERMISSION_SETTING) {
+        /*if (requestCode == REQUEST_PERMISSION_SETTING) {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
                 //Got Permission
                 loadCredits();
             }
-        } else if (requestCode == OPEN_CREDIT_EDITOR_ACTIVITY) {
+        } else */
+        if (requestCode == OPEN_CREDIT_EDITOR_ACTIVITY) {
             loadCredits();
         }
     }
@@ -245,15 +233,14 @@ public class CreditFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         Log.e(TAG, "onResume");
 
-        if (sentToSettings) {
+        /*if (sentToSettings) {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
                 //Got Permission
                 loadCredits();
             }
-        }
+        }*/
 
         if (sentToCreditEditor) {
             sentToCreditEditor = false;
@@ -261,7 +248,27 @@ public class CreditFragment extends Fragment {
         }
     }
 
-    // Get all categories from database
+    private void loadCredits() {
+        creditListView.setAdapter(new CreditListAdapter(getContext(), new ArrayList<Credit>()));
+
+        try {
+            creditList = expenseDataSource.getAllCredits();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (creditList.size() == 0) {
+            creditEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            Log.e(TAG, "creditList size: " + creditList.size());
+            creditListAdapter = new CreditListAdapter(getContext(), creditList);
+            creditListView.setAdapter(creditListAdapter);
+            tvFooterCreditAmount.setText("" + expenseDataSource.getTotalCreditAmount());
+        }
+    }
+}
+
+    /*// Get all categories from database
     private void getCategoriesFromDatabase() {
         ArrayList<Category> categories = expenseDataSource.getAllCategories();
 
@@ -297,9 +304,9 @@ public class CreditFragment extends Fragment {
                     }
                 })
                 .show();
-    }
+    }*/
 
-    private void loadCredits() {
+    /*private void loadCredits() {
         loadingCreditProgressBar.setVisibility(View.VISIBLE);
         creditListView.setAdapter(new CreditListAdapter(getContext(), new ArrayList<Credit>()));
         //expenseDataSource.deleteAllCredits();
@@ -329,10 +336,10 @@ public class CreditFragment extends Fragment {
 
                         String dateString = new SimpleDateFormat("dd-MM-yyyy").format(timestamp);
 
-                        /*String fullDateString = date.toString();
+                        *//*String fullDateString = date.toString();
                         String monthDateString = fullDateString.substring(4, 10);
                         String yearString = fullDateString.substring(30, 34);
-                        String dateString = monthDateString + ", " + yearString;*/
+                        String dateString = monthDateString + ", " + yearString;*//*
 
                         credit.setCreditDate(dateString);
                         credit.setCreditTimestamp(intTimestamp);
@@ -350,9 +357,9 @@ public class CreditFragment extends Fragment {
                             credit.setCreditDescription(messageBodyNormal);
                             credit.setCreditAmount(findCreditAmountFromMessageBody(messageBodyLowerCase));
 
-                            /*if (!isCategoryExisted(credit.getCreditCategory())) {
+                            *//*if (!isCategoryExisted(credit.getCreditCategory())) {
                                 expenseDataSource.insertCategory(new Category("Bank"));
-                            }*/
+                            }*//*
 
                             if (!isCreditExisted(credit.getCreditTimestamp())) {
                                 expenseDataSource.insertCredit(credit);
@@ -398,9 +405,9 @@ public class CreditFragment extends Fragment {
             creditListView.setAdapter(adapter);
             tvFooterCreditAmount.setText("" + expenseDataSource.getTotalCreditAmount());
         }
-    }
+    }*/
 
-    private boolean isCreditExisted(int creditTimestamp) {
+    /*private boolean isCreditExisted(int creditTimestamp) {
         ArrayList<Credit> credits = expenseDataSource.getAllCredits();
         ArrayList<Credit> deletedCredits = expenseDataSource.getAllDeletedCredits();
 
@@ -417,9 +424,9 @@ public class CreditFragment extends Fragment {
         }
 
         return false;
-    }
+    }*/
 
-    private Double findCreditAmountFromMessageBody(String messageBody) {
+    /*private Double findCreditAmountFromMessageBody(String messageBody) {
         int indexOfTaka = -1;
         if (messageBody.contains("bdt")) {
             indexOfTaka = messageBody.indexOf("bdt");
@@ -441,5 +448,4 @@ public class CreditFragment extends Fragment {
         }
 
         return creditAmount;
-    }
-}
+    }*/

@@ -1,6 +1,8 @@
 package com.monir.expensetracker.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.ui.fragment.CreditFragment;
 import com.monir.expensetracker.ui.fragment.DebitFragment;
 import com.monir.expensetracker.ui.fragment.HomeFragment;
 import com.monir.expensetracker.util.CalendarCollection;
@@ -111,10 +114,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_debit) {
             DebitFragment debitFragment = new DebitFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, debitFragment, debitFragment.getTag()).commit();
-        }/* else if (id == R.id.nav_credit) {
+        } else if (id == R.id.nav_credit) {
             CreditFragment creditFragment = new CreditFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, creditFragment, creditFragment.getTag()).commit();
-        } else if (id == R.id.nav_balance) {
+        }/* else if (id == R.id.nav_balance) {
             BalanceFragment balanceFragment = new BalanceFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, balanceFragment, balanceFragment.getTag()).commit();
         } else if (id == R.id.nav_history) {
@@ -127,5 +130,10 @@ public class MainActivity extends AppCompatActivity
             HelpFragment helpFragment = new HelpFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, helpFragment, helpFragment.getTag()).commit();
         }*/
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
