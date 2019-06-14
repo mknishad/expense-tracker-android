@@ -593,7 +593,7 @@ public class DebitEditorActivity extends AppCompatActivity {
                     String elementText = elements.get(k).getText();
                     Log.d(TAG, "processTextRecognitionResult: elementText = " + elementText);
 
-                    if (TextUtils.isDigitsOnly(elementText)) {
+                    if (elementText.matches("-?\\d+(\\.\\d+)?")) {
                         total = elementText;
                     }
                 }
