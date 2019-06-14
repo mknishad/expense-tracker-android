@@ -34,6 +34,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -64,6 +65,7 @@ public class DebitEditorActivity extends AppCompatActivity {
     private static final int RC_CHOOSE_IMAGE = 200;
 
     private Toolbar toolbar;
+    private ProgressBar progressBar;
     private static EditText etDebitDate;
     private AutoCompleteTextView actvDebitCategory;
     private EditText etDebitDescription;
@@ -162,6 +164,7 @@ public class DebitEditorActivity extends AppCompatActivity {
 
     private void initializeViews() {
         initToolbar();
+        progressBar = findViewById(R.id.progressBar);
         etDebitDate = (EditText) findViewById(R.id.edit_text_debit_date);
         actvDebitCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_debit_category);
         etDebitDescription = (EditText) findViewById(R.id.edit_text_debit_description);
@@ -506,6 +509,7 @@ public class DebitEditorActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case RC_CHOOSE_IMAGE:
+                    progressBar.setVisibility(View.VISIBLE);
                     Uri imageUri = getPickImageResultUri(data);
                     Log.d(TAG, "onActivityResult: imageUri = " + imageUri.toString());
                     try {
@@ -513,6 +517,7 @@ public class DebitEditorActivity extends AppCompatActivity {
                         runTextRecognition(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        progressBar.setVisibility(View.GONE);
                     }
                     break;
             }
@@ -550,6 +555,7 @@ public class DebitEditorActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(FirebaseVisionText texts) {
                                 btnScanDebit.setEnabled(true);
+                                progressBar.setVisibility(View.GONE);
                                 processTextRecognitionResult(texts);
                             }
                         })
@@ -559,6 +565,7 @@ public class DebitEditorActivity extends AppCompatActivity {
                             public void onFailure(@NonNull Exception e) {
                                 // Task failed with an exception
                                 btnScanDebit.setEnabled(true);
+                                progressBar.setVisibility(View.GONE);
                                 e.printStackTrace();
                             }
                         });
@@ -571,19 +578,29 @@ public class DebitEditorActivity extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(this, texts.getText(), Toast.LENGTH_LONG).show();
+        etDebitDescription.setText(texts.getText());
 
-        /*mGraphicOverlay.clear();
+        String total = "";
+
+        //mGraphicOverlay.clear();
         for (int i = 0; i < blocks.size(); i++) {
             List<FirebaseVisionText.Line> lines = blocks.get(i).getLines();
             for (int j = 0; j < lines.size(); j++) {
                 List<FirebaseVisionText.Element> elements = lines.get(j).getElements();
                 for (int k = 0; k < elements.size(); k++) {
-                    Graphic textGraphic = new TextGraphic(mGraphicOverlay, elements.get(k));
-                    mGraphicOverlay.add(textGraphic);
+                    //Graphic textGraphic = new TextGraphic(mGraphicOverlay, elements.get(k));
+                    //mGraphicOverlay.add(textGraphic);
+                    String elementText = elements.get(k).getText();
+                    Log.d(TAG, "processTextRecognitionResult: elementText = " + elementText);
+
+                    if (TextUtils.isDigitsOnly(elementText)) {
+                        total = elementText;
+                    }
                 }
             }
-        }*/
+        }
+
+        etDebitAmount.setText(total);
     }
 
     @Override

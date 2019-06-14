@@ -15,6 +15,13 @@
         android:layout_alignParentEnd="true"
         android:background="@color/colorPrimary" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,7 +42,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="4dp">
+                android:padding="0dp">
 
                 <EditText
                     android:id="@+id/edit_text_debit_date"
@@ -53,7 +60,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="4dp">
+                android:layout_marginTop="8dp"
+                android:padding="0dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/auto_complete_debit_category"
@@ -69,7 +77,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="4dp">
+                android:layout_marginTop="8dp"
+                android:padding="0dp">
 
                 <EditText
                     android:id="@+id/edit_text_debit_amount"
@@ -86,7 +95,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="4dp">
+                android:layout_marginTop="8dp"
+                android:padding="0dp">
 
                 <EditText
                     android:id="@+id/edit_text_debit_description"
@@ -108,5 +118,5 @@
         android:layout_centerHorizontal="true"
         android:drawableLeft="@android:drawable/ic_menu_camera"
         android:text="  Scan"
-        android:textSize="22sp" />
+        android:textSize="20sp" />
 </RelativeLayout>
