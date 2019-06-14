@@ -1,16 +1,9 @@
 package com.monir.expensetracker.ocr;
 
-import android.graphics.Bitmap;
-import android.os.Environment;
-
-import com.googlecode.tesseract.android.TessBaseAPI;
-
-import java.io.File;
-
 public class TessOCR {
-    private TessBaseAPI mTess;
+    //private TessBaseAPI mTess;
 
-    public TessOCR() {
+    /*public TessOCR() {
         // TODO Auto-generated constructor stub
 
         mTess = new TessBaseAPI();
@@ -35,5 +28,5 @@ public class TessOCR {
     public void onDestroy() {
         if (mTess != null)
             mTess.end();
-    }
+    }*/
 }

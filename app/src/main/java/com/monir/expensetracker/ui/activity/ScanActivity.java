@@ -27,10 +27,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.ocr.TessOCR;
 import com.monir.expensetracker.util.Constant;
 import com.monir.expensetracker.util.FileCreator;
-import com.monir.expensetracker.ocr.TessOCR;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,7 +44,7 @@ import java.util.List;
 public class ScanActivity extends Activity {
 
     private static final String TAG = "ScanActivity";
-    private CropImageView mCropImageView;
+    //private CropImageView mCropImageView;
     Bitmap converted;
     private EditText etScanResultData;
     private TessOCR mTessOCR;
@@ -70,7 +69,7 @@ public class ScanActivity extends Activity {
 
         etScanResultData = (EditText) findViewById(R.id.et_scan_result_data);
 
-        mCropImageView = (CropImageView) findViewById(R.id.crop_image_view);
+        //mCropImageView = (CropImageView) findViewById(R.id.crop_image_view);
         String[] paths = new String[]{DATA_PATH, DATA_PATH + "tessdata/"};
 
         for (String path : paths) {
@@ -116,18 +115,13 @@ public class ScanActivity extends Activity {
         mTessOCR = new TessOCR();
     }
 
-    /**
-     * On load image button click, start pick image chooser activity.
-     */
+    //On load image button click, start pick image chooser activity.
+
     public void onLoadImageClick(View view) {
         startActivityForResult(getPickImageChooserIntent(), 200);
     }
 
-
-    /**
-     * On save image data button click, start debit editor activity.
-     */
-
+    //On save image data button click, start debit editor activity.
     public void onSaveImageData(View view) {
 
         if (etScanResultData.getText().toString().trim().length() > 0) {
@@ -149,9 +143,9 @@ public class ScanActivity extends Activity {
     }
 
 
-    /**
-     * On open camera button click, start capture image.
-     */
+
+    //On open camera button click, start capture image.
+
 
     public void onLaunchCamera(View view) {
 
@@ -169,12 +163,12 @@ public class ScanActivity extends Activity {
 
     }
 
-    /**
-     * Crop the image and set it back to the cropping view.
-     */
+
+    //Crop the image and set it back to the cropping view.
+
 
     public void onCropImageClick(View view) {
-        if (mCropImageView != null) {
+        /*if (mCropImageView != null) {
             Bitmap cropped = mCropImageView.getCroppedImage(500, 500);
             if (cropped != null) {
                 mCropImageView.setImageBitmap(cropped);
@@ -182,7 +176,7 @@ public class ScanActivity extends Activity {
                 mCropImageView.setImageBitmap(bnwBitmap);
                 doOCR(bnwBitmap);
             }
-        }
+        }*/
     }
 
     public void doOCR(final Bitmap bitmap) {
@@ -199,7 +193,7 @@ public class ScanActivity extends Activity {
         new Thread(new Runnable() {
             public void run() {
 
-                final String result = mTessOCR.getOCRResult(bitmap).toLowerCase();
+                /*final String result = mTessOCR.getOCRResult(bitmap).toLowerCase();
                 runOnUiThread(new Runnable() {
 
                     @Override
@@ -213,7 +207,7 @@ public class ScanActivity extends Activity {
                         mProgressDialog.dismiss();
                     }
 
-                });
+                });*/
 
             }
 
@@ -263,8 +257,8 @@ public class ScanActivity extends Activity {
                 }
 
                 if (!requirePermissions) {
-                    mCropImageView.setImageUriAsync(imageUri);
-                    mCropImageView.setClickable(true);
+                    //mCropImageView.setImageUriAsync(imageUri);
+                    //mCropImageView.setClickable(true);
                 }
             }
 
@@ -308,18 +302,18 @@ public class ScanActivity extends Activity {
         if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             Log.d(TAG, "onRequestPermissionsResult: " + mCropImageUri.getPath());
-            mCropImageView.setImageUriAsync(mCropImageUri);
-            mCropImageView.setClickable(true);
+            //mCropImageView.setImageUriAsync(mCropImageUri);
+            //mCropImageView.setClickable(true);
         } else {
             Toast.makeText(this, "Required permissions are not granted", Toast.LENGTH_LONG).show();
         }
     }
 
-    /**
-     * Create a chooser intent to select the source to get image from.<br/>
-     * The source can be camera's (ACTION_IMAGE_CAPTURE) or gallery's (ACTION_GET_CONTENT).<br/>
-     * All possible sources are added to the intent chooser.
-     */
+
+    /*  Create a chooser intent to select the source to get image from.<br/>
+      The source can be camera's (ACTION_IMAGE_CAPTURE) or gallery's (ACTION_GET_CONTENT).<br/>
+      All possible sources are added to the intent chooser.*/
+
     public Intent getPickImageChooserIntent() {
 
         // Determine Uri of camera image to save.
@@ -371,9 +365,9 @@ public class ScanActivity extends Activity {
         return chooserIntent;
     }
 
-    /**
-     * Get URI to image received from capture by camera.
-     */
+
+     // Get URI to image received from capture by camera.
+
     private Uri getCaptureImageOutputUri() {
         Uri outputFileUri = null;
         File getImage = getExternalCacheDir();
@@ -390,12 +384,11 @@ public class ScanActivity extends Activity {
         return outputFileUri;
     }
 
-    /**
-     * Get the URI of the selected image from {@link #getPickImageChooserIntent()}.<br/>
-     * Will return the correct URI for camera and gallery image.
-     *
-     * @param data the returned data of the activity result
-     */
+
+      /*Get the java.net.URI of the selected image from {@link #getPickImageChooserIntent()}.<br/>
+      Will return the correct URI for camera and gallery image.
+      @param data the returned data of the activity result*/
+
     public Uri getPickImageResultUri(Intent data) {
         boolean isCamera = true;
         if (data != null && data.getData() != null) {
@@ -406,9 +399,9 @@ public class ScanActivity extends Activity {
         return isCamera ? getCaptureImageOutputUri() : data.getData();
     }
 
-    /**
-     * Test if we can open the given Android URI to test if permission required error is thrown.<br>
-     */
+
+    //Test if we can open the given Android URI to test if permission required error is thrown.<br>
+
     public boolean isUriRequiresPermissions(Uri uri) {
         try {
             ContentResolver resolver = getContentResolver();

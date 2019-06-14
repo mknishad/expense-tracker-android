@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "561036656524",
+    "firebase_url": "https://expense-tracker-d64ff.firebaseio.com",
+    "project_id": "expense-tracker-d64ff",
+    "storage_bucket": "expense-tracker-d64ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561036656524:android:b78b55693905ec15",
+        "android_client_info": {
+          "package_name": "com.monir.expensetracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561036656524-iam6mincg1vp5dhs35f437a3rshb0174.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDou0huL8WVCsjctArACSu6e1saOfwolg0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561036656524-iam6mincg1vp5dhs35f437a3rshb0174.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
