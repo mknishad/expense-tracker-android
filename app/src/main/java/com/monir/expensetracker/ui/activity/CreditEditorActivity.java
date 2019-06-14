@@ -68,7 +68,7 @@ public class CreditEditorActivity extends AppCompatActivity {
 
         expenseDataSource = new ExpenseDataSource(this);
         initializeViews();
-        ibCreditCalendar.setOnClickListener(new View.OnClickListener() {
+        etCreditDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new DatePickerFragment();

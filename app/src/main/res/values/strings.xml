@@ -80,5 +80,9 @@
     <string name="debit_">DEBIT:</string>
     <string name="credit_">CREDIT:</string>
     <string name="balance_">BALANCE:</string>
+    <string name="date">Date</string>
+    <string name="category">Category</string>
+    <string name="amount">Amount</string>
+    <string name="description">Description</string>
 
 </resources>

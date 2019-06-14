@@ -27,7 +27,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.monir.expensetracker.R;
@@ -48,7 +47,6 @@ public class DebitEditorActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private static EditText etDebitDate;
-    private ImageButton ibDebitCalendar;
     private AutoCompleteTextView actvDebitCategory;
     private EditText etDebitDescription;
     private EditText etDebitAmount;
@@ -83,32 +81,22 @@ public class DebitEditorActivity extends AppCompatActivity {
         initializeViews();
 
         if (scanData != null && scanData.trim().length() > 0) {
-
             String category = getIntent().getStringExtra(Constant.CATEGORY_BUNDLE);
 
-            if (category != null)
+            if (category != null) {
                 actvDebitCategory.setText(category);
+            }
 
             ObjectParser objectParser = new ObjectParser(actvDebitCategory.getText().toString(), scanData);
-
             debit = objectParser.parse();
 
             actvDebitCategory.setText(debit.getDebitCategory());
             etDebitDate.setText(debit.getDebitDate());
-            etDebitAmount.setText(debit.getDebitAmount() + "");
+            etDebitAmount.setText(String.valueOf(debit.getDebitAmount()));
             etDebitDescription.setText(debit.getDebitDescription());
-
         }
 
         etDebitDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getSupportFragmentManager(), "datePicker");
-            }
-        });
-
-        ibDebitCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new DatePickerFragment();
@@ -154,18 +142,15 @@ public class DebitEditorActivity extends AppCompatActivity {
         }
     }
 
-
     private void initializeViews() {
         initToolbar();
         etDebitDate = (EditText) findViewById(R.id.edit_text_debit_date);
-        ibDebitCalendar = (ImageButton) findViewById(R.id.image_button_debit_calendar);
         actvDebitCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_debit_category);
         etDebitDescription = (EditText) findViewById(R.id.edit_text_debit_description);
         etDebitAmount = (EditText) findViewById(R.id.edit_text_debit_amount);
         btnScanDebit = (Button) findViewById(R.id.btn_scan_debit);
 
         etDebitDate.setOnTouchListener(touchListener);
-        ibDebitCalendar.setOnTouchListener(touchListener);
         actvDebitCategory.setOnTouchListener(touchListener);
         etDebitDescription.setOnTouchListener(touchListener);
         etDebitAmount.setOnTouchListener(touchListener);
@@ -378,7 +363,7 @@ public class DebitEditorActivity extends AppCompatActivity {
                 expenseDataSource.insertCategory(new Category(category));
             }
 
-            Debit debit = new Debit(date, category, description, new Double(amount));
+            Debit debit = new Debit(date, category, description, Double.valueOf(amount));
             //Log.e(TAG, "system currentTimeMillis: " + System.currentTimeMillis() % 100000000);
 
             if (activityType.equals(Constant.ACTIVITY_TYPE_ADD)) {
