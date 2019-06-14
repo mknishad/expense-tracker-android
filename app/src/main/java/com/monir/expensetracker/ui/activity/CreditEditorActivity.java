@@ -22,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.monir.expensetracker.R;
@@ -42,7 +41,6 @@ public class CreditEditorActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private static EditText etCreditDate;
-    private ImageButton ibCreditCalendar;
     private AutoCompleteTextView actvCreditCategory;
     private EditText etCreditDescription;
     private EditText etCreditAmount;
@@ -115,13 +113,11 @@ public class CreditEditorActivity extends AppCompatActivity {
         initToolbar();
 
         etCreditDate = (EditText) findViewById(R.id.edit_text_credit_date);
-        ibCreditCalendar = (ImageButton) findViewById(R.id.image_button_credit_calendar);
         actvCreditCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_credit_category);
         etCreditDescription = (EditText) findViewById(R.id.edit_text_credit_description);
         etCreditAmount = (EditText) findViewById(R.id.edit_text_credit_amount);
 
         etCreditDate.setOnTouchListener(touchListener);
-        ibCreditCalendar.setOnTouchListener(touchListener);
         actvCreditCategory.setOnTouchListener(touchListener);
         etCreditDescription.setOnTouchListener(touchListener);
         etCreditAmount.setOnTouchListener(touchListener);
