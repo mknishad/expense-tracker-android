@@ -110,13 +110,13 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_scan_debit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:drawableLeft="@android:drawable/ic_menu_camera"
-        android:text="  Scan"
-        android:textSize="20sp" />
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        app:backgroundTint="@color/colorAccent"/>
 </RelativeLayout>
