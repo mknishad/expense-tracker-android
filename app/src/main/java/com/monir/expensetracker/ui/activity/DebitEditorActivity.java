@@ -19,6 +19,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +32,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -70,7 +70,7 @@ public class DebitEditorActivity extends AppCompatActivity {
     private AutoCompleteTextView actvDebitCategory;
     private EditText etDebitDescription;
     private EditText etDebitAmount;
-    private Button btnScanDebit;
+    private FloatingActionButton fabScanDebit;
     private ExpenseDataSource expenseDataSource;
     private ArrayList<String> categoriesString = new ArrayList<>();
     private Intent debitIntent;
@@ -116,24 +116,6 @@ public class DebitEditorActivity extends AppCompatActivity {
             etDebitDescription.setText(debit.getDebitDescription());
         }
 
-        etDebitDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getSupportFragmentManager(), "datePicker");
-            }
-        });
-
-        btnScanDebit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (hasPermissions())
-                    moveToScan();
-                else
-                    requestPerms();
-            }
-        });
-
         getCategoriesFromDatabase();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, categoriesString);
         actvDebitCategory.setAdapter(adapter);
@@ -169,7 +151,25 @@ public class DebitEditorActivity extends AppCompatActivity {
         actvDebitCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_debit_category);
         etDebitDescription = (EditText) findViewById(R.id.edit_text_debit_description);
         etDebitAmount = (EditText) findViewById(R.id.edit_text_debit_amount);
-        btnScanDebit = (Button) findViewById(R.id.btn_scan_debit);
+        fabScanDebit = findViewById(R.id.btn_scan_debit);
+
+        etDebitDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+
+        fabScanDebit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hasPermissions())
+                    moveToScan();
+                else
+                    requestPerms();
+            }
+        });
 
         etDebitDate.setOnTouchListener(touchListener);
         actvDebitCategory.setOnTouchListener(touchListener);
@@ -548,13 +548,13 @@ public class DebitEditorActivity extends AppCompatActivity {
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionTextRecognizer recognizer = FirebaseVision.getInstance()
                 .getOnDeviceTextRecognizer();
-        btnScanDebit.setEnabled(false);
+        fabScanDebit.setEnabled(false);
         recognizer.processImage(image)
                 .addOnSuccessListener(
                         new OnSuccessListener<FirebaseVisionText>() {
                             @Override
                             public void onSuccess(FirebaseVisionText texts) {
-                                btnScanDebit.setEnabled(true);
+                                fabScanDebit.setEnabled(true);
                                 progressBar.setVisibility(View.GONE);
                                 processTextRecognitionResult(texts);
                             }
@@ -564,7 +564,7 @@ public class DebitEditorActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // Task failed with an exception
-                                btnScanDebit.setEnabled(true);
+                                fabScanDebit.setEnabled(true);
                                 progressBar.setVisibility(View.GONE);
                                 e.printStackTrace();
                             }
