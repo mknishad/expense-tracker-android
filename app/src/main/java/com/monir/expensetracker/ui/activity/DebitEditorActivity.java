@@ -31,10 +31,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,12 +48,12 @@ import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Category;
 import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.util.Constant;
-import com.monir.expensetracker.util.ObjectParser;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -64,19 +64,18 @@ public class DebitEditorActivity extends AppCompatActivity {
     private String TAG = DebitEditorActivity.class.getSimpleName();
     private static final int RC_CHOOSE_IMAGE = 200;
 
-    private Toolbar toolbar;
     private ProgressBar progressBar;
     private static EditText etDebitDate;
-    private AutoCompleteTextView actvDebitCategory;
+    //private AutoCompleteTextView actvDebitCategory;
+    private Spinner categorySpinner;
     private EditText etDebitDescription;
     private EditText etDebitAmount;
     private FloatingActionButton fabScanDebit;
     private ExpenseDataSource expenseDataSource;
     private ArrayList<String> categoriesString = new ArrayList<>();
-    private Intent debitIntent;
+    private List<String> categoryList;
     private String activityType;
     private int debitId;
-    private Debit debit;
     private boolean debitHasChanged = false;
 
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
@@ -95,32 +94,32 @@ public class DebitEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debit_editor);
 
-        String scanData = getIntent().getStringExtra(Constant.INTENT_SCAN_DATA);
+        //String scanData = getIntent().getStringExtra(Constant.INTENT_SCAN_DATA);
 
         expenseDataSource = new ExpenseDataSource(this);
         initializeViews();
 
-        if (scanData != null && scanData.trim().length() > 0) {
+        /*if (scanData != null && scanData.trim().length() > 0) {
             String category = getIntent().getStringExtra(Constant.CATEGORY_BUNDLE);
 
             if (category != null) {
-                actvDebitCategory.setText(category);
+                //actvDebitCategory.setText(category);
             }
 
-            ObjectParser objectParser = new ObjectParser(actvDebitCategory.getText().toString(), scanData);
-            debit = objectParser.parse();
+            //ObjectParser objectParser = new ObjectParser(actvDebitCategory.getText().toString(), scanData);
+            //debit = objectParser.parse();
 
-            actvDebitCategory.setText(debit.getDebitCategory());
+            ///actvDebitCategory.setText(debit.getDebitCategory());
             etDebitDate.setText(debit.getDebitDate());
             etDebitAmount.setText(String.valueOf(debit.getDebitAmount()));
             etDebitDescription.setText(debit.getDebitDescription());
-        }
+        }*/
 
-        getCategoriesFromDatabase();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, categoriesString);
-        actvDebitCategory.setAdapter(adapter);
-        actvDebitCategory.setThreshold(1);
-        debitIntent = getIntent();
+        //getCategoriesFromDatabase();
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, categoriesString);
+        //actvDebitCategory.setAdapter(adapter);
+        //actvDebitCategory.setThreshold(1);
+        Intent debitIntent = getIntent();
         activityType = debitIntent.getStringExtra(Constant.ACTIVITY_TYPE);
         Log.e(TAG, "Activity type: " + activityType);
 
@@ -133,11 +132,12 @@ public class DebitEditorActivity extends AppCompatActivity {
             debitId = debitIntent.getIntExtra(Constant.DEBIT_ITEM_ID, -1);
             Log.e(TAG, "debit list item position: " + debitId);
             if (debitId > -1) {
-                debit = expenseDataSource.getDebit(debitId);
+                Debit debit = expenseDataSource.getDebit(debitId);
                 etDebitDate.setText(debit.getDebitDate());
-                actvDebitCategory.setText(debit.getDebitCategory());
+                //actvDebitCategory.setText(debit.getDebitCategory());
+                categorySpinner.setSelection(categoryList.indexOf(debit.getDebitCategory()));
                 etDebitDescription.setText(debit.getDebitDescription());
-                etDebitAmount.setText("" + debit.getDebitAmount());
+                etDebitAmount.setText(String.valueOf(debit.getDebitAmount()));
             } else {
                 Toast.makeText(this, "Error loading debit!", Toast.LENGTH_SHORT).show();
             }
@@ -148,10 +148,13 @@ public class DebitEditorActivity extends AppCompatActivity {
         initToolbar();
         progressBar = findViewById(R.id.progressBar);
         etDebitDate = (EditText) findViewById(R.id.edit_text_debit_date);
-        actvDebitCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_debit_category);
+        //actvDebitCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_debit_category);
+        categorySpinner = findViewById(R.id.categorySpinner);
         etDebitDescription = (EditText) findViewById(R.id.edit_text_debit_description);
         etDebitAmount = (EditText) findViewById(R.id.edit_text_debit_amount);
         fabScanDebit = findViewById(R.id.btn_scan_debit);
+
+        initializeCategorySpinner();
 
         etDebitDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,19 +175,19 @@ public class DebitEditorActivity extends AppCompatActivity {
         });
 
         etDebitDate.setOnTouchListener(touchListener);
-        actvDebitCategory.setOnTouchListener(touchListener);
+        //actvDebitCategory.setOnTouchListener(touchListener);
+        categorySpinner.setOnTouchListener(touchListener);
         etDebitDescription.setOnTouchListener(touchListener);
         etDebitAmount.setOnTouchListener(touchListener);
     }
 
 
     private void initToolbar() {
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorText));
-        toolbar.setTitle(R.string.add_debit);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -193,6 +196,14 @@ public class DebitEditorActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void initializeCategorySpinner() {
+        String[] categories = getResources().getStringArray(R.array.categories);
+        categoryList = Arrays.asList(categories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categoryList);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
     }
 
     private void getCategoriesFromDatabase() {
@@ -368,14 +379,15 @@ public class DebitEditorActivity extends AppCompatActivity {
 
     private void saveDebit() {
         String date = etDebitDate.getText().toString().trim();
-        String category = actvDebitCategory.getText().toString().trim();
+        //String category = actvDebitCategory.getText().toString().trim();
+        String category = categorySpinner.getSelectedItem().toString();
         String description = etDebitDescription.getText().toString().trim();
         String amount = etDebitAmount.getText().toString().trim();
 
         if (TextUtils.isEmpty(date)) {
             Toast.makeText(this, "Please enter or select a date!", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(category)) {
-            Toast.makeText(this, "Please enter a category!", Toast.LENGTH_SHORT).show();
+        } else if (category.equals(categoryList.get(0))) {
+            Toast.makeText(this, "Please select a category!", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(description)) {
             Toast.makeText(this, "Please enter description!", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(amount)) {
@@ -630,18 +642,13 @@ public class DebitEditorActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         boolean allowed = true;
 
-        switch (requestCode) {
-            case PERMS_REQUEST_CODE:
-                for (int res : grantResults) {
-                    // if user granted permissions
-                    allowed = allowed && (res == PackageManager.PERMISSION_GRANTED);
-                }
-                break;
-
-            default:
-                // if user not granted permissions
-                allowed = false;
-                break;
+        if (requestCode == PERMS_REQUEST_CODE) {
+            for (int res : grantResults) {
+                // if user granted permissions
+                allowed = allowed && (res == PackageManager.PERMISSION_GRANTED);
+            }
+        } else {// if user not granted permissions
+            allowed = false;
         }
 
         if (allowed) {

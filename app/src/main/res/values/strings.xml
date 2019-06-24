@@ -50,21 +50,27 @@
     <string name="delete">Delete</string>
 
     <string-array name="categories">
-        <item>Clothing</item>
-        <item>Charitable Giving</item>
+        <item>Select a category</item>
+        <item>Car</item>
+        <item>Charity</item>
+        <item>Clothes</item>
+        <item>Communication</item>
         <item>Education</item>
+        <item>Eating Out</item>
         <item>Electronics</item>
         <item>Entertainment</item>
         <item>Fitness</item>
         <item>Food</item>
         <item>Gifts</item>
         <item>Health</item>
-        <item>Household</item>
-        <item>Investments</item>
+        <item>House</item>
+        <item>Investment</item>
         <item>Loan Payment</item>
         <item>Miscellaneous</item>
-        <item>Rent</item>
-        <item>Transportation</item>
+        <item>Sports</item>
+        <item>Taxy</item>
+        <item>Toiletry</item>
+        <item>Transport</item>
         <item>Utility Bills</item>
         <item>Vacation</item>
     </string-array>
@@ -84,5 +90,4 @@
     <string name="category">Category</string>
     <string name="amount">Amount</string>
     <string name="description">Description</string>
-
 </resources>
