@@ -23,12 +23,12 @@ public class ExpenseDataSource {
     }
 
     // open the database for operation
-    public void open() {
+    private void open() {
         database = databaseHelper.getWritableDatabase();
     }
 
     // close the database
-    public void close() {
+    private void close() {
         database.close();
     }
 
@@ -46,7 +46,7 @@ public class ExpenseDataSource {
 
         this.close();
 
-        return inserted > 0 ? true : false;
+        return inserted > 0;
     }
 
     // insert a credit to Credit table
@@ -64,7 +64,7 @@ public class ExpenseDataSource {
 
         this.close();
 
-        return inserted > 0 ? true : false;
+        return inserted > 0;
     }
 
     // insert a deleted credit to DeletedCredit table
@@ -82,7 +82,7 @@ public class ExpenseDataSource {
 
         this.close();
 
-        return inserted > 0 ? true : false;
+        return inserted > 0;
     }
 
     // insert a category to Category table
@@ -96,7 +96,7 @@ public class ExpenseDataSource {
 
         this.close();
 
-        return inserted > 0 ? true : false;
+        return inserted > 0;
     }
 
     // get a single debit from the table by debit id
@@ -125,6 +125,7 @@ public class ExpenseDataSource {
 
         cursor.moveToFirst();
         Credit credit = createCredit(cursor);
+
         cursor.close();
         this.close();
 
@@ -146,8 +147,12 @@ public class ExpenseDataSource {
                 cursor.moveToNext();
             }
         }
-        cursor.close();
-        database.close();
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            database.close();
+        }
 
         return debits;
     }
@@ -192,7 +197,11 @@ public class ExpenseDataSource {
                 cursor.moveToNext();
             }
         }
-        cursor.close();
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
         database.close();
 
         return credits;
@@ -214,7 +223,9 @@ public class ExpenseDataSource {
             }
         }
 
-        cursor.close();
+        if (cursor != null) {
+            cursor.close();
+        }
         database.close();
 
 
@@ -236,7 +247,10 @@ public class ExpenseDataSource {
                 cursor.moveToNext();
             }
         }
-        cursor.close();
+
+        if (cursor != null) {
+            cursor.close();
+        }
         database.close();
 
         return categories;
@@ -258,7 +272,10 @@ public class ExpenseDataSource {
                 cursor.moveToNext();
             }
         }
-        cursor.close();
+
+        if (cursor != null) {
+            cursor.close();
+        }
         database.close();
 
         return creditAmounts;
@@ -278,7 +295,7 @@ public class ExpenseDataSource {
                 Constant.COL_ID + " = " + id, null);
         this.close();
 
-        return updated > 0 ? true : false;
+        return updated > 0;
     }
 
     // update a credit with a given value
@@ -296,7 +313,7 @@ public class ExpenseDataSource {
                 Constant.COL_ID + " = " + id, null);
         this.close();
 
-        return updated > 0 ? true : false;
+        return updated > 0;
     }
 
     // delete a debit from debit table by debit id
@@ -306,7 +323,7 @@ public class ExpenseDataSource {
         int deleted = database.delete(Constant.TABLE_DEBIT, Constant.COL_ID + " = " + id, null);
         this.close();
 
-        return deleted > 0 ? true : false;
+        return deleted > 0;
     }
 
     // delete a credit from credit table by credit id
@@ -316,7 +333,7 @@ public class ExpenseDataSource {
         int deleted = database.delete(Constant.TABLE_CREDIT, Constant.COL_ID + " = " + id, null);
         this.close();
 
-        return deleted > 0 ? true : false;
+        return deleted > 0;
     }
 
     // return total amount of debits
@@ -368,9 +385,7 @@ public class ExpenseDataSource {
         String debitDescription = cursor.getString(cursor.getColumnIndex(Constant.COL_DEBIT_DESCRIPTION));
         Double debitAmount = cursor.getDouble(cursor.getColumnIndex(Constant.COL_DEBIT_AMOUNT));
 
-        Debit debit = new Debit(id, debitDate, debitCategory, debitDescription, debitAmount);
-
-        return debit;
+        return new Debit(id, debitDate, debitCategory, debitDescription, debitAmount);
     }
 
     // create a credit from cursor data
@@ -382,9 +397,7 @@ public class ExpenseDataSource {
         Double creditAmount = cursor.getDouble(cursor.getColumnIndex(Constant.COL_CREDIT_AMOUNT));
         int creditTimestamp = cursor.getInt(cursor.getColumnIndex(Constant.COL_CREDIT_TIMESTAMP));
 
-        Credit credit = new Credit(id, creditDate, creditCategory, creditDescription, creditAmount, creditTimestamp);
-
-        return credit;
+        return new Credit(id, creditDate, creditCategory, creditDescription, creditAmount, creditTimestamp);
     }
 
     // Create a category from cursor data
@@ -392,8 +405,6 @@ public class ExpenseDataSource {
         int id = cursor.getInt(cursor.getColumnIndex(Constant.COL_ID));
         String categoryName = cursor.getString(cursor.getColumnIndex(Constant.COL_CATEGORY_NAME));
 
-        Category category = new Category(id, categoryName);
-
-        return category;
+        return new Category(id, categoryName);
     }
 }
