@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -140,7 +144,29 @@ public class DebitFragment extends Fragment {
             Log.e(TAG, "debitList size: " + debitList.size());
             debitListAdapter = new DebitListAdapter(getContext(), debitList);
             debitListView.setAdapter(debitListAdapter);
-            tvFooterDebitAmount.setText("" + expenseDataSource.getTotalDebitAmount());
+            tvFooterDebitAmount.setText(String.valueOf(expenseDataSource.getTotalDebitAmount()));
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_list, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        /*searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        debitListAdapter.getFilter().filter(s);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        return false;
+                    }
+                }
+        );*/
     }
 }

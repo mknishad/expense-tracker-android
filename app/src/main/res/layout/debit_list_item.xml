@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:background="#dddddd" >
+    android:background="#dddddd">
 
     <View
         android:id="@+id/shadowViewDebit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="3dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="3dp"
         android:background="#cccccc" />
 
     <RelativeLayout
@@ -21,52 +22,53 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
-        android:background="#ffffff" >
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="#ffffff">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/tv_debit_category"
-                android:text="Category"
-                android:textSize="22sp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
                 android:gravity="bottom"
-                android:textColor="#555555"
                 android:paddingBottom="2dp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp" />
+                android:textColor="#555555"
+                android:textSize="22sp"
+                tools:text="Category" />
 
             <TextView
                 android:id="@+id/tv_debit_date"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
                 android:gravity="top"
                 android:paddingTop="2dp"
-                android:textSize="18sp"
+                tools:text="15 Oct, 1992"
                 android:textColor="#777"
-                android:layout_marginLeft="20dp"
-                android:text="15 Oct, 1992" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_debit_amount"
-            android:text="500.00"
-            android:textSize="22sp"
-            android:textColor="#555555"
-            android:layout_marginRight="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_marginRight="20dp"
+            tools:text="500.00"
+            android:textColor="#555555"
+            android:textSize="22sp" />
 
     </RelativeLayout>
 
