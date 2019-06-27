@@ -50,7 +50,7 @@
     <!-- Dialog button text for the option to confirm deleting the current credit [CHAR LIMIT=20] -->
     <string name="delete">Delete</string>
 
-    <string-array name="categories">
+    <string-array name="debit_categories">
         <item>Select a category</item>
         <item>Car</item>
         <item>Charity</item>
@@ -74,6 +74,13 @@
         <item>Transport</item>
         <item>Utility Bills</item>
         <item>Vacation</item>
+    </string-array>
+
+    <string-array name="credit_categories">
+        <item>Select a category</item>
+        <item>Salary</item>
+        <item>Deposits</item>
+        <item>Savings</item>
     </string-array>
 
     <string name="title_activity_add_debit">AddDebitActivity</string>

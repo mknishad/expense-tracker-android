@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.monir.expensetracker.R;
@@ -32,8 +33,11 @@ import com.monir.expensetracker.util.Constant;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class CreditEditorActivity extends AppCompatActivity {
 
@@ -41,12 +45,13 @@ public class CreditEditorActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private static EditText etCreditDate;
-    private AutoCompleteTextView actvCreditCategory;
+    //private AutoCompleteTextView actvCreditCategory;
+    private Spinner categorySpinner;
     private EditText etCreditDescription;
     private EditText etCreditAmount;
     private ExpenseDataSource expenseDataSource;
     private ArrayList<String> categoriesString = new ArrayList<>();
-    private Intent creditIntent;
+    private List<String> categoryList;
     private String activityType;
     private int creditId;
     private Credit credit;
@@ -66,18 +71,12 @@ public class CreditEditorActivity extends AppCompatActivity {
 
         expenseDataSource = new ExpenseDataSource(this);
         initializeViews();
-        etCreditDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getSupportFragmentManager(), "datePicker");
-            }
-        });
-        getCategoriesFromDatabase();
+
+        /*getCategoriesFromDatabase();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, categoriesString);
         actvCreditCategory.setAdapter(adapter);
-        actvCreditCategory.setThreshold(1);
-        creditIntent = getIntent();
+        actvCreditCategory.setThreshold(1);*/
+        Intent creditIntent = getIntent();
         activityType = creditIntent.getStringExtra(Constant.ACTIVITY_TYPE);
         Log.e(TAG, "Activity type: " + activityType);
 
@@ -92,9 +91,10 @@ public class CreditEditorActivity extends AppCompatActivity {
             if (creditId > -1) {
                 credit = expenseDataSource.getCredit(creditId);
                 etCreditDate.setText(credit.getCreditDate());
-                actvCreditCategory.setText(credit.getCreditCategory());
+                //actvCreditCategory.setText(credit.getCreditCategory());
+                categorySpinner.setSelection(categoryList.indexOf(credit.getCreditCategory()));
                 etCreditDescription.setText(credit.getCreditDescription());
-                etCreditAmount.setText("" + credit.getCreditAmount());
+                etCreditAmount.setText(String.valueOf(credit.getCreditAmount()));
             } else {
                 Toast.makeText(this, "Error loading credit!", Toast.LENGTH_SHORT).show();
             }
@@ -113,12 +113,24 @@ public class CreditEditorActivity extends AppCompatActivity {
         initToolbar();
 
         etCreditDate = (EditText) findViewById(R.id.edit_text_credit_date);
-        actvCreditCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_credit_category);
+        //actvCreditCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_credit_category);
+        categorySpinner = findViewById(R.id.categorySpinner);
         etCreditDescription = (EditText) findViewById(R.id.edit_text_credit_description);
         etCreditAmount = (EditText) findViewById(R.id.edit_text_credit_amount);
 
+        initializeCategorySpinner();
+
+        etCreditDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+
         etCreditDate.setOnTouchListener(touchListener);
-        actvCreditCategory.setOnTouchListener(touchListener);
+        //actvCreditCategory.setOnTouchListener(touchListener);
+        categorySpinner.setOnTouchListener(touchListener);
         etCreditDescription.setOnTouchListener(touchListener);
         etCreditAmount.setOnTouchListener(touchListener);
     }
@@ -141,8 +153,16 @@ public class CreditEditorActivity extends AppCompatActivity {
     }
 
     private void setInitialDate() {
-        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         etCreditDate.setText(date);
+    }
+
+    private void initializeCategorySpinner() {
+        String[] categories = getResources().getStringArray(R.array.credit_categories);
+        categoryList = Arrays.asList(categories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categoryList);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
     }
 
     @Override
@@ -282,23 +302,23 @@ public class CreditEditorActivity extends AppCompatActivity {
 
     private void saveCredit() {
         String date = etCreditDate.getText().toString().trim();
-        String category = actvCreditCategory.getText().toString().trim();
+        //String category = actvCreditCategory.getText().toString().trim();
+        String category = categorySpinner.getSelectedItem().toString();
         String description = etCreditDescription.getText().toString().trim();
         String amount = etCreditAmount.getText().toString().trim();
 
         if (TextUtils.isEmpty(date)) {
             Toast.makeText(this, "Please enter or select a date!", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(category)) {
-            Toast.makeText(this, "Please enter a category!", Toast.LENGTH_SHORT).show();
+        } else if (category.equals(categoryList.get(0))) {
+            Toast.makeText(this, "Please select a category!", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(description)) {
             Toast.makeText(this, "Please enter description!", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(amount)) {
             Toast.makeText(this, "Please enter amount!", Toast.LENGTH_SHORT).show();
         } else {
-
-            if (!isCategoryExisted(category)) {
+            /*if (!isCategoryExisted(category)) {
                 expenseDataSource.insertCategory(new Category(category));
-            }
+            }*/
 
             Credit credit = new Credit(date, category, description, new Double(amount), (int) (System.currentTimeMillis() % 100000000));
             Log.e(TAG, "system currentTimeMillis: " + System.currentTimeMillis() % 100000000);

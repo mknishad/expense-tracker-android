@@ -199,7 +199,7 @@ public class DebitEditorActivity extends AppCompatActivity {
     }
 
     private void initializeCategorySpinner() {
-        String[] categories = getResources().getStringArray(R.array.categories);
+        String[] categories = getResources().getStringArray(R.array.debit_categories);
         categoryList = Arrays.asList(categories);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categoryList);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -393,9 +393,9 @@ public class DebitEditorActivity extends AppCompatActivity {
         } else if (TextUtils.isEmpty(amount)) {
             Toast.makeText(this, "Please enter amount!", Toast.LENGTH_SHORT).show();
         } else {
-            if (!isCategoryExisted(category)) {
+            /*if (!isCategoryExisted(category)) {
                 expenseDataSource.insertCategory(new Category(category));
-            }
+            }*/
 
             Debit debit = new Debit(date, category, description, Double.valueOf(amount));
             //Log.e(TAG, "system currentTimeMillis: " + System.currentTimeMillis() % 100000000);
@@ -519,19 +519,17 @@ public class DebitEditorActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case RC_CHOOSE_IMAGE:
-                    progressBar.setVisibility(View.VISIBLE);
-                    Uri imageUri = getPickImageResultUri(data);
-                    Log.d(TAG, "onActivityResult: imageUri = " + imageUri.toString());
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                        runTextRecognition(bitmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        progressBar.setVisibility(View.GONE);
-                    }
-                    break;
+            if (requestCode == RC_CHOOSE_IMAGE) {
+                progressBar.setVisibility(View.VISIBLE);
+                Uri imageUri = getPickImageResultUri(data);
+                Log.d(TAG, "onActivityResult: imageUri = " + imageUri.toString());
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    runTextRecognition(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         }
     }
