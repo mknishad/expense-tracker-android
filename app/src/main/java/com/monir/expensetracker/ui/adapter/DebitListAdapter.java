@@ -20,38 +20,19 @@ import java.util.List;
 
 
 public class DebitListAdapter extends BaseAdapter implements Filterable {
-
     private List<Debit> mOriginalDebits;
     private List<Debit> mDisplayedDebits;
     private LayoutInflater inflater;
 
     public DebitListAdapter(@NonNull Context context, @NonNull List<Debit> debits) {
-        //super(context, 0, debits);
         super();
-        //mOriginalDebits = debits;
         mDisplayedDebits = debits;
         inflater = LayoutInflater.from(context);
-    }
-
-    @Override
-    public int getCount() {
-        return mDisplayedDebits.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return mDisplayedDebits.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
         ViewHolder holder;
 
         if (convertView == null) {
@@ -79,26 +60,11 @@ public class DebitListAdapter extends BaseAdapter implements Filterable {
         });
 
         return convertView;
-
-        /*View listItemView = convertView;
-        if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.debit_list_item, parent, false);
-        }
-
-        Debit currentDebit = getItem(position);
-        TextView debitCategoryTextView = (TextView) listItemView.findViewById(R.id.tv_debit_category);
-        debitCategoryTextView.setText(currentDebit.getDebitCategory());
-        TextView debitDateTextView = (TextView) listItemView.findViewById(R.id.tv_debit_date);
-        debitDateTextView.setText(currentDebit.getDebitDate());
-        TextView debitAmountTextView = (TextView) listItemView.findViewById(R.id.tv_debit_amount);
-        debitAmountTextView.setText(String.valueOf(currentDebit.getDebitAmount()));
-
-        return listItemView;*/
     }
 
     @Override
     public Filter getFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
@@ -107,28 +73,6 @@ public class DebitListAdapter extends BaseAdapter implements Filterable {
                 if (mOriginalDebits == null) {
                     mOriginalDebits = mDisplayedDebits;
                 }
-
-                /*if (constraint == null || constraint.length() == 0) {
-                    results.count = mOriginalDebits.size();
-                    results.values = mOriginalDebits;
-                } else {
-                    constraint = constraint.toString().toLowerCase();
-                    for (int i = 0; i < mOriginalDebits.size(); i++) {
-                        String data = mOriginalDebits.get(i).getDebitCategory();
-                        if (data.toLowerCase().startsWith(constraint.toString())) {
-                            filteredDebits.add(new Debit(
-                                    mOriginalDebits.get(i).getDebitId(),
-                                    mOriginalDebits.get(i).getDebitDate(),
-                                    mOriginalDebits.get(i).getDebitCategory(),
-                                    mOriginalDebits.get(i).getDebitDescription(),
-                                    mOriginalDebits.get(i).getDebitAmount()
-                            ));
-                        }
-                    }
-
-                    results.count = filteredDebits.size();
-                    results.values = filteredDebits;
-                }*/
 
                 if (constraint != null) {
                     if (mOriginalDebits != null && mOriginalDebits.size() > 0) {
@@ -150,8 +94,21 @@ public class DebitListAdapter extends BaseAdapter implements Filterable {
                 notifyDataSetChanged();
             }
         };
+    }
 
-        return filter;
+    @Override
+    public int getCount() {
+        return mDisplayedDebits.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return mDisplayedDebits.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override

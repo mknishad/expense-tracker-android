@@ -48,7 +48,6 @@ public class DebitFragment extends Fragment {
     private TextView debitEmptyView;
     private View view;
     private TextView tvFooterDebitAmount;
-    private SearchView searchView;
 
     private boolean sentToDebitEditor = false;
 
@@ -78,12 +77,9 @@ public class DebitFragment extends Fragment {
             debitEmptyView = (TextView) view.findViewById(R.id.empty_view_debit);
             //Log.e(TAG, "footer amount text view initialized");
             tvFooterDebitAmount = (TextView) view.findViewById(R.id.text_view_amount_debit);
-            searchView = view.findViewById(R.id.searchView);
 
             debitListView.setEmptyView(debitEmptyView);
             debitListView.setTextFilterEnabled(true);
-
-            setupSearchView();
 
             expenseDataSource = new ExpenseDataSource(getContext());
 
@@ -115,31 +111,6 @@ public class DebitFragment extends Fragment {
 
             loadDebits();
         }
-    }
-
-    private void setupSearchView() {
-        searchView.setIconifiedByDefault(false);
-        searchView.setSubmitButtonEnabled(true);
-        searchView.setQueryHint("Search Here");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                if (TextUtils.isEmpty(s)) {
-                    debitListView.clearTextFilter();
-                } else {
-                    debitListView.setFilterText(s);
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
-
-        //TODO: unhide searchview
-        searchView.setVisibility(View.GONE);
     }
 
     @Override

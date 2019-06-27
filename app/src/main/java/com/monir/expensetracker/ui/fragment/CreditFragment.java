@@ -5,8 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -82,6 +87,7 @@ public class CreditFragment extends Fragment {
             tvFooterCreditAmount = (TextView) view.findViewById(R.id.text_view_amount_credit);
 
             creditListView.setEmptyView(creditEmptyView);
+            creditListView.setTextFilterEnabled(true);
 
             expenseDataSource = new ExpenseDataSource(getContext());
 
@@ -265,6 +271,44 @@ public class CreditFragment extends Fragment {
             creditListView.setAdapter(creditListAdapter);
             tvFooterCreditAmount.setText("" + expenseDataSource.getTotalCreditAmount());
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_list, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                loadCredits();
+                return true;
+            }
+        });
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        if (TextUtils.isEmpty(s)) {
+                            creditListView.clearTextFilter();
+                        } else {
+                            creditListView.setFilterText(s);
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        return false;
+                    }
+                }
+        );
     }
 }
 
