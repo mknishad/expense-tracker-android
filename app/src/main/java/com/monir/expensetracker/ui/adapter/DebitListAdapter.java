@@ -27,7 +27,8 @@ public class DebitListAdapter extends BaseAdapter implements Filterable {
 
     public DebitListAdapter(@NonNull Context context, @NonNull List<Debit> debits) {
         //super(context, 0, debits);
-        mOriginalDebits = debits;
+        super();
+        //mOriginalDebits = debits;
         mDisplayedDebits = debits;
         inflater = LayoutInflater.from(context);
     }
@@ -38,48 +39,44 @@ public class DebitListAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public Object getItem(int i) {
-        return i;
+    public Object getItem(int position) {
+        return mDisplayedDebits.get(position);
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    private class ViewHoler {
-        RelativeLayout rlContainer;
-        TextView tvCategory, tvDate, tvAmount;
+    public long getItemId(int position) {
+        return position;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        ViewHoler holder = null;
+        ViewHolder holder;
 
         if (convertView == null) {
-            holder = new ViewHoler();
-            convertView = inflater.inflate(R.layout.debit_list_item, null);
+            holder = new ViewHolder();
+            convertView = inflater.inflate(R.layout.debit_list_item, parent, false);
 
             holder.rlContainer = convertView.findViewById(R.id.mainContainer);
             holder.tvCategory = convertView.findViewById(R.id.tv_debit_category);
             holder.tvDate = convertView.findViewById(R.id.tv_debit_date);
             holder.tvAmount = convertView.findViewById(R.id.tv_debit_amount);
+            convertView.setTag(holder);
         } else {
-            holder = (ViewHoler) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        //holder.tvCategory.setText(mDisplayedDebits.get(position).getDebitCategory());
-        //holder.tvDate.setText(mDisplayedDebits.get(position).getDebitDate());
-        //holder.tvAmount.setText(String.valueOf(mDisplayedDebits.get(position).getDebitAmount()));
+        holder.tvCategory.setText(mDisplayedDebits.get(position).getDebitCategory());
+        holder.tvDate.setText(mDisplayedDebits.get(position).getDebitDate());
+        holder.tvAmount.setText(String.valueOf(mDisplayedDebits.get(position).getDebitAmount()));
 
-        /*holder.rlContainer.setOnClickListener(new View.OnClickListener() {
+        holder.rlContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
-        });*/
+        });
 
         return convertView;
 
@@ -108,10 +105,10 @@ public class DebitListAdapter extends BaseAdapter implements Filterable {
                 List<Debit> filteredDebits = new ArrayList<>();
 
                 if (mOriginalDebits == null) {
-                    mOriginalDebits = new ArrayList<>(mDisplayedDebits);
+                    mOriginalDebits = mDisplayedDebits;
                 }
 
-                if (constraint == null || constraint.length() == 0) {
+                /*if (constraint == null || constraint.length() == 0) {
                     results.count = mOriginalDebits.size();
                     results.values = mOriginalDebits;
                 } else {
@@ -131,6 +128,17 @@ public class DebitListAdapter extends BaseAdapter implements Filterable {
 
                     results.count = filteredDebits.size();
                     results.values = filteredDebits;
+                }*/
+
+                if (constraint != null) {
+                    if (mOriginalDebits != null && mOriginalDebits.size() > 0) {
+                        for (Debit d : mOriginalDebits) {
+                            if (d.getDebitCategory().toLowerCase().contains(constraint.toString())) {
+                                filteredDebits.add(d);
+                            }
+                        }
+                    }
+                    results.values = filteredDebits;
                 }
 
                 return results;
@@ -144,5 +152,15 @@ public class DebitListAdapter extends BaseAdapter implements Filterable {
         };
 
         return filter;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
+    private class ViewHolder {
+        RelativeLayout rlContainer;
+        TextView tvCategory, tvDate, tvAmount;
     }
 }

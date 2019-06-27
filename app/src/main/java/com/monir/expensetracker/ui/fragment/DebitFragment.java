@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,6 +48,7 @@ public class DebitFragment extends Fragment {
     private TextView debitEmptyView;
     private View view;
     private TextView tvFooterDebitAmount;
+    private SearchView searchView;
 
     private boolean sentToDebitEditor = false;
 
@@ -76,8 +78,12 @@ public class DebitFragment extends Fragment {
             debitEmptyView = (TextView) view.findViewById(R.id.empty_view_debit);
             //Log.e(TAG, "footer amount text view initialized");
             tvFooterDebitAmount = (TextView) view.findViewById(R.id.text_view_amount_debit);
+            searchView = view.findViewById(R.id.searchView);
 
             debitListView.setEmptyView(debitEmptyView);
+            debitListView.setTextFilterEnabled(true);
+
+            setupSearchView();
 
             expenseDataSource = new ExpenseDataSource(getContext());
 
@@ -109,6 +115,31 @@ public class DebitFragment extends Fragment {
 
             loadDebits();
         }
+    }
+
+    private void setupSearchView() {
+        searchView.setIconifiedByDefault(false);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint("Search Here");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                if (TextUtils.isEmpty(s)) {
+                    debitListView.clearTextFilter();
+                } else {
+                    debitListView.setFilterText(s);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        //TODO: unhide searchview
+        searchView.setVisibility(View.GONE);
     }
 
     @Override
@@ -152,13 +183,29 @@ public class DebitFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.menu_list, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                loadDebits();
+                return true;
+            }
+        });
         SearchView searchView = (SearchView) searchItem.getActionView();
 
-        /*searchView.setOnQueryTextListener(
+        searchView.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String s) {
-                        debitListAdapter.getFilter().filter(s);
+                        if (TextUtils.isEmpty(s)) {
+                            debitListView.clearTextFilter();
+                        } else {
+                            debitListView.setFilterText(s);
+                        }
                         return false;
                     }
 
@@ -167,6 +214,6 @@ public class DebitFragment extends Fragment {
                         return false;
                     }
                 }
-        );*/
+        );
     }
 }
