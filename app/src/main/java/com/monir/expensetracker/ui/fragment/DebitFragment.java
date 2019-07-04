@@ -31,6 +31,8 @@ import com.monir.expensetracker.util.Constant;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,8 +50,6 @@ public class DebitFragment extends Fragment {
     private TextView debitEmptyView;
     private View view;
     private TextView tvFooterDebitAmount;
-
-    private boolean sentToDebitEditor = false;
 
     public DebitFragment() {
     }
@@ -87,7 +87,6 @@ public class DebitFragment extends Fragment {
             fabDebit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    sentToDebitEditor = true;
                     Intent intent = new Intent(getContext(), DebitEditorActivity.class);
                     intent.putExtra(Constant.ACTIVITY_TYPE, Constant.ACTIVITY_TYPE_ADD);
                     startActivityForResult(intent, OPEN_DEBIT_EDITOR_ACTIVITY);
@@ -97,10 +96,6 @@ public class DebitFragment extends Fragment {
             debitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //showCreditDetailInDialog(position);
-                    Log.e("CrditFragment", "----------------------position: " + position + " id: " + id);
-
-                    sentToDebitEditor = true;
                     Intent intent = new Intent(getContext(), DebitEditorActivity.class);
                     intent.putExtra(Constant.ACTIVITY_TYPE, Constant.ACTIVITY_TYPE_EDIT);
                     intent.putExtra(Constant.DEBIT_ITEM_ID, debitList.get(position).getDebitId());
@@ -116,17 +111,7 @@ public class DebitFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == OPEN_DEBIT_EDITOR_ACTIVITY) {
-            loadDebits();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (sentToDebitEditor) {
-            sentToDebitEditor = false;
+        if (requestCode == OPEN_DEBIT_EDITOR_ACTIVITY && resultCode == RESULT_OK) {
             loadDebits();
         }
     }

@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment {
 
     private static final int RC_ACTIVITY_CREDIT = 1111;
     private static final int RC_ACTIVITY_DEBIT = 1112;
+    private static final int RC_ACTIVITY_CATEGORY = 1113;
 
     private Context context;
     private View view;
@@ -103,8 +104,8 @@ public class HomeFragment extends Fragment {
         debitCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent debitDetailsIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);
-                startActivity(debitDetailsIntent);
+                Intent debitCategoryDetailsIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);
+                startActivityForResult(debitCategoryDetailsIntent, RC_ACTIVITY_CATEGORY);
             }
         });
         addCreditImageView.setOnClickListener(new View.OnClickListener() {
@@ -152,8 +153,8 @@ public class HomeFragment extends Fragment {
                 PieEntry pe = (PieEntry) e;
 
                 if (pe.getLabel().equalsIgnoreCase("debit")) {
-                    Intent debitDetailsIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);
-                    startActivity(debitDetailsIntent);
+                    Intent debitCategoryDetailsIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);
+                    startActivityForResult(debitCategoryDetailsIntent, RC_ACTIVITY_CATEGORY);
                 } else {
 
                 }
@@ -168,12 +169,12 @@ public class HomeFragment extends Fragment {
 
     private void addDataSet() {
         Log.d(TAG, "addDataSet started");
-        ArrayList<PieEntry> yEntrys = new ArrayList<>();
-        yEntrys.add(new PieEntry((float) creditAmount, getString(R.string.credit)));
-        yEntrys.add(new PieEntry((float) debitAmount, getString(R.string.debit)));
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry((float) creditAmount, getString(R.string.credit)));
+        entries.add(new PieEntry((float) debitAmount, getString(R.string.debit)));
 
         //create the data set
-        PieDataSet pieDataSet = new PieDataSet(yEntrys, "");
+        PieDataSet pieDataSet = new PieDataSet(entries, "");
 
         //add colors to data set
         ArrayList<Integer> colors = new ArrayList<>();
@@ -191,12 +192,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case RC_ACTIVITY_CREDIT:
-                case RC_ACTIVITY_DEBIT:
-                    showData();
-                    break;
-            }
+            showData();
         }
     }
 }

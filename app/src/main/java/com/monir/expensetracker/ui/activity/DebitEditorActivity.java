@@ -346,14 +346,13 @@ public class DebitEditorActivity extends AppCompatActivity {
             if (deleted) {
                 Toast.makeText(this, getString(R.string.editor_delete_debit_successful),
                         Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
+                finish();
             } else {
                 Toast.makeText(this, getString(R.string.editor_delete_debit_failed),
                         Toast.LENGTH_SHORT).show();
             }
         }
-
-        // Close the activity
-        finish();
     }
 
     private void showUnsavedChangesDialog(

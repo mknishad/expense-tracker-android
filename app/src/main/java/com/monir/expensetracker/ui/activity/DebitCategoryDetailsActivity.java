@@ -1,10 +1,12 @@
 package com.monir.expensetracker.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
@@ -13,6 +15,7 @@ import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.ui.adapter.ExpandableListAdapter;
+import com.monir.expensetracker.util.Constant;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,6 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 public class DebitCategoryDetailsActivity extends AppCompatActivity {
+
+    private static final String TAG = "DebitCategoryDetailsAct";
+    private static final int OPEN_DEBIT_EDITOR_ACTIVITY = 203;
 
     private Toolbar toolbar;
     private ProgressBar progressBar;
@@ -46,13 +52,26 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
 
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
-        expListView = findViewById(R.id.expandableListView);
         progressBar = findViewById(R.id.progressBar);
+        expListView = findViewById(R.id.expandableListView);
         initToolbar();
+        populateListView();
 
-        prepareListData();
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-        expListView.setAdapter(listAdapter);
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Debit debit = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
+                //Toast.makeText(DebitCategoryDetailsActivity.this, debit.getDebitCategory() + " " + debit.getDebitDescription(), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(DebitCategoryDetailsActivity.this, DebitEditorActivity.class);
+                intent.putExtra(Constant.ACTIVITY_TYPE, Constant.ACTIVITY_TYPE_EDIT);
+                intent.putExtra(Constant.DEBIT_ITEM_ID, debit.getDebitId());
+                Log.e(TAG, "Clicked item id: " + id);
+                startActivityForResult(intent, OPEN_DEBIT_EDITOR_ACTIVITY);
+
+                return false;
+            }
+        });
     }
 
     private void initToolbar() {
@@ -69,6 +88,14 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void populateListView() {
+        progressBar.setVisibility(View.VISIBLE);
+        prepareListData();
+        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        expListView.setAdapter(listAdapter);
+        progressBar.setVisibility(View.GONE);
     }
 
     /*
@@ -89,6 +116,20 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
             if (entry.getValue().size() == 0) {
                 listDataHeader.remove(entry.getKey());
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == OPEN_DEBIT_EDITOR_ACTIVITY && resultCode == RESULT_OK) {
+            populateListView();
         }
     }
 }
