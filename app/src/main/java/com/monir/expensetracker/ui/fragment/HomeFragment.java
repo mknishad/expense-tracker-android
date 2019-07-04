@@ -24,6 +24,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.ExpenseDataSource;
+import com.monir.expensetracker.ui.activity.CreditCategoryDetailsActivity;
 import com.monir.expensetracker.ui.activity.CreditEditorActivity;
 import com.monir.expensetracker.ui.activity.DebitCategoryDetailsActivity;
 import com.monir.expensetracker.ui.activity.DebitEditorActivity;
@@ -98,14 +99,15 @@ public class HomeFragment extends Fragment {
         creditCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent creditCategoryIntent = new Intent(getActivity(), CreditCategoryDetailsActivity.class);
+                startActivityForResult(creditCategoryIntent, RC_ACTIVITY_CATEGORY);
             }
         });
         debitCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent debitCategoryDetailsIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);
-                startActivityForResult(debitCategoryDetailsIntent, RC_ACTIVITY_CATEGORY);
+                Intent debitCategoryIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);
+                startActivityForResult(debitCategoryIntent, RC_ACTIVITY_CATEGORY);
             }
         });
         addCreditImageView.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +158,8 @@ public class HomeFragment extends Fragment {
                     Intent debitCategoryDetailsIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);
                     startActivityForResult(debitCategoryDetailsIntent, RC_ACTIVITY_CATEGORY);
                 } else {
-
+                    Intent creditCategoryIntent = new Intent(getActivity(), CreditCategoryDetailsActivity.class);
+                    startActivityForResult(creditCategoryIntent, RC_ACTIVITY_CATEGORY);
                 }
             }
 

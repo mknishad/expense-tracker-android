@@ -100,4 +100,6 @@
     <string name="category">Category</string>
     <string name="amount">Amount</string>
     <string name="description">Description</string>
+    <string name="debit_categories">Debit Categories</string>
+    <string name="credit_categories">Credit Categories</string>
 </resources>

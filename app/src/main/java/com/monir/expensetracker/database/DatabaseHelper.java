@@ -50,10 +50,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_CREDIT_TABLE);
         db.execSQL(CREATE_CATEGORY_TABLE);
         db.execSQL(CREATE_DELETED_CREDIT_TABLE);
-        insertInitialCategories(db);
+        //insertInitialDebitCategories(db);
     }
 
-    private void insertInitialCategories(SQLiteDatabase db) {
+    private void insertInitialDebitCategories(SQLiteDatabase db) {
         db.execSQL("INSERT INTO " + Constant.TABLE_CATEGORY + " VALUES (" + 1 + ", \"Car\");");
         db.execSQL("INSERT INTO " + Constant.TABLE_CATEGORY + " VALUES (" + 2 + ", \"Charity\");");
         db.execSQL("INSERT INTO " + Constant.TABLE_CATEGORY + " VALUES (" + 3 + ", \"Clothes\");");

@@ -13,8 +13,8 @@ import android.widget.ProgressBar;
 
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.ExpenseDataSource;
-import com.monir.expensetracker.model.Debit;
-import com.monir.expensetracker.ui.adapter.ExpandableDebitListAdapter;
+import com.monir.expensetracker.model.Credit;
+import com.monir.expensetracker.ui.adapter.ExpandableCreditListAdapter;
 import com.monir.expensetracker.util.Constant;
 
 import java.util.Arrays;
@@ -23,18 +23,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class DebitCategoryDetailsActivity extends AppCompatActivity {
+public class CreditCategoryDetailsActivity extends AppCompatActivity {
 
-    private static final String TAG = "DebitCategoryDetailsAct";
-    private static final int OPEN_DEBIT_EDITOR_ACTIVITY = 204;
+    private static final String TAG = "CreditCategoryDetailsAc";
+    private static final int OPEN_CREDIT_EDITOR_ACTIVITY = 205;
 
     private Toolbar toolbar;
     private ProgressBar progressBar;
     private ExpandableListView expListView;
-    private ExpandableDebitListAdapter listAdapter;
+    private ExpandableCreditListAdapter listAdapter;
     private ExpenseDataSource expenseDataSource;
     private List<String> listDataHeader;
-    private HashMap<String, List<Debit>> listDataChild;
+    private HashMap<String, List<Credit>> listDataChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +60,14 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Debit debit = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
+                Credit credit = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
                 //Toast.makeText(DebitCategoryDetailsActivity.this, debit.getDebitCategory() + " " + debit.getDebitDescription(), Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(DebitCategoryDetailsActivity.this, DebitEditorActivity.class);
+                Intent intent = new Intent(CreditCategoryDetailsActivity.this, CreditEditorActivity.class);
                 intent.putExtra(Constant.ACTIVITY_TYPE, Constant.ACTIVITY_TYPE_EDIT);
-                intent.putExtra(Constant.DEBIT_ITEM_ID, debit.getDebitId());
+                intent.putExtra(Constant.CREDIT_ITEM_ID, credit.getCreditId());
                 Log.e(TAG, "Clicked item id: " + id);
-                startActivityForResult(intent, OPEN_DEBIT_EDITOR_ACTIVITY);
+                startActivityForResult(intent, OPEN_CREDIT_EDITOR_ACTIVITY);
 
                 return false;
             }
@@ -93,7 +93,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
     private void populateListView() {
         progressBar.setVisibility(View.VISIBLE);
         prepareListData();
-        listAdapter = new ExpandableDebitListAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new ExpandableCreditListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
         progressBar.setVisibility(View.GONE);
     }
@@ -102,17 +102,17 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
      * Preparing the list data
      */
     private void prepareListData() {
-        String[] categories = getResources().getStringArray(R.array.debit_categories);
+        String[] categories = getResources().getStringArray(R.array.credit_categories);
         listDataHeader = new LinkedList<>(Arrays.asList(categories));
         listDataHeader.remove(0);
 
         listDataChild = new HashMap<>();
         for (String category : listDataHeader) {
-            List<Debit> debits = expenseDataSource.getDebitsByCategory(category);
-            listDataChild.put(category, debits);
+            List<Credit> credits = expenseDataSource.getCreditsByCategory(category);
+            listDataChild.put(category, credits);
         }
 
-        for (Map.Entry<String, List<Debit>> entry : listDataChild.entrySet()) {
+        for (Map.Entry<String, List<Credit>> entry : listDataChild.entrySet()) {
             if (entry.getValue().size() == 0) {
                 listDataHeader.remove(entry.getKey());
             }
@@ -128,7 +128,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == OPEN_DEBIT_EDITOR_ACTIVITY && resultCode == RESULT_OK) {
+        if (requestCode == OPEN_CREDIT_EDITOR_ACTIVITY && resultCode == RESULT_OK) {
             populateListView();
         }
     }

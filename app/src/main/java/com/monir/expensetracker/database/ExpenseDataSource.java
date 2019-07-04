@@ -233,6 +233,32 @@ public class ExpenseDataSource {
         return credits;
     }
 
+    // return credit by category from debit table
+    public ArrayList<Credit> getCreditsByCategory(String category) {
+        ArrayList<Credit> credits = new ArrayList<>();
+        this.open();
+
+        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_CREDIT +
+                " WHERE " + Constant.COL_CREDIT_CATEGORY + " = ?", new String[]{category});
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Credit credit = createCredit(cursor);
+                credits.add(credit);
+                cursor.moveToNext();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            database.close();
+        }
+
+        return credits;
+    }
+
     // return all credits from credit table
     public ArrayList<Credit> getAllDeletedCredits() {
         ArrayList<Credit> credits = new ArrayList<>();

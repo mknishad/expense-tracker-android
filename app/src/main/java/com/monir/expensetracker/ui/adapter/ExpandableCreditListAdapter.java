@@ -8,20 +8,20 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.monir.expensetracker.R;
-import com.monir.expensetracker.model.Debit;
+import com.monir.expensetracker.model.Credit;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
 
     private Context mContext;
     private List<String> mListDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<Debit>> mListDataChild;
+    private HashMap<String, List<Credit>> mListDataChild;
 
-    public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<Debit>> listDataChild) {
+    public ExpandableCreditListAdapter(Context context, List<String> listDataHeader,
+                                       HashMap<String, List<Credit>> listDataChild) {
         this.mContext = context;
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listDataChild;
@@ -29,8 +29,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition))
-                .get(childPosition);
+        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition)).get(childPosition);
     }
 
     @Override
@@ -42,9 +41,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String descriptionText = ((Debit) getChild(groupPosition, childPosition)).getDebitDescription();
-        final String dateText = ((Debit) getChild(groupPosition, childPosition)).getDebitDate();
-        final String amountText = ((Debit) getChild(groupPosition, childPosition)).getDebitAmount().toString();
+        final String descriptionText = ((Credit) getChild(groupPosition, childPosition)).getCreditDescription();
+        final String dateText = ((Credit) getChild(groupPosition, childPosition)).getCreditDate();
+        final String amountText = ((Credit) getChild(groupPosition, childPosition)).getCreditAmount().toString();
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
@@ -93,9 +92,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_group, null);
         }
 
-        TextView categoryTextView = convertView
-                .findViewById(R.id.categoryTextView);
-        //categoryTextView.setTypeface(null, Typeface.BOLD);
+        TextView categoryTextView = convertView.findViewById(R.id.categoryTextView);
         categoryTextView.setText(headerTitle);
 
         return convertView;
