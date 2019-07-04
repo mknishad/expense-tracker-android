@@ -5,18 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.card.MaterialCardView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.ui.activity.CreditEditorActivity;
@@ -41,11 +47,14 @@ public class HomeFragment extends Fragment {
     private Context context;
     private View view;
 
-    private float[] yData;
     private PieChart pieChart;
     private TextView balanceTextView;
     private TextView creditTextView;
     private TextView debitTextView;
+    private MaterialCardView creditCardView;
+    private MaterialCardView debitCardView;
+    private ImageView addCreditImageView;
+    private ImageView addDebitImageView;
 
     private ExpenseDataSource expenseDataSource;
 
@@ -80,7 +89,25 @@ public class HomeFragment extends Fragment {
         balanceTextView = view.findViewById(R.id.balanceTextView);
         creditTextView = view.findViewById(R.id.creditTextView);
         debitTextView = view.findViewById(R.id.debitTextView);
-        view.findViewById(R.id.addCreditImageView).setOnClickListener(new View.OnClickListener() {
+        creditCardView = view.findViewById(R.id.creditCardView);
+        debitCardView = view.findViewById(R.id.debitCardView);
+        addCreditImageView = view.findViewById(R.id.addCreditImageView);
+        addDebitImageView = view.findViewById(R.id.addDebitImageView);
+
+        creditCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        debitCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "" + expenseDataSource.getTotalCreditByCategory("Communication"),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        addCreditImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CreditEditorActivity.class);
@@ -88,7 +115,7 @@ public class HomeFragment extends Fragment {
                 startActivityForResult(intent, RC_ACTIVITY_CREDIT);
             }
         });
-        view.findViewById(R.id.addDebitImageView).setOnClickListener(new View.OnClickListener() {
+        addDebitImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DebitEditorActivity.class);
@@ -118,6 +145,19 @@ public class HomeFragment extends Fragment {
         pieChart.setDrawEntryLabels(false);
 
         addDataSet();
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                PieEntry pe = (PieEntry) e;
+                Toast.makeText(context, pe.getLabel(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
     }
 
     private void addDataSet() {

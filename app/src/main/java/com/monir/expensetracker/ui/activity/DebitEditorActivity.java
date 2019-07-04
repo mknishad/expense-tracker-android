@@ -181,7 +181,6 @@ public class DebitEditorActivity extends AppCompatActivity {
         etDebitAmount.setOnTouchListener(touchListener);
     }
 
-
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

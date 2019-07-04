@@ -262,7 +262,7 @@ public class ExpenseDataSource {
         this.open();
 
         Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_CREDIT + " WHERE " +
-                Constant.COL_CREDIT_DATE + " = " + date, null);
+                Constant.COL_CREDIT_DATE + " = ?", new String[] {date});
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -360,13 +360,25 @@ public class ExpenseDataSource {
     // return total amount of credits
     public double getTotalCreditAmount() {
         this.open();
-        Cursor c = database.rawQuery("SELECT SUM(" + Constant.COL_CREDIT_AMOUNT + ") FROM " + Constant.TABLE_CREDIT, null);
+        Cursor c = database.rawQuery("SELECT SUM(" + Constant.COL_CREDIT_AMOUNT + ") FROM " +
+                Constant.TABLE_CREDIT, null);
         c.moveToFirst();
         double amount = c.getDouble(0);
         c.close();
         return amount;
     }
 
+    // return total credit amount by category
+    public double getTotalCreditByCategory(String category) {
+        this.open();
+        Cursor c = database.rawQuery("SELECT TOTAL(" + Constant.COL_DEBIT_AMOUNT + ") FROM " +
+                Constant.TABLE_DEBIT + " WHERE " + Constant.COL_DEBIT_CATEGORY + " = ?",
+                new String[] {category});
+        c.moveToFirst();
+        double total = c.getDouble(0);
+        c.close();
+        return total;
+    }
 
     // delete all credits
     public void deleteAllCredits() {
