@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -81,11 +80,11 @@ public class CreditEditorActivity extends AppCompatActivity {
         Log.e(TAG, "Activity type: " + activityType);
 
         if (activityType.equals(Constant.ACTIVITY_TYPE_ADD)) {
-            setTitle("Add Credit");
+            toolbar.setTitle(R.string.add_credit);
             invalidateOptionsMenu();
             setInitialDate();
         } else if (activityType.equals(Constant.ACTIVITY_TYPE_EDIT)) {
-            setTitle("Edit Credit");
+            toolbar.setTitle(R.string.edit_credit);
             creditId = creditIntent.getIntExtra(Constant.CREDIT_ITEM_ID, -1);
             Log.e(TAG, "credit list item position: " + creditId);
             if (creditId > -1) {

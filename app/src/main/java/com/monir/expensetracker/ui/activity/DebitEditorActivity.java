@@ -64,6 +64,7 @@ public class DebitEditorActivity extends AppCompatActivity {
     private String TAG = DebitEditorActivity.class.getSimpleName();
     private static final int RC_CHOOSE_IMAGE = 200;
 
+    private Toolbar toolbar;
     private ProgressBar progressBar;
     private static EditText etDebitDate;
     //private AutoCompleteTextView actvDebitCategory;
@@ -124,11 +125,11 @@ public class DebitEditorActivity extends AppCompatActivity {
         Log.e(TAG, "Activity type: " + activityType);
 
         if (activityType.equals(Constant.ACTIVITY_TYPE_ADD)) {
-            setTitle("Add Debit");
+            toolbar.setTitle(R.string.add_debit);
             invalidateOptionsMenu();
             setInitialDate();
         } else if (activityType.equals(Constant.ACTIVITY_TYPE_EDIT)) {
-            setTitle("Edit Debit");
+            toolbar.setTitle(R.string.edit_debit);
             debitId = debitIntent.getIntExtra(Constant.DEBIT_ITEM_ID, -1);
             Log.e(TAG, "debit list item position: " + debitId);
             if (debitId > -1) {
@@ -182,11 +183,12 @@ public class DebitEditorActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorText));
+        toolbar.setTitle(R.string.add_debit);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

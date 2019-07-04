@@ -157,6 +157,32 @@ public class ExpenseDataSource {
         return debits;
     }
 
+    // return debits by category from debit table
+    public ArrayList<Debit> getDebitsByCategory(String category) {
+        ArrayList<Debit> debits = new ArrayList<>();
+        this.open();
+
+        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_DEBIT +
+                " WHERE " + Constant.COL_DEBIT_CATEGORY + " = ?", new String[]{category});
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Debit debit = createDebit(cursor);
+                debits.add(debit);
+                cursor.moveToNext();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            database.close();
+        }
+
+        return debits;
+    }
+
     // return all debit amounts from a specific date
     public List<Debit> getDebitsInThisDate(String date) {
         List<Debit> debits = new ArrayList<>();
@@ -262,7 +288,7 @@ public class ExpenseDataSource {
         this.open();
 
         Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_CREDIT + " WHERE " +
-                Constant.COL_CREDIT_DATE + " = ?", new String[] {date});
+                Constant.COL_CREDIT_DATE + " = ?", new String[]{date});
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -372,8 +398,8 @@ public class ExpenseDataSource {
     public double getTotalCreditByCategory(String category) {
         this.open();
         Cursor c = database.rawQuery("SELECT TOTAL(" + Constant.COL_DEBIT_AMOUNT + ") FROM " +
-                Constant.TABLE_DEBIT + " WHERE " + Constant.COL_DEBIT_CATEGORY + " = ?",
-                new String[] {category});
+                        Constant.TABLE_DEBIT + " WHERE " + Constant.COL_DEBIT_CATEGORY + " = ?",
+                new String[]{category});
         c.moveToFirst();
         double total = c.getDouble(0);
         c.close();

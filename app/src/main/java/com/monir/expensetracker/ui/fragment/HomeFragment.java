@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
@@ -26,6 +25,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.ui.activity.CreditEditorActivity;
+import com.monir.expensetracker.ui.activity.DebitCategoryDetailsActivity;
 import com.monir.expensetracker.ui.activity.DebitEditorActivity;
 import com.monir.expensetracker.util.Constant;
 
@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
 
     private void init() {
         context = getActivity();
-        getActivity().setTitle("Home");
+        //getActivity().setTitle("Home");
         expenseDataSource = new ExpenseDataSource(context);
     }
 
@@ -103,8 +103,8 @@ public class HomeFragment extends Fragment {
         debitCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "" + expenseDataSource.getTotalCreditByCategory("Communication"),
-                        Toast.LENGTH_SHORT).show();
+                Intent debitDetailsIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);
+                startActivity(debitDetailsIntent);
             }
         });
         addCreditImageView.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +150,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 PieEntry pe = (PieEntry) e;
-                Toast.makeText(context, pe.getLabel(), Toast.LENGTH_SHORT).show();
+
+                if (pe.getLabel().equalsIgnoreCase("debit")) {
+                    Intent debitDetailsIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);
+                    startActivity(debitDetailsIntent);
+                } else {
+
+                }
             }
 
             @Override

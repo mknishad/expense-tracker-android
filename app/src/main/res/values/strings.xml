@@ -5,7 +5,9 @@
 <resources>
     <string name="app_name">Expense Tracker</string>
     <string name="add_credit">Add Credit</string>
+    <string name="edit_credit">Edit Credit</string>
     <string name="add_debit">Add Debit</string>
+    <string name="edit_debit">Edit Debit</string>
     <string name="scan">Scan</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
