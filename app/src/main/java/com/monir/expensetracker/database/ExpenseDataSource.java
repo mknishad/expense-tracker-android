@@ -5,10 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.monir.expensetracker.util.Constant;
 import com.monir.expensetracker.model.Category;
 import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.model.Debit;
+import com.monir.expensetracker.util.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,10 @@ public class ExpenseDataSource {
         contentValues.put(Constant.COL_DEBIT_DESCRIPTION, debit.getDebitDescription());
         contentValues.put(Constant.COL_DEBIT_AMOUNT, debit.getDebitAmount());
 
-        long inserted = database.insert(Constant.TABLE_DEBIT, null, contentValues);
+        long inserted = database.insert(
+                Constant.TABLE_DEBIT,
+                null,
+                contentValues);
 
         this.close();
 
@@ -60,7 +63,10 @@ public class ExpenseDataSource {
         contentValues.put(Constant.COL_CREDIT_AMOUNT, credit.getCreditAmount());
         contentValues.put(Constant.COL_CREDIT_TIMESTAMP, credit.getCreditTimestamp());
 
-        long inserted = database.insert(Constant.TABLE_CREDIT, null, contentValues);
+        long inserted = database.insert(
+                Constant.TABLE_CREDIT,
+                null,
+                contentValues);
 
         this.close();
 
@@ -78,7 +84,10 @@ public class ExpenseDataSource {
         contentValues.put(Constant.COL_CREDIT_AMOUNT, credit.getCreditAmount());
         contentValues.put(Constant.COL_CREDIT_TIMESTAMP, credit.getCreditTimestamp());
 
-        long inserted = database.insert(Constant.TABLE_DELETED_CREDIT, null, contentValues);
+        long inserted = database.insert(
+                Constant.TABLE_DELETED_CREDIT,
+                null,
+                contentValues);
 
         this.close();
 
@@ -92,7 +101,10 @@ public class ExpenseDataSource {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Constant.COL_CATEGORY_NAME, category.getCategoryName());
 
-        long inserted = database.insert(Constant.TABLE_CATEGORY, null, contentValues);
+        long inserted = database.insert(
+                Constant.TABLE_CATEGORY,
+                null,
+                contentValues);
 
         this.close();
 
@@ -103,9 +115,18 @@ public class ExpenseDataSource {
     public Debit getDebit(int id) {
         this.open();
 
-        Cursor cursor = database.query(Constant.TABLE_DEBIT, new String[]{Constant.COL_ID,
-                Constant.COL_DEBIT_DATE, Constant.COL_DEBIT_CATEGORY, Constant.COL_DEBIT_DESCRIPTION,
-                Constant.COL_DEBIT_AMOUNT}, Constant.COL_ID + " = " + id, null, null, null, null);
+        Cursor cursor = database.query(
+                Constant.TABLE_DEBIT,
+                new String[]{Constant.COL_ID,
+                        Constant.COL_DEBIT_DATE,
+                        Constant.COL_DEBIT_CATEGORY,
+                        Constant.COL_DEBIT_DESCRIPTION,
+                        Constant.COL_DEBIT_AMOUNT},
+                Constant.COL_ID + " = " + id,
+                null,
+                null,
+                null,
+                null);
 
         cursor.moveToFirst();
         Debit debit = createDebit(cursor);
@@ -119,9 +140,19 @@ public class ExpenseDataSource {
     public Credit getCredit(int id) {
         this.open();
 
-        Cursor cursor = database.query(Constant.TABLE_CREDIT, new String[]{Constant.COL_ID,
-                Constant.COL_CREDIT_DATE, Constant.COL_CREDIT_CATEGORY, Constant.COL_CREDIT_DESCRIPTION,
-                Constant.COL_CREDIT_AMOUNT, Constant.COL_CREDIT_TIMESTAMP}, Constant.COL_ID + " = " + id, null, null, null, null);
+        Cursor cursor = database.query(
+                Constant.TABLE_CREDIT,
+                new String[]{Constant.COL_ID,
+                        Constant.COL_CREDIT_DATE,
+                        Constant.COL_CREDIT_CATEGORY,
+                        Constant.COL_CREDIT_DESCRIPTION,
+                        Constant.COL_CREDIT_AMOUNT,
+                        Constant.COL_CREDIT_TIMESTAMP},
+                Constant.COL_ID + " = " + id,
+                null,
+                null,
+                null,
+                null);
 
         cursor.moveToFirst();
         Credit credit = createCredit(cursor);
@@ -137,7 +168,9 @@ public class ExpenseDataSource {
         ArrayList<Debit> debits = new ArrayList<>();
         this.open();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_DEBIT, null);
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_DEBIT,
+                null);
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -162,8 +195,10 @@ public class ExpenseDataSource {
         ArrayList<Debit> debits = new ArrayList<>();
         this.open();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_DEBIT +
-                " WHERE " + Constant.COL_DEBIT_CATEGORY + " = ?", new String[]{category});
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
+                        Constant.COL_DEBIT_CATEGORY + " = ?",
+                new String[]{category});
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -188,8 +223,10 @@ public class ExpenseDataSource {
         List<Debit> debits = new ArrayList<>();
         this.open();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
-                Constant.COL_DEBIT_DATE + " = ?", new String[]{date});
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
+                        Constant.COL_DEBIT_DATE + " = ?",
+                new String[]{date});
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -213,7 +250,9 @@ public class ExpenseDataSource {
         ArrayList<Credit> credits = new ArrayList<>();
         this.open();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_CREDIT, null);
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_CREDIT,
+                null);
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -238,8 +277,10 @@ public class ExpenseDataSource {
         ArrayList<Credit> credits = new ArrayList<>();
         this.open();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_CREDIT +
-                " WHERE " + Constant.COL_CREDIT_CATEGORY + " = ?", new String[]{category});
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_CREDIT + " WHERE " +
+                        Constant.COL_CREDIT_CATEGORY + " = ?",
+                new String[]{category});
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -264,7 +305,9 @@ public class ExpenseDataSource {
         ArrayList<Credit> credits = new ArrayList<>();
         this.open();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_DELETED_CREDIT, null);
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_DELETED_CREDIT,
+                null);
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -289,7 +332,9 @@ public class ExpenseDataSource {
         ArrayList<Category> categories = new ArrayList<>();
         this.open();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_CATEGORY, null);
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_CATEGORY,
+                null);
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -313,8 +358,10 @@ public class ExpenseDataSource {
         ArrayList<Double> creditAmounts = new ArrayList<>();
         this.open();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.TABLE_CREDIT + " WHERE " +
-                Constant.COL_CREDIT_DATE + " = ?", new String[]{date});
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_CREDIT + " WHERE " +
+                        Constant.COL_CREDIT_DATE + " = ?",
+                new String[]{date});
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -343,8 +390,11 @@ public class ExpenseDataSource {
         contentValues.put(Constant.COL_DEBIT_DESCRIPTION, debit.getDebitDescription());
         contentValues.put(Constant.COL_DEBIT_AMOUNT, debit.getDebitAmount());
 
-        int updated = database.update(Constant.TABLE_DEBIT, contentValues,
-                Constant.COL_ID + " = " + id, null);
+        int updated = database.update(
+                Constant.TABLE_DEBIT,
+                contentValues,
+                Constant.COL_ID + " = ?",
+                new String[]{String.valueOf(id)});
         this.close();
 
         return updated > 0;
@@ -361,8 +411,11 @@ public class ExpenseDataSource {
         contentValues.put(Constant.COL_CREDIT_AMOUNT, credit.getCreditAmount());
         contentValues.put(Constant.COL_CREDIT_TIMESTAMP, credit.getCreditTimestamp());
 
-        int updated = database.update(Constant.TABLE_CREDIT, contentValues,
-                Constant.COL_ID + " = " + id, null);
+        int updated = database.update(
+                Constant.TABLE_CREDIT,
+                contentValues,
+                Constant.COL_ID + " = ?",
+                new String[]{String.valueOf(id)});
         this.close();
 
         return updated > 0;
@@ -372,7 +425,9 @@ public class ExpenseDataSource {
     public boolean deleteDebit(int id) {
         this.open();
 
-        int deleted = database.delete(Constant.TABLE_DEBIT, Constant.COL_ID + " = " + id, null);
+        int deleted = database.delete(
+                Constant.TABLE_DEBIT, Constant.COL_ID + " = ?",
+                new String[]{String.valueOf(id)});
         this.close();
 
         return deleted > 0;
@@ -382,7 +437,10 @@ public class ExpenseDataSource {
     public boolean deleteCredit(int id) {
         this.open();
 
-        int deleted = database.delete(Constant.TABLE_CREDIT, Constant.COL_ID + " = " + id, null);
+        int deleted = database.delete(
+                Constant.TABLE_CREDIT,
+                Constant.COL_ID + " = ?" + id,
+                new String[]{String.valueOf(id)});
         this.close();
 
         return deleted > 0;
@@ -391,7 +449,21 @@ public class ExpenseDataSource {
     // return total amount of debits
     public double getTotalDebitAmount() {
         this.open();
-        Cursor c = database.rawQuery("SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT, null);
+        Cursor c = database.rawQuery(
+                "SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT,
+                null);
+        c.moveToFirst();
+        double amount = c.getDouble(0);
+        c.close();
+        return amount;
+    }
+
+    public double getTotalDebitAmountByCategory(String category) {
+        this.open();
+        Cursor c = database.rawQuery(
+                "SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT +
+                        " WHERE " + Constant.COL_DEBIT_CATEGORY + " = ?",
+                new String[]{category});
         c.moveToFirst();
         double amount = c.getDouble(0);
         c.close();
@@ -401,19 +473,21 @@ public class ExpenseDataSource {
     // return total amount of debits
     public double getTotalDebitAmountOnThisYear(int year) {
         this.open();
-        Cursor c = database.rawQuery("SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT, null);
+        Cursor c = database.rawQuery(
+                "SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT,
+                null);
         c.moveToFirst();
         double amount = c.getDouble(0);
         c.close();
         return amount;
     }
 
-
     // return total amount of credits
     public double getTotalCreditAmount() {
         this.open();
-        Cursor c = database.rawQuery("SELECT SUM(" + Constant.COL_CREDIT_AMOUNT + ") FROM " +
-                Constant.TABLE_CREDIT, null);
+        Cursor c = database.rawQuery(
+                "SELECT SUM(" + Constant.COL_CREDIT_AMOUNT + ") FROM " + Constant.TABLE_CREDIT,
+                null);
         c.moveToFirst();
         double amount = c.getDouble(0);
         c.close();
@@ -421,10 +495,11 @@ public class ExpenseDataSource {
     }
 
     // return total credit amount by category
-    public double getTotalCreditByCategory(String category) {
+    public double getTotalCreditAmountByCategory(String category) {
         this.open();
-        Cursor c = database.rawQuery("SELECT TOTAL(" + Constant.COL_DEBIT_AMOUNT + ") FROM " +
-                        Constant.TABLE_DEBIT + " WHERE " + Constant.COL_DEBIT_CATEGORY + " = ?",
+        Cursor c = database.rawQuery(
+                "SELECT TOTAL(" + Constant.COL_CREDIT_AMOUNT + ") FROM " +
+                        Constant.TABLE_CREDIT + " WHERE " + Constant.COL_CREDIT_CATEGORY + " = ?",
                 new String[]{category});
         c.moveToFirst();
         double total = c.getDouble(0);

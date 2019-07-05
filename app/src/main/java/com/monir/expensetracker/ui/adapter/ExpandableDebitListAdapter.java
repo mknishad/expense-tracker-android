@@ -9,14 +9,17 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Debit;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class ExpandableDebitListAdapter extends BaseExpandableListAdapter {
 
     private Context mContext;
+    private ExpenseDataSource mDataSource;
     private List<String> mListDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Debit>> mListDataChild;
@@ -24,6 +27,7 @@ public class ExpandableDebitListAdapter extends BaseExpandableListAdapter {
     public ExpandableDebitListAdapter(Context context, List<String> listDataHeader,
                                       HashMap<String, List<Debit>> listDataChild) {
         this.mContext = context;
+        this.mDataSource = new ExpenseDataSource(mContext);
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listDataChild;
     }
@@ -45,7 +49,7 @@ public class ExpandableDebitListAdapter extends BaseExpandableListAdapter {
 
         final String descriptionText = ((Debit) getChild(groupPosition, childPosition)).getDebitDescription();
         final String dateText = ((Debit) getChild(groupPosition, childPosition)).getDebitDate();
-        final String amountText = ((Debit) getChild(groupPosition, childPosition)).getDebitAmount().toString();
+        final double amount = ((Debit) getChild(groupPosition, childPosition)).getDebitAmount();
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
@@ -58,7 +62,7 @@ public class ExpandableDebitListAdapter extends BaseExpandableListAdapter {
         TextView txtDate = convertView.findViewById(R.id.dateTextView);
         txtDate.setText(dateText);
         TextView txtAmount = convertView.findViewById(R.id.amountTextView);
-        txtAmount.setText(amountText);
+        txtAmount.setText(String.format(Locale.getDefault(), "৳%.2f", amount));
 
         return convertView;
     }
@@ -88,16 +92,19 @@ public class ExpandableDebitListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
+        double headerAmount = mDataSource.getTotalDebitAmountByCategory(headerTitle);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_group, null);
         }
 
-        TextView categoryTextView = convertView.findViewById(R.id.categoryTextView);
-        categoryTextView.setText(headerTitle);
         ConstraintLayout groupContainer = convertView.findViewById(R.id.groupContainer);
         groupContainer.setBackgroundResource(android.R.color.holo_red_light);
+        TextView categoryTextView = convertView.findViewById(R.id.categoryTextView);
+        categoryTextView.setText(headerTitle);
+        TextView amountTextView = convertView.findViewById(R.id.amountTextView);
+        amountTextView.setText(String.format(Locale.getDefault(), "৳%.2f", headerAmount));
 
         return convertView;
     }

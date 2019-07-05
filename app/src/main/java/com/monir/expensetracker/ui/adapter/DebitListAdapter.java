@@ -17,6 +17,7 @@ import com.monir.expensetracker.model.Debit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class DebitListAdapter extends BaseAdapter implements Filterable {
@@ -50,14 +51,15 @@ public class DebitListAdapter extends BaseAdapter implements Filterable {
 
         holder.tvCategory.setText(mDisplayedDebits.get(position).getDebitCategory());
         holder.tvDate.setText(mDisplayedDebits.get(position).getDebitDate());
-        holder.tvAmount.setText(String.valueOf(mDisplayedDebits.get(position).getDebitAmount()));
+        holder.tvAmount.setText(String.format(Locale.getDefault(), "৳%.2f",
+                mDisplayedDebits.get(position).getDebitAmount()));
 
-        holder.rlContainer.setOnClickListener(new View.OnClickListener() {
+        /*holder.rlContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
-        });
+        });*/
 
         return convertView;
     }

@@ -3,11 +3,9 @@ package com.monir.expensetracker.ui.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -16,10 +14,10 @@ import android.widget.TextView;
 
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.model.Credit;
-import com.monir.expensetracker.model.Debit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class CreditListAdapter extends BaseAdapter implements Filterable {
@@ -52,14 +50,15 @@ public class CreditListAdapter extends BaseAdapter implements Filterable {
 
         holder.tvCategory.setText(mDisplayedCredits.get(position).getCreditCategory());
         holder.tvDate.setText(mDisplayedCredits.get(position).getCreditDate());
-        holder.tvAmount.setText(String.valueOf(mDisplayedCredits.get(position).getCreditAmount()));
+        holder.tvAmount.setText(String.format(Locale.getDefault(), "৳%.2f",
+                mDisplayedCredits.get(position).getCreditAmount()));
 
-        holder.rlContainer.setOnClickListener(new View.OnClickListener() {
+        /*holder.rlContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
-        });
+        });*/
 
         return convertView;
     }

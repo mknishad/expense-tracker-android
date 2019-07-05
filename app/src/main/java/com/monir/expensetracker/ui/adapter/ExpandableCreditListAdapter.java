@@ -9,14 +9,17 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Credit;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
 
     private Context mContext;
+    private ExpenseDataSource mDataSource;
     private List<String> mListDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Credit>> mListDataChild;
@@ -24,6 +27,7 @@ public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
     public ExpandableCreditListAdapter(Context context, List<String> listDataHeader,
                                        HashMap<String, List<Credit>> listDataChild) {
         this.mContext = context;
+        this.mDataSource = new ExpenseDataSource(mContext);
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listDataChild;
     }
@@ -42,9 +46,11 @@ public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String descriptionText = ((Credit) getChild(groupPosition, childPosition)).getCreditDescription();
+        final String descriptionText = ((Credit) getChild(groupPosition, childPosition))
+                .getCreditDescription();
         final String dateText = ((Credit) getChild(groupPosition, childPosition)).getCreditDate();
-        final String amountText = ((Credit) getChild(groupPosition, childPosition)).getCreditAmount().toString();
+        final Double amount = ((Credit) getChild(groupPosition, childPosition))
+                .getCreditAmount();
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
@@ -57,7 +63,7 @@ public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
         TextView txtDate = convertView.findViewById(R.id.dateTextView);
         txtDate.setText(dateText);
         TextView txtAmount = convertView.findViewById(R.id.amountTextView);
-        txtAmount.setText(amountText);
+        txtAmount.setText(String.format(Locale.getDefault(), "৳%.2f", amount));
 
         return convertView;
     }
@@ -84,19 +90,22 @@ public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,
-                             View convertView, ViewGroup parent) {
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
+                             ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
+        double headerAmount = mDataSource.getTotalCreditAmountByCategory(headerTitle);
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) this.mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater =
+                    (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_group, null);
         }
 
-        TextView categoryTextView = convertView.findViewById(R.id.categoryTextView);
-        categoryTextView.setText(headerTitle);
         ConstraintLayout groupContainer = convertView.findViewById(R.id.groupContainer);
         groupContainer.setBackgroundResource(android.R.color.holo_green_light);
+        TextView categoryTextView = convertView.findViewById(R.id.categoryTextView);
+        categoryTextView.setText(headerTitle);
+        TextView amountTextView = convertView.findViewById(R.id.amountTextView);
+        amountTextView.setText(String.format(Locale.getDefault(), "৳%.2f", headerAmount));
 
         return convertView;
     }
