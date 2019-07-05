@@ -15,14 +15,14 @@
             android:id="@+id/nav_debit"
             android:icon="@drawable/ic_remove_circle_outline_gray_24dp"
             android:title="@string/debit" />
-        <item
+        <!--<item
             android:id="@+id/nav_balance"
             android:icon="@drawable/ic_balance_gray_24dp"
-            android:title="@string/balance" />
-        <item
+            android:title="@string/balance" />-->
+        <!--<item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_history_gray_24dp"
-            android:title="@string/history" />
+            android:title="@string/history" />-->
     </group>
     <group
         android:id="@+id/menu_bottom"
