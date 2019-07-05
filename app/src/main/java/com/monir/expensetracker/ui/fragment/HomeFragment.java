@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.card.MaterialCardView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
@@ -13,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -53,8 +53,8 @@ public class HomeFragment extends Fragment {
     private TextView balanceTextView;
     private TextView creditTextView;
     private TextView debitTextView;
-    private MaterialCardView creditCardView;
-    private MaterialCardView debitCardView;
+    private RelativeLayout creditLayout;
+    private RelativeLayout debitLayout;
     private ImageView addCreditImageView;
     private ImageView addDebitImageView;
 
@@ -91,19 +91,19 @@ public class HomeFragment extends Fragment {
         balanceTextView = view.findViewById(R.id.balanceTextView);
         creditTextView = view.findViewById(R.id.creditTextView);
         debitTextView = view.findViewById(R.id.debitTextView);
-        creditCardView = view.findViewById(R.id.creditCardView);
-        debitCardView = view.findViewById(R.id.debitCardView);
+        creditLayout = view.findViewById(R.id.creditLayout);
+        debitLayout = view.findViewById(R.id.debitLayout);
         addCreditImageView = view.findViewById(R.id.addCreditImageView);
         addDebitImageView = view.findViewById(R.id.addDebitImageView);
 
-        creditCardView.setOnClickListener(new View.OnClickListener() {
+        creditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent creditCategoryIntent = new Intent(getActivity(), CreditCategoryDetailsActivity.class);
                 startActivityForResult(creditCategoryIntent, RC_ACTIVITY_CATEGORY);
             }
         });
-        debitCardView.setOnClickListener(new View.OnClickListener() {
+        debitLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent debitCategoryIntent = new Intent(getActivity(), DebitCategoryDetailsActivity.class);

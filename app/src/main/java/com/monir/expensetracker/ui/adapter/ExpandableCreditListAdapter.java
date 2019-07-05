@@ -1,6 +1,7 @@
 package com.monir.expensetracker.ui.adapter;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +95,8 @@ public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
 
         TextView categoryTextView = convertView.findViewById(R.id.categoryTextView);
         categoryTextView.setText(headerTitle);
+        ConstraintLayout groupContainer = convertView.findViewById(R.id.groupContainer);
+        groupContainer.setBackgroundResource(android.R.color.holo_green_light);
 
         return convertView;
     }

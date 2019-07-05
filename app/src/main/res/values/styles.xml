@@ -24,4 +24,9 @@
         <item name="android:tint">@android:color/white</item>
     </style>
 
+    <style name="Ripple">
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+    </style>
+
 </resources>
