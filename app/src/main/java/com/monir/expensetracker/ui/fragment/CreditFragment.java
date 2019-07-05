@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -87,7 +88,7 @@ public class CreditFragment extends Fragment {
             tvFooterCreditAmount = (TextView) view.findViewById(R.id.text_view_amount_credit);
 
             creditListView.setEmptyView(creditEmptyView);
-            creditListView.setTextFilterEnabled(true);
+            creditListView.setTextFilterEnabled(false);
 
             expenseDataSource = new ExpenseDataSource(getContext());
 
@@ -305,7 +306,9 @@ public class CreditFragment extends Fragment {
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        return false;
+                        Filter filter = creditListAdapter.getFilter();
+                        filter.filter(s);
+                        return true;
                     }
                 }
         );

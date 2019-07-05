@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -79,7 +80,7 @@ public class DebitFragment extends Fragment {
             tvFooterDebitAmount = (TextView) view.findViewById(R.id.text_view_amount_debit);
 
             debitListView.setEmptyView(debitEmptyView);
-            debitListView.setTextFilterEnabled(true);
+            debitListView.setTextFilterEnabled(false);
 
             expenseDataSource = new ExpenseDataSource(getContext());
 
@@ -167,7 +168,9 @@ public class DebitFragment extends Fragment {
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        return false;
+                        Filter filter = debitListAdapter.getFilter();
+                        filter.filter(s);
+                        return true;
                     }
                 }
         );
