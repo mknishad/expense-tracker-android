@@ -11,6 +11,7 @@ import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.util.Constant;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ExpenseDataSource {
@@ -111,7 +112,7 @@ public class ExpenseDataSource {
         return inserted > 0;
     }
 
-    // get a single debit from the table by debit id
+    // get a single debit from the debit table by debit id
     public Debit getDebit(int id) {
         this.open();
 
@@ -136,7 +137,7 @@ public class ExpenseDataSource {
         return debit;
     }
 
-    // get a single credit from the table by credit id
+    // get a single credit from the credit table by credit id
     public Credit getCredit(int id) {
         this.open();
 
@@ -218,6 +219,47 @@ public class ExpenseDataSource {
         return debits;
     }
 
+    // return credit by category from debit table
+    public List<Debit> getDebitsByMonth(int month, int year) {
+        List<Debit> debits = new LinkedList<>();
+        this.open();
+
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_DEBIT,
+                null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Debit debit = createDebit(cursor);
+                debits.add(debit);
+                cursor.moveToNext();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            database.close();
+        }
+
+        List<Debit> foundDebits = new LinkedList<>(debits);
+
+        for (Debit d : debits) {
+            String date = d.getDebitDate();
+            int firstIndex = date.indexOf('-');
+            int lastIndex = date.lastIndexOf('-');
+            int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
+            int y = Integer.parseInt(date.substring(lastIndex + 1));
+
+            if (m != month || y != year) {
+                foundDebits.remove(d);
+            }
+        }
+
+        return foundDebits;
+    }
+
     // return all debit amounts from a specific date
     public List<Debit> getDebitsInThisDate(String date) {
         List<Debit> debits = new ArrayList<>();
@@ -272,7 +314,7 @@ public class ExpenseDataSource {
         return credits;
     }
 
-    // return credit by category from debit table
+    // return credit by category from credit table
     public ArrayList<Credit> getCreditsByCategory(String category) {
         ArrayList<Credit> credits = new ArrayList<>();
         this.open();
@@ -295,6 +337,44 @@ public class ExpenseDataSource {
         }
         if (database != null) {
             database.close();
+        }
+
+        return credits;
+    }
+
+    // return credit by category from debit table
+    public List<Credit> getCreditsByMonth(int month, int year) {
+        List<Credit> credits = new LinkedList<>();
+        this.open();
+
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_CREDIT,
+                null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Credit credit = createCredit(cursor);
+                credits.add(credit);
+                cursor.moveToNext();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            database.close();
+        }
+
+        for (Credit c : credits) {
+            int firstIndex = c.getCreditDate().indexOf('-');
+            int lastIndex = c.getCreditDate().lastIndexOf('-');
+            int m = Integer.parseInt(c.getCreditDate().substring(firstIndex, lastIndex));
+            int y = Integer.parseInt(c.getCreditDate().substring(lastIndex));
+
+            if (m != month || y != year) {
+                credits.remove(c);
+            }
         }
 
         return credits;

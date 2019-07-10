@@ -379,7 +379,6 @@ public class DebitEditorActivity extends AppCompatActivity {
 
     private void saveDebit() {
         String date = etDebitDate.getText().toString().trim();
-        //String category = actvDebitCategory.getText().toString().trim();
         String category = categorySpinner.getSelectedItem().toString();
         String description = etDebitDescription.getText().toString().trim();
         String amount = etDebitAmount.getText().toString().trim();

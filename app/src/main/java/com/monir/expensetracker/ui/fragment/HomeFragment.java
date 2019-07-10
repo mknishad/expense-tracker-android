@@ -24,6 +24,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.ExpenseDataSource;
+import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.ui.activity.CreditCategoryDetailsActivity;
 import com.monir.expensetracker.ui.activity.CreditEditorActivity;
 import com.monir.expensetracker.ui.activity.DebitCategoryDetailsActivity;
@@ -31,6 +32,7 @@ import com.monir.expensetracker.ui.activity.DebitEditorActivity;
 import com.monir.expensetracker.util.Constant;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
@@ -76,6 +78,8 @@ public class HomeFragment extends Fragment {
         init();
         initViews(view);
         showData();
+
+        List<Debit> debits = expenseDataSource.getDebitsByMonth(1, 2019);
 
         return view;
     }

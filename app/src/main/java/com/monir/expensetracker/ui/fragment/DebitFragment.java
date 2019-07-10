@@ -64,7 +64,7 @@ public class DebitFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e(TAG, "onCreateView");
+        Log.d(TAG, "onCreateView");
         getActivity().setTitle("Debit");
         return view = inflater.inflate(R.layout.fragment_debit, container, false);
     }
