@@ -13,8 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.ui.fragment.AboutFragment;
 import com.monir.expensetracker.ui.fragment.CreditFragment;
 import com.monir.expensetracker.ui.fragment.DebitFragment;
+import com.monir.expensetracker.ui.fragment.HelpFragment;
 import com.monir.expensetracker.ui.fragment.HomeFragment;
 import com.monir.expensetracker.util.CalendarCollection;
 
@@ -121,13 +123,13 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_history) {
             HistoryFragment historyFragment = new HistoryFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, historyFragment, historyFragment.getTag()).commit();
-        } else if (id == R.id.nav_about) {
+        }*/ else if (id == R.id.nav_about) {
             AboutFragment aboutFragment = new AboutFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, aboutFragment, aboutFragment.getTag()).commit();
         } else if (id == R.id.nav_help) {
             HelpFragment helpFragment = new HelpFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, helpFragment, helpFragment.getTag()).commit();
-        }*/
+        }
     }
 
     @Override

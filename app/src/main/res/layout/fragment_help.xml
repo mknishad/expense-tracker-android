@@ -22,24 +22,28 @@ tools:context=".ui.fragment.HelpFragment">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:text="1. To add a debit, tap the add button on debit screen, select a category and scan a bill." />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textSize="20sp"
             android:text="2. To see your credits, go to Credit screen and accept SMS permission. You will see your credits here from your inbox." />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textSize="20sp"
             android:text="3. To see your balance , go to Balance screen. You will see your overall balance and and a pie chart showing your total debit and total credit." />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textSize="20sp"
             android:text="4. To see your transaction history, go to history screen. Your will see calendar view there. Tap on a date and you will see your debits on that day." />
     </LinearLayout>
 </ScrollView>
