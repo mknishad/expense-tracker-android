@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -59,6 +60,7 @@ public class HomeFragment extends Fragment {
     private RelativeLayout debitLayout;
     private ImageView addCreditImageView;
     private ImageView addDebitImageView;
+    private LinearLayout monthLayout;
 
     private ExpenseDataSource expenseDataSource;
 
@@ -99,6 +101,7 @@ public class HomeFragment extends Fragment {
         debitLayout = view.findViewById(R.id.debitLayout);
         addCreditImageView = view.findViewById(R.id.addCreditImageView);
         addDebitImageView = view.findViewById(R.id.addDebitImageView);
+        monthLayout = view.findViewById(R.id.monthLayout);
 
         creditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +131,12 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(context, DebitEditorActivity.class);
                 intent.putExtra(Constant.ACTIVITY_TYPE, Constant.ACTIVITY_TYPE_ADD);
                 startActivityForResult(intent, RC_ACTIVITY_DEBIT);
+            }
+        });
+        monthLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
