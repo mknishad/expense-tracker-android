@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,8 +61,11 @@ public class HomeFragment extends Fragment {
     private RelativeLayout debitLayout;
     private ImageView addCreditImageView;
     private ImageView addDebitImageView;
-    private LinearLayout monthLayout;
+    private TextView monthTextView;
+    private ImageView previousImageView;
+    private ImageView nextImageView;
 
+    private Calendar today;
     private ExpenseDataSource expenseDataSource;
 
     private double creditAmount;
@@ -76,6 +78,9 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        getActivity().setTitle(R.string.app_name);
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -92,6 +97,7 @@ public class HomeFragment extends Fragment {
         context = getActivity();
         //getActivity().setTitle("Home");
         expenseDataSource = new ExpenseDataSource(context);
+        today = Calendar.getInstance();
     }
 
     private void initViews(View view) {
@@ -103,7 +109,9 @@ public class HomeFragment extends Fragment {
         debitLayout = view.findViewById(R.id.debitLayout);
         addCreditImageView = view.findViewById(R.id.addCreditImageView);
         addDebitImageView = view.findViewById(R.id.addDebitImageView);
-        monthLayout = view.findViewById(R.id.monthLayout);
+        monthTextView = view.findViewById(R.id.monthTextView);
+        previousImageView = view.findViewById(R.id.previousImageView);
+        nextImageView = view.findViewById(R.id.nextImageView);
 
         creditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,10 +143,9 @@ public class HomeFragment extends Fragment {
                 startActivityForResult(intent, RC_ACTIVITY_DEBIT);
             }
         });
-        monthLayout.setOnClickListener(new View.OnClickListener() {
+        monthTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar today = Calendar.getInstance();
                 MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(context,
                         new MonthPickerDialog.OnDateSetListener() {
                             @Override
@@ -146,6 +153,8 @@ public class HomeFragment extends Fragment {
                                 /* on date set */
                                 Log.d(TAG, "selectedMonth = " + selectedMonth +
                                         " selectedYear = " + selectedYear);
+                                monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                                        getMonthString(selectedMonth), selectedYear));
                             }
                         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -156,6 +165,21 @@ public class HomeFragment extends Fragment {
                         .show();
             }
         });
+        previousImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        nextImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
     }
 
     private void showData() {
@@ -220,6 +244,51 @@ public class HomeFragment extends Fragment {
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
         pieChart.invalidate();
+    }
+
+    private String getMonthString(int i) {
+        String month;
+        switch (i) {
+            case 0:
+                month = "Jan";
+                break;
+            case 1:
+                month = "Feb";
+                break;
+            case 2:
+                month = "Mar";
+                break;
+            case 3:
+                month = "Apr";
+                break;
+            case 4:
+                month = "May";
+                break;
+            case 5:
+                month = "Jun";
+                break;
+            case 6:
+                month = "Jul";
+                break;
+            case 7:
+                month = "Aug";
+                break;
+            case 8:
+                month = "Sep";
+                break;
+            case 9:
+                month = "Oct";
+                break;
+            case 10:
+                month = "Nov";
+                break;
+            case 11:
+                month = "Dec";
+                break;
+            default:
+                month = "";
+        }
+        return month;
     }
 
     @Override

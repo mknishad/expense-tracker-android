@@ -1,5 +1,6 @@
 package com.monir.expensetracker.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,9 +27,12 @@ import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.ui.activity.CreditEditorActivity;
 import com.monir.expensetracker.ui.adapter.CreditListAdapter;
 import com.monir.expensetracker.util.Constant;
+import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +45,7 @@ public class CreditFragment extends Fragment {
     private static final int REQUEST_PERMISSION_SETTING = 102;
     private static final int OPEN_CREDIT_EDITOR_ACTIVITY = 103;
 
+    private Context context;
     private List<Credit> creditList;
     private ExpenseDataSource expenseDataSource;
     //private ProgressBar loadingCreditProgressBar;
@@ -48,6 +54,11 @@ public class CreditFragment extends Fragment {
     private TextView creditEmptyView;
     private View view;
     private TextView tvFooterCreditAmount;
+    private TextView monthTextView;
+    private ImageView previousImageView;
+    private ImageView nextImageView;
+
+    private Calendar today;
 
     private boolean sentToCreditEditor = false;
 
@@ -72,6 +83,7 @@ public class CreditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.e(TAG, "onCreateView");
         getActivity().setTitle("Credit");
+        context = getActivity();
         return view = inflater.inflate(R.layout.fragment_credit, container, false);
     }
 
@@ -86,11 +98,15 @@ public class CreditFragment extends Fragment {
             creditEmptyView = (TextView) view.findViewById(R.id.empty_view_credit);
             //loadingCreditProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading_credits);
             tvFooterCreditAmount = (TextView) view.findViewById(R.id.text_view_amount_credit);
+            monthTextView = view.findViewById(R.id.monthTextView);
+            previousImageView = view.findViewById(R.id.previousImageView);
+            nextImageView = view.findViewById(R.id.nextImageView);
 
             creditListView.setEmptyView(creditEmptyView);
             creditListView.setTextFilterEnabled(false);
 
             expenseDataSource = new ExpenseDataSource(getContext());
+            today = Calendar.getInstance();
 
             FloatingActionButton fabCredit = (FloatingActionButton) view.findViewById(R.id.fab_credit);
             fabCredit.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +133,44 @@ public class CreditFragment extends Fragment {
                     startActivityForResult(intent, OPEN_CREDIT_EDITOR_ACTIVITY);
                 }
             });
+
+            monthTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(context,
+                            new MonthPickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(int selectedMonth, int selectedYear) {
+                                    /* on date set */
+                                    Log.d(TAG, "selectedMonth = " + selectedMonth +
+                                            " selectedYear = " + selectedYear);
+                                    monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                                            getMonthString(selectedMonth), selectedYear));
+                                }
+                            }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
+
+                    builder.setActivatedMonth(today.get(Calendar.MONTH))
+                            .setActivatedYear(today.get(Calendar.YEAR))
+                            .setTitle("Select Month")
+                            .build()
+                            .show();
+                }
+            });
+            previousImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            nextImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                    getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
 
             loadCredits();
 
@@ -179,6 +233,51 @@ public class CreditFragment extends Fragment {
                 loadCredits();
             }*/
         }
+    }
+
+    private String getMonthString(int i) {
+        String month;
+        switch (i) {
+            case 0:
+                month = "Jan";
+                break;
+            case 1:
+                month = "Feb";
+                break;
+            case 2:
+                month = "Mar";
+                break;
+            case 3:
+                month = "Apr";
+                break;
+            case 4:
+                month = "May";
+                break;
+            case 5:
+                month = "Jun";
+                break;
+            case 6:
+                month = "Jul";
+                break;
+            case 7:
+                month = "Aug";
+                break;
+            case 8:
+                month = "Sep";
+                break;
+            case 9:
+                month = "Oct";
+                break;
+            case 10:
+                month = "Nov";
+                break;
+            case 11:
+                month = "Dec";
+                break;
+            default:
+                month = "";
+        }
+        return month;
     }
 
     /*@Override

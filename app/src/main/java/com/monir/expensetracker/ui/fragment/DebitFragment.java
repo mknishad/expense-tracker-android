@@ -1,6 +1,7 @@
 package com.monir.expensetracker.ui.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,9 +30,12 @@ import com.monir.expensetracker.ui.activity.DebitEditorActivity;
 import com.monir.expensetracker.ui.adapter.CreditListAdapter;
 import com.monir.expensetracker.ui.adapter.DebitListAdapter;
 import com.monir.expensetracker.util.Constant;
+import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -44,6 +49,7 @@ public class DebitFragment extends Fragment {
 
     private static final int OPEN_DEBIT_EDITOR_ACTIVITY = 203;
 
+    private Context context;
     private List<Debit> debitList;
     private ExpenseDataSource expenseDataSource;
     private DebitListAdapter debitListAdapter;
@@ -51,6 +57,11 @@ public class DebitFragment extends Fragment {
     private TextView debitEmptyView;
     private View view;
     private TextView tvFooterDebitAmount;
+    private TextView monthTextView;
+    private ImageView previousImageView;
+    private ImageView nextImageView;
+
+    private Calendar today;
 
     public DebitFragment() {
     }
@@ -66,6 +77,7 @@ public class DebitFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         getActivity().setTitle("Debit");
+        context = getActivity();
         return view = inflater.inflate(R.layout.fragment_debit, container, false);
     }
 
@@ -78,11 +90,15 @@ public class DebitFragment extends Fragment {
             debitEmptyView = (TextView) view.findViewById(R.id.empty_view_debit);
             //Log.e(TAG, "footer amount text view initialized");
             tvFooterDebitAmount = (TextView) view.findViewById(R.id.text_view_amount_debit);
+            monthTextView = view.findViewById(R.id.monthTextView);
+            previousImageView = view.findViewById(R.id.previousImageView);
+            nextImageView = view.findViewById(R.id.nextImageView);
 
             debitListView.setEmptyView(debitEmptyView);
             debitListView.setTextFilterEnabled(false);
 
             expenseDataSource = new ExpenseDataSource(getContext());
+            today = Calendar.getInstance();
 
             FloatingActionButton fabDebit = (FloatingActionButton) view.findViewById(R.id.fab_debit);
             fabDebit.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +121,91 @@ public class DebitFragment extends Fragment {
                 }
             });
 
+            monthTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(context,
+                            new MonthPickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(int selectedMonth, int selectedYear) {
+                                    /* on date set */
+                                    Log.d(TAG, "selectedMonth = " + selectedMonth +
+                                            " selectedYear = " + selectedYear);
+                                    monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                                            getMonthString(selectedMonth), selectedYear));
+                                }
+                            }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
+
+                    builder.setActivatedMonth(today.get(Calendar.MONTH))
+                            .setActivatedYear(today.get(Calendar.YEAR))
+                            .setTitle("Select Month")
+                            .build()
+                            .show();
+                }
+            });
+            previousImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            nextImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                    getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
+
             loadDebits();
         }
+    }
+
+    private String getMonthString(int i) {
+        String month;
+        switch (i) {
+            case 0:
+                month = "Jan";
+                break;
+            case 1:
+                month = "Feb";
+                break;
+            case 2:
+                month = "Mar";
+                break;
+            case 3:
+                month = "Apr";
+                break;
+            case 4:
+                month = "May";
+                break;
+            case 5:
+                month = "Jun";
+                break;
+            case 6:
+                month = "Jul";
+                break;
+            case 7:
+                month = "Aug";
+                break;
+            case 8:
+                month = "Sep";
+                break;
+            case 9:
+                month = "Oct";
+                break;
+            case 10:
+                month = "Nov";
+                break;
+            case 11:
+                month = "Dec";
+                break;
+            default:
+                month = "";
+        }
+        return month;
     }
 
     @Override
