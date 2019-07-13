@@ -31,8 +31,10 @@ import com.monir.expensetracker.ui.activity.CreditEditorActivity;
 import com.monir.expensetracker.ui.activity.DebitCategoryDetailsActivity;
 import com.monir.expensetracker.ui.activity.DebitEditorActivity;
 import com.monir.expensetracker.util.Constant;
+import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -136,7 +138,22 @@ public class HomeFragment extends Fragment {
         monthLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar today = Calendar.getInstance();
+                MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(context,
+                        new MonthPickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(int selectedMonth, int selectedYear) {
+                                /* on date set */
+                                Log.d(TAG, "selectedMonth = " + selectedMonth +
+                                        " selectedYear = " + selectedYear);
+                            }
+                        }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
+                builder.setActivatedMonth(today.get(Calendar.MONTH))
+                        .setActivatedYear(today.get(Calendar.YEAR))
+                        .setTitle("Select Month")
+                        .build()
+                        .show();
             }
         });
     }
