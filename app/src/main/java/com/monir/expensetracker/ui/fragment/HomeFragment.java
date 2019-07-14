@@ -86,9 +86,9 @@ public class HomeFragment extends Fragment {
 
         init();
         initViews(view);
-        showData();
+        showData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
 
-        List<Debit> debits = expenseDataSource.getDebitsByMonth(1, 2019);
+        //List<Debit> debits = expenseDataSource.getDebitsByMonth(1, 2019);
 
         return view;
     }
@@ -155,6 +155,9 @@ public class HomeFragment extends Fragment {
                                         " selectedYear = " + selectedYear);
                                 monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                                         getMonthString(selectedMonth), selectedYear));
+                                today.set(Calendar.MONTH, selectedMonth);
+                                today.set(Calendar.YEAR, selectedYear);
+                                showData(selectedMonth, selectedYear);
                             }
                         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -168,13 +171,33 @@ public class HomeFragment extends Fragment {
         previousImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                if (month == Calendar.JANUARY) {
+                    today.set(Calendar.MONTH, Calendar.DECEMBER);
+                    today.set(Calendar.YEAR, year - 1);
+                } else {
+                    today.set(Calendar.MONTH, month - 1);
+                }
+                monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                        getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
+                showData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
             }
         });
         nextImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                if (month == Calendar.DECEMBER) {
+                    today.set(Calendar.MONTH, Calendar.JANUARY);
+                    today.set(Calendar.YEAR, year + 1);
+                } else {
+                    today.set(Calendar.MONTH, month + 1);
+                }
+                monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                        getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
+                showData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
             }
         });
 
@@ -182,9 +205,9 @@ public class HomeFragment extends Fragment {
                 getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
     }
 
-    private void showData() {
-        creditAmount = expenseDataSource.getTotalCreditAmount();
-        debitAmount = expenseDataSource.getTotalDebitAmount();
+    private void showData(int month, int year) {
+        creditAmount = expenseDataSource.getTotalCreditAmountByMonth(month +1, year);
+        debitAmount = expenseDataSource.getTotalDebitAmountByMonth(month + 1, year);
         balanceTextView.setText(String.format(Locale.getDefault(), "৳%.2f",
                 (creditAmount - debitAmount)));
         creditTextView.setText(String.format(Locale.getDefault(), "৳%.2f", creditAmount));
@@ -294,7 +317,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            showData();
+            showData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
         }
     }
 }
