@@ -550,6 +550,47 @@ public class ExpenseDataSource {
         return amount;
     }
 
+    // return total debit amount by month
+    public double getTotalDebitAmountByMonth(int month, int year) {
+        List<Debit> debits = new LinkedList<>();
+        double totalDebit = 0;
+        this.open();
+
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_DEBIT,
+                null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Debit debit = createDebit(cursor);
+                debits.add(debit);
+                cursor.moveToNext();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            database.close();
+        }
+
+        for (Debit d : debits) {
+            String date = d.getDebitDate();
+            int firstIndex = date.indexOf('-');
+            int lastIndex = date.lastIndexOf('-');
+            int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
+            int y = Integer.parseInt(date.substring(lastIndex + 1));
+
+            if (m != month || y != year) {
+                continue;
+            }
+            totalDebit += d.getDebitAmount();
+        }
+
+        return totalDebit;
+    }
+
     // return total amount of debits
     public double getTotalDebitAmountOnThisYear(int year) {
         this.open();
@@ -585,6 +626,47 @@ public class ExpenseDataSource {
         double total = c.getDouble(0);
         c.close();
         return total;
+    }
+
+    // return total credit amount by month
+    public double getTotalCreditAmountByMonth(int month, int year) {
+        List<Credit> credits = new LinkedList<>();
+        double totalCredit = 0;
+        this.open();
+
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_CREDIT,
+                null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Credit credit = createCredit(cursor);
+                credits.add(credit);
+                cursor.moveToNext();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            database.close();
+        }
+
+        for (Credit c : credits) {
+            String date = c.getCreditDate();
+            int firstIndex = date.indexOf('-');
+            int lastIndex = date.lastIndexOf('-');
+            int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
+            int y = Integer.parseInt(date.substring(lastIndex + 1));
+
+            if (m != month || y != year) {
+                continue;
+            }
+            totalCredit += c.getCreditAmount();
+        }
+
+        return totalCredit;
     }
 
     // delete all credits
