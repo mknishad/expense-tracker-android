@@ -101,6 +101,8 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
                                         " selectedYear = " + selectedYear);
                                 monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                                         getMonthString(selectedMonth), selectedYear));
+                                today.set(Calendar.MONTH, selectedMonth);
+                                today.set(Calendar.YEAR, selectedYear);
                             }
                         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 

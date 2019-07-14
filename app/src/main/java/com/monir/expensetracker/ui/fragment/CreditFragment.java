@@ -146,6 +146,7 @@ public class CreditFragment extends Fragment {
                                             " selectedYear = " + selectedYear);
                                     monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                                             getMonthString(selectedMonth), selectedYear));
+                                    loadCredits(selectedMonth, selectedYear);
                                 }
                             }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -159,20 +160,40 @@ public class CreditFragment extends Fragment {
             previousImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    int month = today.get(Calendar.MONTH);
+                    int year = today.get(Calendar.YEAR);
+                    if (month == Calendar.JANUARY) {
+                        today.set(Calendar.MONTH, Calendar.DECEMBER);
+                        today.set(Calendar.YEAR, year - 1);
+                    } else {
+                        today.set(Calendar.MONTH, month - 1);
+                    }
+                    monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                            getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
+                    loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
                 }
             });
             nextImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    int month = today.get(Calendar.MONTH);
+                    int year = today.get(Calendar.YEAR);
+                    if (month == Calendar.DECEMBER) {
+                        today.set(Calendar.MONTH, Calendar.JANUARY);
+                        today.set(Calendar.YEAR, year + 1);
+                    } else {
+                        today.set(Calendar.MONTH, month + 1);
+                    }
+                    monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                            getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
+                    loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
                 }
             });
 
             monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                     getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
 
-            loadCredits();
+            loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
 
             /*if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
@@ -332,7 +353,7 @@ public class CreditFragment extends Fragment {
             }
         } else */
         if (requestCode == OPEN_CREDIT_EDITOR_ACTIVITY) {
-            loadCredits();
+            loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
         }
     }
 
@@ -350,15 +371,15 @@ public class CreditFragment extends Fragment {
 
         if (sentToCreditEditor) {
             sentToCreditEditor = false;
-            loadCredits();
+            loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
         }
     }
 
-    private void loadCredits() {
+    private void loadCredits(int month, int year) {
         creditListView.setAdapter(new CreditListAdapter(getContext(), new ArrayList<Credit>()));
 
         try {
-            creditList = expenseDataSource.getAllCredits();
+            creditList = expenseDataSource.getCreditsByMonth(month + 1, year);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -369,7 +390,7 @@ public class CreditFragment extends Fragment {
             Log.e(TAG, "creditList size: " + creditList.size());
             creditListAdapter = new CreditListAdapter(getContext(), creditList);
             creditListView.setAdapter(creditListAdapter);
-            tvFooterCreditAmount.setText("" + expenseDataSource.getTotalCreditAmount());
+            tvFooterCreditAmount.setText(String.valueOf(expenseDataSource.getTotalCreditAmountByMonth(month, year)));
         }
     }
 
@@ -385,7 +406,7 @@ public class CreditFragment extends Fragment {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                loadCredits();
+                loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
                 return true;
             }
         });

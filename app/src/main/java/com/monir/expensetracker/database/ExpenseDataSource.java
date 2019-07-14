@@ -366,6 +366,8 @@ public class ExpenseDataSource {
             database.close();
         }
 
+        List<Credit> foundCredits = new ArrayList<>(credits);
+
         for (Credit c : credits) {
             int firstIndex = c.getCreditDate().indexOf('-');
             int lastIndex = c.getCreditDate().lastIndexOf('-');
@@ -373,11 +375,11 @@ public class ExpenseDataSource {
             int y = Integer.parseInt(c.getCreditDate().substring(lastIndex));
 
             if (m != month || y != year) {
-                credits.remove(c);
+                foundCredits.remove(c);
             }
         }
 
-        return credits;
+        return foundCredits;
     }
 
     // return all credits from credit table
