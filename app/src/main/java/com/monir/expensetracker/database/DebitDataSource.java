@@ -133,6 +133,48 @@ public class DebitDataSource {
         return debits;
     }
 
+
+    // return credit by category from credit table
+    public List<Debit> getDebitsByCategoryAndMonth(String category, int month, int year) {
+        ArrayList<Debit> debits = new ArrayList<>();
+        this.open();
+
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
+                        Constant.COL_DEBIT_CATEGORY + " = ?",
+                new String[]{category});
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Debit credit = createDebit(cursor);
+                debits.add(credit);
+                cursor.moveToNext();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            this.close();
+        }
+
+        List<Debit> foundDebits = new ArrayList<>(debits);
+
+        for (Debit d : debits) {
+            int firstIndex = d.getDebitDate().indexOf('-');
+            int lastIndex = d.getDebitDate().lastIndexOf('-');
+            int m = Integer.parseInt(d.getDebitDate().substring(firstIndex + 1, lastIndex));
+            int y = Integer.parseInt(d.getDebitDate().substring(lastIndex + 1));
+
+            if (m != month || y != year) {
+                foundDebits.remove(d);
+            }
+        }
+
+        return foundDebits;
+    }
+
     // return credit by category from debit table
     public List<Debit> getDebitsByMonth(int month, int year) {
         List<Debit> debits = new LinkedList<>();
@@ -255,6 +297,47 @@ public class DebitDataSource {
         double amount = c.getDouble(0);
         c.close();
         return amount;
+    }
+
+    // return total credit amount by category and month
+    public double getTotalDebitAmountByCategoryAndMonth(String category, int month, int year) {
+        List<Debit> debits = new LinkedList<>();
+        double totalDebit = 0;
+        this.open();
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
+                        Constant.COL_DEBIT_CATEGORY + " = ?",
+                new String[]{category});
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Debit debit = createDebit(cursor);
+                debits.add(debit);
+                cursor.moveToNext();
+            }
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            database.close();
+        }
+
+        for (Debit d : debits) {
+            String date = d.getDebitDate();
+            int firstIndex = date.indexOf('-');
+            int lastIndex = date.lastIndexOf('-');
+            int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
+            int y = Integer.parseInt(date.substring(lastIndex + 1));
+            if (m != month || y != year) {
+                continue;
+            }
+            totalDebit += d.getDebitAmount();
+        }
+
+        return totalDebit;
     }
 
     // return total debit amount by month

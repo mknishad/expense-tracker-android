@@ -189,7 +189,6 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
         String[] categories = getResources().getStringArray(R.array.credit_categories);
         listDataHeader = new LinkedList<>(Arrays.asList(categories));
         listDataHeader.remove(0);
-        double total = 0;
 
         listDataChild = new HashMap<>();
         for (String category : listDataHeader) {

@@ -72,7 +72,6 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
         previousImageView = findViewById(R.id.previousImageView);
         nextImageView = findViewById(R.id.nextImageView);
         initToolbar();
-        populateListView();
 
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -101,6 +100,9 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
                                         " selectedYear = " + selectedYear);
                                 monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                                         getMonthString(selectedMonth), selectedYear));
+                                calendar.set(Calendar.MONTH, selectedMonth);
+                                calendar.set(Calendar.YEAR, selectedYear);
+                                loadData();
                             }
                         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH));
 
@@ -114,18 +116,44 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
         previousImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+                if (month == Calendar.JANUARY) {
+                    calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+                    calendar.set(Calendar.YEAR, year - 1);
+                } else {
+                    calendar.set(Calendar.MONTH, month - 1);
+                }
+                monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                        getMonthString(calendar.get(Calendar.MONTH)), calendar.get(Calendar.YEAR)));
+                loadData();
             }
         });
         nextImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+                if (month == Calendar.getInstance().get(Calendar.MONTH)
+                        && year == Calendar.getInstance().get(Calendar.YEAR)) {
+                    return;
+                }
+                if (month == Calendar.DECEMBER) {
+                    calendar.set(Calendar.MONTH, Calendar.JANUARY);
+                    calendar.set(Calendar.YEAR, year + 1);
+                } else {
+                    calendar.set(Calendar.MONTH, month + 1);
+                }
+                monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                        getMonthString(calendar.get(Calendar.MONTH)), calendar.get(Calendar.YEAR)));
+                loadData();
             }
         });
 
         monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                 getMonthString(calendar.get(Calendar.MONTH)), calendar.get(Calendar.YEAR)));
+
+        loadData();
     }
 
     private void initToolbar() {
@@ -144,10 +172,10 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void populateListView() {
+    private void loadData() {
         progressBar.setVisibility(View.VISIBLE);
         prepareListData();
-        listAdapter = new ExpandableDebitListAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new ExpandableDebitListAdapter(this, listDataHeader, listDataChild, calendar);
         expListView.setAdapter(listAdapter);
         progressBar.setVisibility(View.GONE);
     }
@@ -162,7 +190,8 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
 
         listDataChild = new HashMap<>();
         for (String category : listDataHeader) {
-            List<Debit> debits = debitDataSource.getDebitsByCategory(category);
+            List<Debit> debits = debitDataSource.getDebitsByCategoryAndMonth(category,
+                    calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
             listDataChild.put(category, debits);
         }
 
@@ -228,7 +257,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OPEN_DEBIT_EDITOR_ACTIVITY && resultCode == RESULT_OK) {
-            populateListView();
+            loadData();
         }
     }
 }

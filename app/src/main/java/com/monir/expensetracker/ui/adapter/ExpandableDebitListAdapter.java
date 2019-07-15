@@ -13,6 +13,7 @@ import com.monir.expensetracker.database.DebitDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Debit;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -24,13 +25,16 @@ public class ExpandableDebitListAdapter extends BaseExpandableListAdapter {
     private List<String> mListDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Debit>> mListDataChild;
+    private Calendar calendar;
 
     public ExpandableDebitListAdapter(Context context, List<String> listDataHeader,
-                                      HashMap<String, List<Debit>> listDataChild) {
+                                      HashMap<String, List<Debit>> listDataChild,
+                                      Calendar calendar) {
         this.mContext = context;
         this.debitDataSource = new DebitDataSource(mContext);
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listDataChild;
+        this.calendar = calendar;
     }
 
     @Override
@@ -93,7 +97,8 @@ public class ExpandableDebitListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
-        double headerAmount = debitDataSource.getTotalDebitAmountByCategory(headerTitle);
+        double headerAmount = debitDataSource.getTotalDebitAmountByCategoryAndMonth(headerTitle,
+                calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

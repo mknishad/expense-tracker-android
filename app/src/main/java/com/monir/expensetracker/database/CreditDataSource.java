@@ -323,7 +323,7 @@ public class CreditDataSource {
         return total;
     }
 
-    // return total credit amount by category
+    // return total credit amount by category and month
     public double getTotalCreditAmountByCategoryAndMonth(String category, int month, int year) {
         List<Credit> credits = new LinkedList<>();
         double totalCredit = 0;
