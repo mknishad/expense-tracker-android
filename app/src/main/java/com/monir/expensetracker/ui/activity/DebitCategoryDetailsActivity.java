@@ -45,6 +45,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
     private TextView monthTextView;
     private ImageView previousImageView;
     private ImageView nextImageView;
+    private TextView tvFooter;
 
     private Calendar calendar;
 
@@ -71,6 +72,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
         monthTextView = findViewById(R.id.monthTextView);
         previousImageView = findViewById(R.id.previousImageView);
         nextImageView = findViewById(R.id.nextImageView);
+        tvFooter = findViewById(R.id.tv_footer);
         initToolbar();
 
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -195,10 +197,21 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
             listDataChild.put(category, debits);
         }
 
+        double totalDebit = 0;
         for (Map.Entry<String, List<Debit>> entry : listDataChild.entrySet()) {
             if (entry.getValue().size() == 0) {
                 listDataHeader.remove(entry.getKey());
             }
+            for (Debit d : entry.getValue()) {
+                totalDebit += d.getDebitAmount();
+            }
+        }
+
+        if (totalDebit > 0) {
+            tvFooter.setVisibility(View.VISIBLE);
+            tvFooter.setText(String.format(Locale.getDefault(), "Total: %.2f", totalDebit));
+        } else {
+            tvFooter.setVisibility(View.GONE);
         }
     }
 
