@@ -57,6 +57,7 @@ public class DebitFragment extends Fragment {
     private ListView debitListView;
     private TextView debitEmptyView;
     private View view;
+    private TextView tvFooter;
     private TextView tvFooterDebitAmount;
     private TextView monthTextView;
     private ImageView previousImageView;
@@ -87,10 +88,11 @@ public class DebitFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (null != view) {
-            debitListView = (ListView) view.findViewById(R.id.lv_debits);
-            debitEmptyView = (TextView) view.findViewById(R.id.empty_view_debit);
+            debitListView = view.findViewById(R.id.lv_debits);
+            debitEmptyView = view.findViewById(R.id.empty_view_debit);
             //Log.e(TAG, "footer amount text view initialized");
-            tvFooterDebitAmount = (TextView) view.findViewById(R.id.text_view_amount_debit);
+            tvFooter = view.findViewById(R.id.tv_footer);
+            tvFooterDebitAmount = view.findViewById(R.id.text_view_amount_debit);
             monthTextView = view.findViewById(R.id.monthTextView);
             previousImageView = view.findViewById(R.id.previousImageView);
             nextImageView = view.findViewById(R.id.nextImageView);
@@ -101,7 +103,7 @@ public class DebitFragment extends Fragment {
             debitDataSource = new DebitDataSource(getContext());
             today = Calendar.getInstance();
 
-            FloatingActionButton fabDebit = (FloatingActionButton) view.findViewById(R.id.fab_debit);
+            FloatingActionButton fabDebit = view.findViewById(R.id.fab_debit);
             fabDebit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -134,6 +136,9 @@ public class DebitFragment extends Fragment {
                                             " selectedYear = " + selectedYear);
                                     monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                                             getMonthString(selectedMonth), selectedYear));
+                                    today.set(Calendar.MONTH, selectedMonth);
+                                    today.set(Calendar.YEAR, selectedYear);
+                                    loadDebits(selectedMonth, selectedYear);
                                 }
                             }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -147,20 +152,40 @@ public class DebitFragment extends Fragment {
             previousImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    int month = today.get(Calendar.MONTH);
+                    int year = today.get(Calendar.YEAR);
+                    if (month == Calendar.JANUARY) {
+                        today.set(Calendar.MONTH, Calendar.DECEMBER);
+                        today.set(Calendar.YEAR, year - 1);
+                    } else {
+                        today.set(Calendar.MONTH, month - 1);
+                    }
+                    monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                            getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
+                    loadDebits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
                 }
             });
             nextImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    int month = today.get(Calendar.MONTH);
+                    int year = today.get(Calendar.YEAR);
+                    if (month == Calendar.DECEMBER) {
+                        today.set(Calendar.MONTH, Calendar.JANUARY);
+                        today.set(Calendar.YEAR, year + 1);
+                    } else {
+                        today.set(Calendar.MONTH, month + 1);
+                    }
+                    monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                            getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
+                    loadDebits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
                 }
             });
 
             monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                     getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
 
-            loadDebits();
+            loadDebits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
         }
     }
 
@@ -213,25 +238,29 @@ public class DebitFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OPEN_DEBIT_EDITOR_ACTIVITY && resultCode == RESULT_OK) {
-            loadDebits();
+            loadDebits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
         }
     }
 
-    private void loadDebits() {
-        debitListView.setAdapter(new CreditListAdapter(getContext(), new ArrayList<Credit>()));
+    private void loadDebits(int month, int year) {
+        debitListView.setAdapter(new CreditListAdapter(context, new ArrayList<Credit>()));
 
         try {
-            debitList = debitDataSource.getAllDebits();
+            debitList = debitDataSource.getDebitsByMonth(month + 1, year);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         if (debitList.size() == 0) {
             debitEmptyView.setVisibility(View.VISIBLE);
+            tvFooter.setVisibility(View.GONE);
+            tvFooterDebitAmount.setVisibility(View.GONE);
         } else {
             Log.e(TAG, "debitList size: " + debitList.size());
-            debitListAdapter = new DebitListAdapter(getContext(), debitList);
+            debitListAdapter = new DebitListAdapter(context, debitList);
             debitListView.setAdapter(debitListAdapter);
+            tvFooter.setVisibility(View.VISIBLE);
+            tvFooterDebitAmount.setVisibility(View.VISIBLE);
             tvFooterDebitAmount.setText(String.valueOf(debitDataSource.getTotalDebitAmount()));
         }
     }
@@ -248,7 +277,7 @@ public class DebitFragment extends Fragment {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                loadDebits();
+                loadDebits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
                 return true;
             }
         });

@@ -148,6 +148,8 @@ public class CreditFragment extends Fragment {
                                             " selectedYear = " + selectedYear);
                                     monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                                             getMonthString(selectedMonth), selectedYear));
+                                    today.set(Calendar.MONTH, selectedMonth);
+                                    today.set(Calendar.YEAR, selectedYear);
                                     loadCredits(selectedMonth, selectedYear);
                                 }
                             }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
@@ -196,65 +198,6 @@ public class CreditFragment extends Fragment {
                     getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
 
             loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-
-            /*if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
-                    //Show Information about why you need the permission
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Need Permission");
-                    builder.setMessage("This app needs SMS permission.");
-                    builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_CALLBACK_CONSTANT);
-                        }
-                    });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    builder.show();
-                } else if (permissionStatus.getBoolean(Manifest.permission.READ_SMS, false)) {
-                    //Previously Permission Request was cancelled with 'Dont Ask Again',
-                    // Redirect to Settings after showing Information about why you need the permission
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Need Permission");
-                    builder.setMessage("This app needs SMS permission.");
-                    builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            sentToSettings = true;
-                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                            intent.setData(uri);
-                            startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                            Toast.makeText(getActivity(), "Go to Permissions to Grant SMS", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    builder.show();
-                } else {
-                    //just request the permission
-                    requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_CALLBACK_CONSTANT);
-                }
-
-                SharedPreferences.Editor editor = permissionStatus.edit();
-                editor.putBoolean(Manifest.permission.READ_PHONE_STATE, true);
-                editor.putBoolean(Manifest.permission.READ_SMS, true);
-                editor.commit();
-            } else {
-                //You already have the permission, just go ahead.
-                loadCredits();
-            }*/
         }
     }
 
@@ -303,57 +246,9 @@ public class CreditFragment extends Fragment {
         return month;
     }
 
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_CALLBACK_CONSTANT) {
-            //check if all permissions are granted
-            boolean allgranted = false;
-            for (int i = 0; i < grantResults.length; i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    allgranted = true;
-                } else {
-                    allgranted = false;
-                    break;
-                }
-            }
-
-
-            if (allgranted) {
-                loadCredits();
-            } else if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Need SMS Permission");
-                builder.setMessage("This app needs SMS permission.");
-                builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_CALLBACK_CONSTANT);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
-            } else {
-                Toast.makeText(getActivity(), "Unable to get Permission", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }*/
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /*if (requestCode == REQUEST_PERMISSION_SETTING) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
-                //Got Permission
-                loadCredits();
-            }
-        } else */
         if (requestCode == OPEN_CREDIT_EDITOR_ACTIVITY) {
             loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
         }
@@ -363,13 +258,6 @@ public class CreditFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.e(TAG, "onResume");
-
-        /*if (sentToSettings) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
-                //Got Permission
-                loadCredits();
-            }
-        }*/
 
         if (sentToCreditEditor) {
             sentToCreditEditor = false;
