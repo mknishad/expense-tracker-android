@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.DebitDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.model.Debit;
@@ -51,7 +52,7 @@ public class DebitFragment extends Fragment {
 
     private Context context;
     private List<Debit> debitList;
-    private ExpenseDataSource expenseDataSource;
+    private DebitDataSource debitDataSource;
     private DebitListAdapter debitListAdapter;
     private ListView debitListView;
     private TextView debitEmptyView;
@@ -97,7 +98,7 @@ public class DebitFragment extends Fragment {
             debitListView.setEmptyView(debitEmptyView);
             debitListView.setTextFilterEnabled(false);
 
-            expenseDataSource = new ExpenseDataSource(getContext());
+            debitDataSource = new DebitDataSource(getContext());
             today = Calendar.getInstance();
 
             FloatingActionButton fabDebit = (FloatingActionButton) view.findViewById(R.id.fab_debit);
@@ -220,7 +221,7 @@ public class DebitFragment extends Fragment {
         debitListView.setAdapter(new CreditListAdapter(getContext(), new ArrayList<Credit>()));
 
         try {
-            debitList = expenseDataSource.getAllDebits();
+            debitList = debitDataSource.getAllDebits();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -231,7 +232,7 @@ public class DebitFragment extends Fragment {
             Log.e(TAG, "debitList size: " + debitList.size());
             debitListAdapter = new DebitListAdapter(getContext(), debitList);
             debitListView.setAdapter(debitListAdapter);
-            tvFooterDebitAmount.setText(String.valueOf(expenseDataSource.getTotalDebitAmount()));
+            tvFooterDebitAmount.setText(String.valueOf(debitDataSource.getTotalDebitAmount()));
         }
     }
 

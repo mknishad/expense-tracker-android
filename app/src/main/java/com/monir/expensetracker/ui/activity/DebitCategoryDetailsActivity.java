@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.DebitDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.ui.adapter.ExpandableDebitListAdapter;
@@ -39,7 +40,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ExpandableListView expListView;
     private ExpandableDebitListAdapter listAdapter;
-    private ExpenseDataSource expenseDataSource;
+    private DebitDataSource debitDataSource;
     private List<String> listDataHeader;
     private HashMap<String, List<Debit>> listDataChild;
     private TextView monthTextView;
@@ -58,7 +59,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
 
     private void init() {
         context = DebitCategoryDetailsActivity.this;
-        expenseDataSource = new ExpenseDataSource(context);
+        debitDataSource = new DebitDataSource(context);
         today = Calendar.getInstance();
 
         initViews();
@@ -162,7 +163,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
 
         listDataChild = new HashMap<>();
         for (String category : listDataHeader) {
-            List<Debit> debits = expenseDataSource.getDebitsByCategory(category);
+            List<Debit> debits = debitDataSource.getDebitsByCategory(category);
             listDataChild.put(category, debits);
         }
 

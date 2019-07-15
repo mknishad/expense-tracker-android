@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.CreditDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.ui.activity.CreditEditorActivity;
@@ -47,7 +48,7 @@ public class CreditFragment extends Fragment {
 
     private Context context;
     private List<Credit> creditList;
-    private ExpenseDataSource expenseDataSource;
+    private CreditDataSource creditDataSource;
     //private ProgressBar loadingCreditProgressBar;
     private CreditListAdapter creditListAdapter;
     private ListView creditListView;
@@ -105,10 +106,10 @@ public class CreditFragment extends Fragment {
             creditListView.setEmptyView(creditEmptyView);
             creditListView.setTextFilterEnabled(false);
 
-            expenseDataSource = new ExpenseDataSource(getContext());
+            creditDataSource = new CreditDataSource(getContext());
             today = Calendar.getInstance();
 
-            FloatingActionButton fabCredit = (FloatingActionButton) view.findViewById(R.id.fab_credit);
+            FloatingActionButton fabCredit = view.findViewById(R.id.fab_credit);
             fabCredit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -379,7 +380,7 @@ public class CreditFragment extends Fragment {
         creditListView.setAdapter(new CreditListAdapter(getContext(), new ArrayList<Credit>()));
 
         try {
-            creditList = expenseDataSource.getCreditsByMonth(month + 1, year);
+            creditList = creditDataSource.getCreditsByMonth(month + 1, year);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -390,7 +391,7 @@ public class CreditFragment extends Fragment {
             Log.e(TAG, "creditList size: " + creditList.size());
             creditListAdapter = new CreditListAdapter(getContext(), creditList);
             creditListView.setAdapter(creditListAdapter);
-            tvFooterCreditAmount.setText(String.valueOf(expenseDataSource.getTotalCreditAmountByMonth(month, year)));
+            tvFooterCreditAmount.setText(String.valueOf(creditDataSource.getTotalCreditAmountByMonth(month, year)));
         }
     }
 

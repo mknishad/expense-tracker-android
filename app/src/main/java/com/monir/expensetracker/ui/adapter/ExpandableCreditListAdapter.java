@@ -9,6 +9,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.CreditDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Credit;
 
@@ -19,7 +20,7 @@ import java.util.Locale;
 public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
 
     private Context mContext;
-    private ExpenseDataSource mDataSource;
+    private CreditDataSource creditDataSource;
     private List<String> mListDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Credit>> mListDataChild;
@@ -27,7 +28,7 @@ public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
     public ExpandableCreditListAdapter(Context context, List<String> listDataHeader,
                                        HashMap<String, List<Credit>> listDataChild) {
         this.mContext = context;
-        this.mDataSource = new ExpenseDataSource(mContext);
+        this.creditDataSource = new CreditDataSource(mContext);
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listDataChild;
     }
@@ -93,7 +94,7 @@ public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
                              ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
-        double headerAmount = mDataSource.getTotalCreditAmountByCategory(headerTitle);
+        double headerAmount = creditDataSource.getTotalCreditAmountByCategory(headerTitle);
         if (convertView == null) {
             LayoutInflater inflater =
                     (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

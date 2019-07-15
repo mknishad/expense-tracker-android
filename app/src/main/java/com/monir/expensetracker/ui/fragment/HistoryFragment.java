@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.DebitDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.ui.adapter.CalendarAdapter;
@@ -36,11 +37,8 @@ public class HistoryFragment extends Fragment {
     private TextView tv_month, tv_selected_date, tv_selected_date_amount;
 
     private TextView empty_view_his_debit;
-
     private ListView lv_daily_debit;
-
-    private ExpenseDataSource expenseDataSource;
-
+    private DebitDataSource debitDataSource;
     private Context context;
 
 
@@ -58,13 +56,10 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        this.context = getActivity().getApplicationContext();
-
-        expenseDataSource = new ExpenseDataSource(getContext());
-
+        context = getActivity();
+        debitDataSource = new DebitDataSource(context);
         cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
         cal_month_copy = (GregorianCalendar) cal_month.clone();
-
         cal_adapter = new CalendarAdapter(this.context, cal_month, CalendarCollection.calendarCollections);
 
         inits(view);
@@ -73,72 +68,47 @@ public class HistoryFragment extends Fragment {
     }
 
     private void inits(View view) {
-
-        tv_month = (TextView) view.findViewById(R.id.tv_month);
+        tv_month = view.findViewById(R.id.tv_month);
         tv_month.setText(DateFormat.format("MMMM yyyy", cal_month));
-
-        tv_selected_date = (TextView) view.findViewById(R.id.tv_selected_date);
-        tv_selected_date_amount = (TextView) view.findViewById(R.id.tv_selected_date_amount);
-
-        empty_view_his_debit = (TextView) view.findViewById(R.id.empty_view_his_debit);
-
-        lv_daily_debit = (ListView) view.findViewById(R.id.lv_daily_debit);
-
+        tv_selected_date = view.findViewById(R.id.tv_selected_date);
+        tv_selected_date_amount = view.findViewById(R.id.tv_selected_date_amount);
+        empty_view_his_debit = view.findViewById(R.id.empty_view_his_debit);
+        lv_daily_debit = view.findViewById(R.id.lv_daily_debit);
         String curentDateString = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-
         tv_selected_date.setText(curentDateString);
-
         tv_selected_date_amount.setText(getAmount(curentDateString));
-
         lv_daily_debit.setEmptyView(empty_view_his_debit);
-
-
         setDailyDebitList(tv_selected_date.getText().toString());
-
-
-        ImageButton previous = (ImageButton) view.findViewById(R.id.ib_prev);
-
+        ImageButton previous = view.findViewById(R.id.ib_prev);
         previous.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 setPreviousMonth();
                 refreshCalendar();
             }
         });
-
-        ImageButton next = (ImageButton) view.findViewById(R.id.Ib_next);
+        ImageButton next = view.findViewById(R.id.Ib_next);
         next.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 setNextMonth();
                 refreshCalendar();
-
             }
         });
-
-
-        GridView gridview = (GridView) view.findViewById(R.id.gv_calendar);
+        GridView gridview = view.findViewById(R.id.gv_calendar);
         gridview.setAdapter(cal_adapter);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-
                 ((CalendarAdapter) parent.getAdapter()).setSelected(v, position);
                 String selectedGridDate = CalendarAdapter.day_string
                         .get(position);
-
                 tv_selected_date.setText(selectedGridDate);
                 tv_selected_date_amount.setText(getAmount(selectedGridDate));
-
                 setDailyDebitList(tv_selected_date.getText().toString());
-
                 String[] separatedTime = selectedGridDate.split("-");
                 String gridvalueString = separatedTime[2].replaceFirst("^0*", "");
                 int gridvalue = Integer.parseInt(gridvalueString);
-
                 if ((gridvalue > 10) && (position < 8)) {
                     setPreviousMonth();
                     refreshCalendar();
@@ -147,19 +117,14 @@ public class HistoryFragment extends Fragment {
                     refreshCalendar();
                 }
                 ((CalendarAdapter) parent.getAdapter()).setSelected(v, position);
-
-
                 ((CalendarAdapter) parent.getAdapter()).getPositionList(selectedGridDate, getActivity());
             }
 
         });
-
     }
 
     private void setDailyDebitList(String date) {
-
-        List<Debit> debits = expenseDataSource.getDebitsInThisDate(date);
-
+        List<Debit> debits = debitDataSource.getDebitsInThisDate(date);
 //        if(date.equals("20-06-2017")){
 //
 //
@@ -205,13 +170,9 @@ public class HistoryFragment extends Fragment {
     }
 
     private String getAmount(String date) {
-
         String amount = "0";
-
         // amount fetch from db
-
         return amount;
-
     }
 
 
@@ -224,7 +185,6 @@ public class HistoryFragment extends Fragment {
             cal_month.set(GregorianCalendar.MONTH,
                     cal_month.get(GregorianCalendar.MONTH) + 1);
         }
-
     }
 
     protected void setPreviousMonth() {
@@ -236,7 +196,6 @@ public class HistoryFragment extends Fragment {
             cal_month.set(GregorianCalendar.MONTH,
                     cal_month.get(GregorianCalendar.MONTH) - 1);
         }
-
     }
 
     public void refreshCalendar() {
@@ -244,5 +203,4 @@ public class HistoryFragment extends Fragment {
         cal_adapter.notifyDataSetChanged();
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
     }
-
 }

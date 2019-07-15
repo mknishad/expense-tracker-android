@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.CreditDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.ui.adapter.ExpandableCreditListAdapter;
@@ -39,7 +40,7 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ExpandableListView expListView;
     private ExpandableCreditListAdapter listAdapter;
-    private ExpenseDataSource expenseDataSource;
+    private CreditDataSource creditDataSource;
     private List<String> listDataHeader;
     private HashMap<String, List<Credit>> listDataChild;
     private TextView monthTextView;
@@ -58,7 +59,7 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
 
     private void init() {
         context = CreditCategoryDetailsActivity.this;
-        expenseDataSource = new ExpenseDataSource(context);
+        creditDataSource = new CreditDataSource(context);
         today = Calendar.getInstance();
 
         initViews();
@@ -164,7 +165,7 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
 
         listDataChild = new HashMap<>();
         for (String category : listDataHeader) {
-            List<Credit> credits = expenseDataSource.getCreditsByCategory(category);
+            List<Credit> credits = creditDataSource.getCreditsByCategory(category);
             listDataChild.put(category, credits);
         }
 

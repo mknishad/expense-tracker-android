@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.CreditDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Category;
 import com.monir.expensetracker.model.Credit;
@@ -44,11 +45,10 @@ public class CreditEditorActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private static EditText etCreditDate;
-    //private AutoCompleteTextView actvCreditCategory;
     private Spinner categorySpinner;
     private EditText etCreditDescription;
     private EditText etCreditAmount;
-    private ExpenseDataSource expenseDataSource;
+    private CreditDataSource creditDataSource;
     private ArrayList<String> categoriesString = new ArrayList<>();
     private List<String> categoryList;
     private String activityType;
@@ -68,13 +68,9 @@ public class CreditEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit_editor);
 
-        expenseDataSource = new ExpenseDataSource(this);
+        creditDataSource = new CreditDataSource(this);
         initializeViews();
 
-        /*getCategoriesFromDatabase();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, categoriesString);
-        actvCreditCategory.setAdapter(adapter);
-        actvCreditCategory.setThreshold(1);*/
         Intent creditIntent = getIntent();
         activityType = creditIntent.getStringExtra(Constant.ACTIVITY_TYPE);
         Log.e(TAG, "Activity type: " + activityType);
@@ -88,9 +84,8 @@ public class CreditEditorActivity extends AppCompatActivity {
             creditId = creditIntent.getIntExtra(Constant.CREDIT_ITEM_ID, -1);
             Log.e(TAG, "credit list item position: " + creditId);
             if (creditId > -1) {
-                credit = expenseDataSource.getCredit(creditId);
+                credit = creditDataSource.getCredit(creditId);
                 etCreditDate.setText(credit.getCreditDate());
-                //actvCreditCategory.setText(credit.getCreditCategory());
                 categorySpinner.setSelection(categoryList.indexOf(credit.getCreditCategory()));
                 etCreditDescription.setText(credit.getCreditDescription());
                 etCreditAmount.setText(String.valueOf(credit.getCreditAmount()));
@@ -100,22 +95,13 @@ public class CreditEditorActivity extends AppCompatActivity {
         }
     }
 
-    private void getCategoriesFromDatabase() {
-        ArrayList<Category> categories = expenseDataSource.getAllCategories();
-        for (int i = 0; i < categories.size(); i++) {
-            String c = categories.get(i).getCategoryName();
-            categoriesString.add(c);
-        }
-    }
-
     private void initializeViews() {
         initToolbar();
 
-        etCreditDate = (EditText) findViewById(R.id.edit_text_credit_date);
-        //actvCreditCategory = (AutoCompleteTextView) findViewById(R.id.auto_complete_credit_category);
+        etCreditDate = findViewById(R.id.edit_text_credit_date);
         categorySpinner = findViewById(R.id.categorySpinner);
-        etCreditDescription = (EditText) findViewById(R.id.edit_text_credit_description);
-        etCreditAmount = (EditText) findViewById(R.id.edit_text_credit_amount);
+        etCreditDescription = findViewById(R.id.edit_text_credit_description);
+        etCreditAmount = findViewById(R.id.edit_text_credit_amount);
 
         initializeCategorySpinner();
 
@@ -258,8 +244,8 @@ public class CreditEditorActivity extends AppCompatActivity {
     private void deleteCredit() {
         // Only perform the delete if this is an existing pet.
         if (activityType.equals(Constant.ACTIVITY_TYPE_EDIT)) {
-            boolean deleted = expenseDataSource.deleteCredit(creditId);
-            expenseDataSource.insertDeletedCredit(credit);
+            boolean deleted = creditDataSource.deleteCredit(creditId);
+            creditDataSource.insertDeletedCredit(credit);
             // Show a toast message depending on whether or not the delete was successful.
             if (deleted) {
                 // If no rows were deleted, then there was an error with the delete.
@@ -323,7 +309,7 @@ public class CreditEditorActivity extends AppCompatActivity {
             Log.e(TAG, "system currentTimeMillis: " + System.currentTimeMillis() % 100000000);
 
             if (activityType.equals(Constant.ACTIVITY_TYPE_ADD)) {
-                boolean inserted = expenseDataSource.insertCredit(credit);
+                boolean inserted = creditDataSource.insertCredit(credit);
                 if (inserted) {
                     Toast.makeText(this, "Credit saved!", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK);
@@ -332,7 +318,7 @@ public class CreditEditorActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to save credit!", Toast.LENGTH_SHORT).show();
                 }
             } else if (activityType.equals(Constant.ACTIVITY_TYPE_EDIT)) {
-                boolean updated = expenseDataSource.updateCredit(creditId, credit);
+                boolean updated = creditDataSource.updateCredit(creditId, credit);
                 if (updated) {
                     Toast.makeText(this, "Credit updated!", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK);

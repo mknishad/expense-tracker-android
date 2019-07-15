@@ -23,6 +23,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.CreditDataSource;
+import com.monir.expensetracker.database.DebitDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.ui.activity.CreditCategoryDetailsActivity;
@@ -66,7 +68,8 @@ public class HomeFragment extends Fragment {
     private ImageView nextImageView;
 
     private Calendar today;
-    private ExpenseDataSource expenseDataSource;
+    private DebitDataSource debitDataSource;
+    private CreditDataSource creditDataSource;
 
     private double creditAmount;
     private double debitAmount;
@@ -78,17 +81,12 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         getActivity().setTitle(R.string.app_name);
-
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
         init();
         initViews(view);
         showData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-
-        //List<Debit> debits = expenseDataSource.getDebitsByMonth(1, 2019);
 
         return view;
     }
@@ -96,7 +94,8 @@ public class HomeFragment extends Fragment {
     private void init() {
         context = getActivity();
         //getActivity().setTitle("Home");
-        expenseDataSource = new ExpenseDataSource(context);
+        debitDataSource = new DebitDataSource(context);
+        creditDataSource = new CreditDataSource(context);
         today = Calendar.getInstance();
     }
 
@@ -189,6 +188,10 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
+                if (month == Calendar.getInstance().get(Calendar.MONTH)
+                        && year == Calendar.getInstance().get(Calendar.YEAR)) {
+                    return;
+                }
                 if (month == Calendar.DECEMBER) {
                     today.set(Calendar.MONTH, Calendar.JANUARY);
                     today.set(Calendar.YEAR, year + 1);
@@ -206,8 +209,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void showData(int month, int year) {
-        creditAmount = expenseDataSource.getTotalCreditAmountByMonth(month +1, year);
-        debitAmount = expenseDataSource.getTotalDebitAmountByMonth(month + 1, year);
+        creditAmount = creditDataSource.getTotalCreditAmountByMonth(month +1, year);
+        debitAmount = debitDataSource.getTotalDebitAmountByMonth(month + 1, year);
         balanceTextView.setText(String.format(Locale.getDefault(), "৳%.2f",
                 (creditAmount - debitAmount)));
         creditTextView.setText(String.format(Locale.getDefault(), "৳%.2f", creditAmount));

@@ -44,6 +44,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 import com.monir.expensetracker.R;
+import com.monir.expensetracker.database.DebitDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Category;
 import com.monir.expensetracker.model.Debit;
@@ -72,7 +73,7 @@ public class DebitEditorActivity extends AppCompatActivity {
     private EditText etDebitDescription;
     private EditText etDebitAmount;
     private FloatingActionButton fabScanDebit;
-    private ExpenseDataSource expenseDataSource;
+    private DebitDataSource debitDataSource;
     private ArrayList<String> categoriesString = new ArrayList<>();
     private List<String> categoryList;
     private String activityType;
@@ -97,7 +98,7 @@ public class DebitEditorActivity extends AppCompatActivity {
 
         //String scanData = getIntent().getStringExtra(Constant.INTENT_SCAN_DATA);
 
-        expenseDataSource = new ExpenseDataSource(this);
+        debitDataSource = new DebitDataSource(this);
         initializeViews();
 
         /*if (scanData != null && scanData.trim().length() > 0) {
@@ -133,7 +134,7 @@ public class DebitEditorActivity extends AppCompatActivity {
             debitId = debitIntent.getIntExtra(Constant.DEBIT_ITEM_ID, -1);
             Log.e(TAG, "debit list item position: " + debitId);
             if (debitId > -1) {
-                Debit debit = expenseDataSource.getDebit(debitId);
+                Debit debit = debitDataSource.getDebit(debitId);
                 etDebitDate.setText(debit.getDebitDate());
                 //actvDebitCategory.setText(debit.getDebitCategory());
                 categorySpinner.setSelection(categoryList.indexOf(debit.getDebitCategory()));
@@ -205,14 +206,6 @@ public class DebitEditorActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categoryList);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         categorySpinner.setAdapter(adapter);
-    }
-
-    private void getCategoriesFromDatabase() {
-        ArrayList<Category> categories = expenseDataSource.getAllCategories();
-        for (int i = 0; i < categories.size(); i++) {
-            String c = categories.get(i).getCategoryName();
-            categoriesString.add(c);
-        }
     }
 
     private void setInitialDate() {
@@ -341,7 +334,7 @@ public class DebitEditorActivity extends AppCompatActivity {
     private void deleteDebit() {
         // Only perform the delete if this is an existing debit.
         if (activityType.equals(Constant.ACTIVITY_TYPE_EDIT)) {
-            boolean deleted = expenseDataSource.deleteDebit(debitId);
+            boolean deleted = debitDataSource.deleteDebit(debitId);
             // Show a toast message depending on whether or not the delete was successful.
             if (deleted) {
                 Toast.makeText(this, getString(R.string.editor_delete_debit_successful),
@@ -400,7 +393,7 @@ public class DebitEditorActivity extends AppCompatActivity {
             //Log.e(TAG, "system currentTimeMillis: " + System.currentTimeMillis() % 100000000);
 
             if (activityType.equals(Constant.ACTIVITY_TYPE_ADD)) {
-                boolean inserted = expenseDataSource.insertDebit(debit);
+                boolean inserted = debitDataSource.insertDebit(debit);
                 if (inserted) {
                     Toast.makeText(this, "Debit saved!", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK);
@@ -409,7 +402,7 @@ public class DebitEditorActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to save debit!", Toast.LENGTH_SHORT).show();
                 }
             } else if (activityType.equals(Constant.ACTIVITY_TYPE_EDIT)) {
-                boolean updated = expenseDataSource.updateDebit(debitId, debit);
+                boolean updated = debitDataSource.updateDebit(debitId, debit);
                 if (updated) {
                     Toast.makeText(this, "Debit updated!", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK);
