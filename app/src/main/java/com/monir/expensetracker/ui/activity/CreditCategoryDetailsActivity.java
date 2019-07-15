@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.CreditDataSource;
-import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.ui.adapter.ExpandableCreditListAdapter;
 import com.monir.expensetracker.util.Constant;
@@ -47,7 +46,7 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
     private ImageView previousImageView;
     private ImageView nextImageView;
 
-    private Calendar today;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +59,7 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
     private void init() {
         context = CreditCategoryDetailsActivity.this;
         creditDataSource = new CreditDataSource(context);
-        today = Calendar.getInstance();
+        calendar = Calendar.getInstance();
 
         initViews();
     }
@@ -73,15 +72,16 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
         previousImageView = findViewById(R.id.previousImageView);
         nextImageView = findViewById(R.id.nextImageView);
         initToolbar();
-        populateListView();
 
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                                        int childPosition, long id) {
                 Credit credit = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
                 //Toast.makeText(DebitCategoryDetailsActivity.this, debit.getDebitCategory() + " " + debit.getDebitDescription(), Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(CreditCategoryDetailsActivity.this, CreditEditorActivity.class);
+                Intent intent = new Intent(CreditCategoryDetailsActivity.this,
+                        CreditEditorActivity.class);
                 intent.putExtra(Constant.ACTIVITY_TYPE, Constant.ACTIVITY_TYPE_EDIT);
                 intent.putExtra(Constant.CREDIT_ITEM_ID, credit.getCreditId());
                 Log.e(TAG, "Clicked item id: " + id);
@@ -102,13 +102,14 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
                                         " selectedYear = " + selectedYear);
                                 monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                                         getMonthString(selectedMonth), selectedYear));
-                                today.set(Calendar.MONTH, selectedMonth);
-                                today.set(Calendar.YEAR, selectedYear);
+                                calendar.set(Calendar.MONTH, selectedMonth);
+                                calendar.set(Calendar.YEAR, selectedYear);
+                                loadData();
                             }
-                        }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
+                        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH));
 
-                builder.setActivatedMonth(today.get(Calendar.MONTH))
-                        .setActivatedYear(today.get(Calendar.YEAR))
+                builder.setActivatedMonth(calendar.get(Calendar.MONTH))
+                        .setActivatedYear(calendar.get(Calendar.YEAR))
                         .setTitle("Select Month")
                         .build()
                         .show();
@@ -117,18 +118,44 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
         previousImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+                if (month == Calendar.JANUARY) {
+                    calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+                    calendar.set(Calendar.YEAR, year - 1);
+                } else {
+                    calendar.set(Calendar.MONTH, month - 1);
+                }
+                monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                        getMonthString(calendar.get(Calendar.MONTH)), calendar.get(Calendar.YEAR)));
+                loadData();
             }
         });
         nextImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+                if (month == Calendar.getInstance().get(Calendar.MONTH)
+                        && year == Calendar.getInstance().get(Calendar.YEAR)) {
+                    return;
+                }
+                if (month == Calendar.DECEMBER) {
+                    calendar.set(Calendar.MONTH, Calendar.JANUARY);
+                    calendar.set(Calendar.YEAR, year + 1);
+                } else {
+                    calendar.set(Calendar.MONTH, month + 1);
+                }
+                monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
+                        getMonthString(calendar.get(Calendar.MONTH)), calendar.get(Calendar.YEAR)));
+                loadData();
             }
         });
 
         monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
-                getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
+                getMonthString(calendar.get(Calendar.MONTH)), calendar.get(Calendar.YEAR)));
+
+        loadData();
     }
 
     private void initToolbar() {
@@ -147,10 +174,10 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void populateListView() {
+    private void loadData() {
         progressBar.setVisibility(View.VISIBLE);
         prepareListData();
-        listAdapter = new ExpandableCreditListAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new ExpandableCreditListAdapter(this, listDataHeader, listDataChild, calendar);
         expListView.setAdapter(listAdapter);
         progressBar.setVisibility(View.GONE);
     }
@@ -162,10 +189,12 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
         String[] categories = getResources().getStringArray(R.array.credit_categories);
         listDataHeader = new LinkedList<>(Arrays.asList(categories));
         listDataHeader.remove(0);
+        double total = 0;
 
         listDataChild = new HashMap<>();
         for (String category : listDataHeader) {
-            List<Credit> credits = creditDataSource.getCreditsByCategory(category);
+            List<Credit> credits = creditDataSource.getCreditsByCategoryAndMonth(category,
+                    calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
             listDataChild.put(category, credits);
         }
 
@@ -231,7 +260,7 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OPEN_CREDIT_EDITOR_ACTIVITY && resultCode == RESULT_OK) {
-            populateListView();
+            loadData();
         }
     }
 }

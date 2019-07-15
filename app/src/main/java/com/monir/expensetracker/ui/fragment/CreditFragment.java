@@ -150,7 +150,7 @@ public class CreditFragment extends Fragment {
                                             getMonthString(selectedMonth), selectedYear));
                                     today.set(Calendar.MONTH, selectedMonth);
                                     today.set(Calendar.YEAR, selectedYear);
-                                    loadCredits(selectedMonth, selectedYear);
+                                    loadCredits();
                                 }
                             }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -174,7 +174,7 @@ public class CreditFragment extends Fragment {
                     }
                     monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                             getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
-                    loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+                    loadCredits();
                 }
             });
             nextImageView.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +182,10 @@ public class CreditFragment extends Fragment {
                 public void onClick(View v) {
                     int month = today.get(Calendar.MONTH);
                     int year = today.get(Calendar.YEAR);
+                    if (month == Calendar.getInstance().get(Calendar.MONTH)
+                            && year == Calendar.getInstance().get(Calendar.YEAR)) {
+                        return;
+                    }
                     if (month == Calendar.DECEMBER) {
                         today.set(Calendar.MONTH, Calendar.JANUARY);
                         today.set(Calendar.YEAR, year + 1);
@@ -190,14 +194,14 @@ public class CreditFragment extends Fragment {
                     }
                     monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                             getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
-                    loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+                    loadCredits();
                 }
             });
 
             monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                     getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
 
-            loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+            loadCredits();
         }
     }
 
@@ -250,7 +254,7 @@ public class CreditFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OPEN_CREDIT_EDITOR_ACTIVITY) {
-            loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+            loadCredits();
         }
     }
 
@@ -261,15 +265,16 @@ public class CreditFragment extends Fragment {
 
         if (sentToCreditEditor) {
             sentToCreditEditor = false;
-            loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+            loadCredits();
         }
     }
 
-    private void loadCredits(int month, int year) {
+    private void loadCredits() {
         creditListView.setAdapter(new CreditListAdapter(context, new ArrayList<Credit>()));
 
         try {
-            creditList = creditDataSource.getCreditsByMonth(month + 1, year);
+            creditList = creditDataSource.getCreditsByMonth(today.get(Calendar.MONTH) + 1,
+                    today.get(Calendar.YEAR));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -284,7 +289,8 @@ public class CreditFragment extends Fragment {
             creditListView.setAdapter(creditListAdapter);
             tvFooter.setVisibility(View.VISIBLE);
             tvFooterCreditAmount.setVisibility(View.VISIBLE);
-            tvFooterCreditAmount.setText(String.valueOf(creditDataSource.getTotalCreditAmountByMonth(month + 1, year)));
+            tvFooterCreditAmount.setText(String.valueOf(creditDataSource.getTotalCreditAmountByMonth(
+                    today.get(Calendar.MONTH) + 1, today.get(Calendar.YEAR))));
         }
     }
 
@@ -300,7 +306,7 @@ public class CreditFragment extends Fragment {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                loadCredits(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+                loadCredits();
                 return true;
             }
         });
@@ -328,185 +334,3 @@ public class CreditFragment extends Fragment {
         );
     }
 }
-
-    /*// Get all categories from database
-    private void getCategoriesFromDatabase() {
-        ArrayList<Category> categories = expenseDataSource.getAllCategories();
-
-        for (int i = 0; i < categories.size(); i++) {
-            String c = categories.get(i).getCategoryName();
-            categoriesString.add(c);
-        }
-    }
-
-    // Is the category existed on database
-    private boolean isCategoryExisted(String category) {
-        for (String s : categoriesString) {
-            if (s.equalsIgnoreCase(category)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void showCreditDetailInDialog(int position) {
-        AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(getContext());
-        }
-        Credit credit = (Credit) creditListView.getItemAtPosition(position);
-        builder.setTitle(credit.getCreditDate())
-                .setMessage(credit.getCreditDescription())
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // continue with delete
-                    }
-                })
-                .show();
-    }*/
-
-    /*private void loadCredits() {
-        loadingCreditProgressBar.setVisibility(View.VISIBLE);
-        creditListView.setAdapter(new CreditListAdapter(getContext(), new ArrayList<Credit>()));
-        //expenseDataSource.deleteAllCredits();
-
-        Timestamp timestamp;
-        Date date;
-        int intTimestamp;
-
-        Credit credit = new Credit();
-        credit.setCreditCategory("Bank");
-
-        Cursor creditCursor = getActivity().getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
-
-        if (creditCursor.moveToFirst()) { // must check the result to prevent exception
-            do {
-                String msgData = "";
-                for (int idx = 0; idx < creditCursor.getColumnCount(); idx++) {
-                    //msgData += " " + cursor.getColumnName(idx) + " : " + cursor.getString(idx) + "\n";
-
-                    //getCategoriesFromDatabase();
-
-                    if (creditCursor.getColumnName(idx).equals("date")) {
-                        timestamp = new Timestamp(creditCursor.getLong(idx));
-                        intTimestamp = (int) (timestamp.getTime() % 100000000);
-                        Log.e(TAG, "message longTimestamp: " + intTimestamp);
-                        date = new Date(timestamp.getTime());
-
-                        String dateString = new SimpleDateFormat("dd-MM-yyyy").format(timestamp);
-
-                        *//*String fullDateString = date.toString();
-                        String monthDateString = fullDateString.substring(4, 10);
-                        String yearString = fullDateString.substring(30, 34);
-                        String dateString = monthDateString + ", " + yearString;*//*
-
-                        credit.setCreditDate(dateString);
-                        credit.setCreditTimestamp(intTimestamp);
-                        //Log.i(CreditFragment.class.getSimpleName(), "Date: " + dateString);
-                    }
-
-                    if (creditCursor.getColumnName(idx).equals("body")) {
-                        // TODO: add logic to add only the credit messages
-                        String messageBodyNormal = creditCursor.getString(idx);
-                        String messageBodyLowerCase = messageBodyNormal.toLowerCase();
-
-                        if (messageBodyLowerCase.contains("credited") || messageBodyLowerCase.contains("cash in") || messageBodyLowerCase.contains("received")) {
-                            Log.i(TAG, creditCursor.getString(idx));
-
-                            credit.setCreditDescription(messageBodyNormal);
-                            credit.setCreditAmount(findCreditAmountFromMessageBody(messageBodyLowerCase));
-
-                            *//*if (!isCategoryExisted(credit.getCreditCategory())) {
-                                expenseDataSource.insertCategory(new Category("Bank"));
-                            }*//*
-
-                            if (!isCreditExisted(credit.getCreditTimestamp())) {
-                                expenseDataSource.insertCredit(credit);
-                            }
-                        }
-                    }
-
-                }
-                //Log.i(CreditFragment.class.getSimpleName(), credit.getCreditDate() + "\n\n");
-                //pbLoading.setVisibility(View.INVISIBLE);
-                // use msgData
-//                if (msgData.toLowerCase().contains("credited")) {
-//                    tvMessages.append(msgData + "\n\n\n");
-//                }
-            } while (creditCursor.moveToNext());
-        } else {
-            // empty box, no SMS
-            //pbLoading.setVisibility(View.INVISIBLE);
-            //tvMessages.append("\n\nNo messages found!\n\n");
-        }
-
-        try {
-            if (creditCursor != null) {
-                creditCursor.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            creditList = expenseDataSource.getAllCredits();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        loadingCreditProgressBar.setVisibility(View.INVISIBLE);
-
-        if (creditList.size() == 0) {
-            creditEmptyView.setVisibility(View.VISIBLE);
-        } else {
-            Log.e(TAG, "creditList size: " + creditList.size());
-            adapter = new CreditListAdapter(getContext(), creditList);
-            creditListView.setAdapter(adapter);
-            tvFooterCreditAmount.setText("" + expenseDataSource.getTotalCreditAmount());
-        }
-    }*/
-
-    /*private boolean isCreditExisted(int creditTimestamp) {
-        ArrayList<Credit> credits = expenseDataSource.getAllCredits();
-        ArrayList<Credit> deletedCredits = expenseDataSource.getAllDeletedCredits();
-
-        for (Credit c : credits) {
-            if (c.getCreditTimestamp() == creditTimestamp) {
-                return true;
-            }
-        }
-
-        for (Credit c : deletedCredits) {
-            if (c.getCreditTimestamp() == creditTimestamp) {
-                return true;
-            }
-        }
-
-        return false;
-    }*/
-
-    /*private Double findCreditAmountFromMessageBody(String messageBody) {
-        int indexOfTaka = -1;
-        if (messageBody.contains("bdt")) {
-            indexOfTaka = messageBody.indexOf("bdt");
-        } else if (messageBody.contains("tk")) {
-            indexOfTaka = messageBody.indexOf("tk");
-        }
-
-        double creditAmount = 0;
-        if (indexOfTaka != -1) {
-            for (int i = indexOfTaka; i < messageBody.length(); i++) {
-                char c = messageBody.charAt(i);
-                if (Character.isDigit(c)) {
-                    int digit = (int) c - 48;
-                    creditAmount = (creditAmount * 10) + digit;
-                } else if (c == '.') {
-                    break;
-                }
-            }
-        }
-
-        return creditAmount;
-    }*/

@@ -103,7 +103,7 @@ public class CreditDataSource {
     }
 
     // return all credits from credit table
-    public ArrayList<Credit> getAllCredits() {
+    public List<Credit> getAllCredits() {
         ArrayList<Credit> credits = new ArrayList<>();
         this.open();
 
@@ -130,7 +130,7 @@ public class CreditDataSource {
     }
 
     // return credit by category from credit table
-    public ArrayList<Credit> getCreditsByCategory(String category) {
+    public List<Credit> getCreditsByCategoryAndMonth(String category, int month, int year) {
         ArrayList<Credit> credits = new ArrayList<>();
         this.open();
 
@@ -151,10 +151,23 @@ public class CreditDataSource {
             cursor.close();
         }
         if (database != null) {
-            database.close();
+            this.close();
         }
 
-        return credits;
+        List<Credit> foundCredits = new ArrayList<>(credits);
+
+        for (Credit c : credits) {
+            int firstIndex = c.getCreditDate().indexOf('-');
+            int lastIndex = c.getCreditDate().lastIndexOf('-');
+            int m = Integer.parseInt(c.getCreditDate().substring(firstIndex + 1, lastIndex));
+            int y = Integer.parseInt(c.getCreditDate().substring(lastIndex + 1));
+
+            if (m != month || y != year) {
+                foundCredits.remove(c);
+            }
+        }
+
+        return foundCredits;
     }
 
     // return credit by category from debit table
@@ -178,7 +191,7 @@ public class CreditDataSource {
             cursor.close();
         }
         if (database != null) {
-            database.close();
+            this.close();
         }
 
         List<Credit> foundCredits = new ArrayList<>(credits);
@@ -308,6 +321,47 @@ public class CreditDataSource {
         double total = c.getDouble(0);
         c.close();
         return total;
+    }
+
+    // return total credit amount by category
+    public double getTotalCreditAmountByCategoryAndMonth(String category, int month, int year) {
+        List<Credit> credits = new LinkedList<>();
+        double totalCredit = 0;
+        this.open();
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + Constant.TABLE_CREDIT + " WHERE " +
+                        Constant.COL_CREDIT_CATEGORY + " = ?",
+                new String[]{category});
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Credit credit = createCredit(cursor);
+                credits.add(credit);
+                cursor.moveToNext();
+            }
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (database != null) {
+            database.close();
+        }
+
+        for (Credit c : credits) {
+            String date = c.getCreditDate();
+            int firstIndex = date.indexOf('-');
+            int lastIndex = date.lastIndexOf('-');
+            int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
+            int y = Integer.parseInt(date.substring(lastIndex + 1));
+            if (m != month || y != year) {
+                continue;
+            }
+            totalCredit += c.getCreditAmount();
+        }
+
+        return totalCredit;
     }
 
     // return total credit amount by month

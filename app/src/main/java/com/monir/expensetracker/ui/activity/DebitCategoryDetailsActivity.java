@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.DebitDataSource;
-import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.ui.adapter.ExpandableDebitListAdapter;
 import com.monir.expensetracker.util.Constant;
@@ -47,7 +46,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
     private ImageView previousImageView;
     private ImageView nextImageView;
 
-    private Calendar today;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +59,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
     private void init() {
         context = DebitCategoryDetailsActivity.this;
         debitDataSource = new DebitDataSource(context);
-        today = Calendar.getInstance();
+        calendar = Calendar.getInstance();
 
         initViews();
     }
@@ -103,10 +102,10 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
                                 monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
                                         getMonthString(selectedMonth), selectedYear));
                             }
-                        }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
+                        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH));
 
-                builder.setActivatedMonth(today.get(Calendar.MONTH))
-                        .setActivatedYear(today.get(Calendar.YEAR))
+                builder.setActivatedMonth(calendar.get(Calendar.MONTH))
+                        .setActivatedYear(calendar.get(Calendar.YEAR))
                         .setTitle("Select Month")
                         .build()
                         .show();
@@ -126,7 +125,7 @@ public class DebitCategoryDetailsActivity extends AppCompatActivity {
         });
 
         monthTextView.setText(String.format(Locale.getDefault(), "%s, %d",
-                getMonthString(today.get(Calendar.MONTH)), today.get(Calendar.YEAR)));
+                getMonthString(calendar.get(Calendar.MONTH)), calendar.get(Calendar.YEAR)));
     }
 
     private void initToolbar() {

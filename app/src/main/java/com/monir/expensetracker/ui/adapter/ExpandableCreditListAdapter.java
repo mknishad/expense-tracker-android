@@ -13,6 +13,7 @@ import com.monir.expensetracker.database.CreditDataSource;
 import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Credit;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -24,13 +25,16 @@ public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
     private List<String> mListDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Credit>> mListDataChild;
+    private Calendar calendar;
 
     public ExpandableCreditListAdapter(Context context, List<String> listDataHeader,
-                                       HashMap<String, List<Credit>> listDataChild) {
+                                       HashMap<String, List<Credit>> listDataChild,
+                                       Calendar calendar) {
         this.mContext = context;
         this.creditDataSource = new CreditDataSource(mContext);
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listDataChild;
+        this.calendar = calendar;
     }
 
     @Override
@@ -94,7 +98,8 @@ public class ExpandableCreditListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
                              ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
-        double headerAmount = creditDataSource.getTotalCreditAmountByCategory(headerTitle);
+        double headerAmount = creditDataSource.getTotalCreditAmountByCategoryAndMonth(headerTitle,
+                calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
         if (convertView == null) {
             LayoutInflater inflater =
                     (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
