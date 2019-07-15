@@ -45,6 +45,7 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
     private TextView monthTextView;
     private ImageView previousImageView;
     private ImageView nextImageView;
+    private TextView tvFooter;
 
     private Calendar calendar;
 
@@ -71,6 +72,7 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
         monthTextView = findViewById(R.id.monthTextView);
         previousImageView = findViewById(R.id.previousImageView);
         nextImageView = findViewById(R.id.nextImageView);
+        tvFooter = findViewById(R.id.tv_footer);
         initToolbar();
 
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -197,10 +199,21 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
             listDataChild.put(category, credits);
         }
 
+        double totalCredit = 0;
         for (Map.Entry<String, List<Credit>> entry : listDataChild.entrySet()) {
             if (entry.getValue().size() == 0) {
                 listDataHeader.remove(entry.getKey());
             }
+            for (Credit c : entry.getValue()) {
+                totalCredit += c.getCreditAmount();
+            }
+        }
+
+        if (totalCredit > 0) {
+            tvFooter.setVisibility(View.VISIBLE);
+            tvFooter.setText(String.format(Locale.getDefault(), "Total: %.2f", totalCredit));
+        } else {
+            tvFooter.setVisibility(View.GONE);
         }
     }
 
