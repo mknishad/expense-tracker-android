@@ -370,8 +370,8 @@ public class ExpenseDataSource {
         for (Credit c : credits) {
             int firstIndex = c.getCreditDate().indexOf('-');
             int lastIndex = c.getCreditDate().lastIndexOf('-');
-            int m = Integer.parseInt(c.getCreditDate().substring(firstIndex, lastIndex));
-            int y = Integer.parseInt(c.getCreditDate().substring(lastIndex));
+            int m = Integer.parseInt(c.getCreditDate().substring(firstIndex + 1, lastIndex));
+            int y = Integer.parseInt(c.getCreditDate().substring(lastIndex + 1));
 
             if (m != month || y != year) {
                 foundCredits.remove(c);

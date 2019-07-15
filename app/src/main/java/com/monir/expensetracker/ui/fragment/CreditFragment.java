@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.CreditDataSource;
-import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.ui.activity.CreditEditorActivity;
 import com.monir.expensetracker.ui.adapter.CreditListAdapter;
@@ -54,6 +53,7 @@ public class CreditFragment extends Fragment {
     private ListView creditListView;
     private TextView creditEmptyView;
     private View view;
+    private TextView tvFooter;
     private TextView tvFooterCreditAmount;
     private TextView monthTextView;
     private ImageView previousImageView;
@@ -95,10 +95,11 @@ public class CreditFragment extends Fragment {
         //permissionStatus = getActivity().getSharedPreferences("permissionStatus", getActivity().MODE_PRIVATE);
 
         if (null != view) {
-            creditListView = (ListView) view.findViewById(R.id.lv_credits);
-            creditEmptyView = (TextView) view.findViewById(R.id.empty_view_credit);
+            creditListView = view.findViewById(R.id.lv_credits);
+            creditEmptyView = view.findViewById(R.id.empty_view_credit);
             //loadingCreditProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading_credits);
-            tvFooterCreditAmount = (TextView) view.findViewById(R.id.text_view_amount_credit);
+            tvFooter = view.findViewById(R.id.tv_footer);
+            tvFooterCreditAmount = view.findViewById(R.id.text_view_amount_credit);
             monthTextView = view.findViewById(R.id.monthTextView);
             previousImageView = view.findViewById(R.id.previousImageView);
             nextImageView = view.findViewById(R.id.nextImageView);
@@ -377,7 +378,7 @@ public class CreditFragment extends Fragment {
     }
 
     private void loadCredits(int month, int year) {
-        creditListView.setAdapter(new CreditListAdapter(getContext(), new ArrayList<Credit>()));
+        creditListView.setAdapter(new CreditListAdapter(context, new ArrayList<Credit>()));
 
         try {
             creditList = creditDataSource.getCreditsByMonth(month + 1, year);
@@ -387,11 +388,15 @@ public class CreditFragment extends Fragment {
 
         if (creditList.size() == 0) {
             creditEmptyView.setVisibility(View.VISIBLE);
+            tvFooter.setVisibility(View.GONE);
+            tvFooterCreditAmount.setVisibility(View.GONE);
         } else {
             Log.e(TAG, "creditList size: " + creditList.size());
-            creditListAdapter = new CreditListAdapter(getContext(), creditList);
+            creditListAdapter = new CreditListAdapter(context, creditList);
             creditListView.setAdapter(creditListAdapter);
-            tvFooterCreditAmount.setText(String.valueOf(creditDataSource.getTotalCreditAmountByMonth(month, year)));
+            tvFooter.setVisibility(View.VISIBLE);
+            tvFooterCreditAmount.setVisibility(View.VISIBLE);
+            tvFooterCreditAmount.setText(String.valueOf(creditDataSource.getTotalCreditAmountByMonth(month + 1, year)));
         }
     }
 
