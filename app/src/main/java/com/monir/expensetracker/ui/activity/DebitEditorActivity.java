@@ -555,7 +555,7 @@ public class DebitEditorActivity extends AppCompatActivity {
         etDebitDescription.setText(texts.getText());
 
         String total = "";
-        List<String> amounts = new ArrayList<>();
+        //List<String> amounts = new ArrayList<>();
 
         //mGraphicOverlay.clear();
         for (int i = 0; i < blocks.size(); i++) {
@@ -569,20 +569,20 @@ public class DebitEditorActivity extends AppCompatActivity {
                     Log.d(TAG, "processTextRecognitionResult: elementText = " + elementText);
 
                     if (elementText.matches("-?\\d+(\\.\\d+)?")) {
-                        //total = elementText;
-                        amounts.add(elementText);
+                        total = elementText;
+                        //amounts.add(elementText);
                     }
                 }
             }
         }
 
-        for (int i = 0; i < 2; i++) {
+        /*for (int i = 0; i < 2; i++) {
             if (amounts.size() > 1) {
                 amounts.remove(amounts.size() - 1);
             }
-        }
+        }*/
 
-        etDebitAmount.setText(amounts.get(amounts.size()-1));
+        etDebitAmount.setText(total);
     }
 
     @Override
