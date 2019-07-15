@@ -45,8 +45,6 @@ import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.DebitDataSource;
-import com.monir.expensetracker.database.ExpenseDataSource;
-import com.monir.expensetracker.model.Category;
 import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.util.Constant;
 

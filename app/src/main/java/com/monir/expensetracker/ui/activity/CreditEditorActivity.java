@@ -26,8 +26,6 @@ import android.widget.Toast;
 
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.CreditDataSource;
-import com.monir.expensetracker.database.ExpenseDataSource;
-import com.monir.expensetracker.model.Category;
 import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.util.Constant;
 

@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.database.DebitDataSource;
-import com.monir.expensetracker.database.ExpenseDataSource;
 import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.ui.adapter.CalendarAdapter;
 import com.monir.expensetracker.ui.adapter.DebitListAdapter;
