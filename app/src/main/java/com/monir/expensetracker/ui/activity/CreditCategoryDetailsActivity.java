@@ -46,7 +46,6 @@ public class CreditCategoryDetailsActivity extends AppCompatActivity {
     private ImageView previousImageView;
     private ImageView nextImageView;
     private TextView tvFooter;
-
     private Calendar calendar;
 
     @Override

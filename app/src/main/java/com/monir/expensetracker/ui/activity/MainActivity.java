@@ -15,10 +15,13 @@ import android.view.MenuItem;
 
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.ui.fragment.AboutFragment;
+import com.monir.expensetracker.ui.fragment.BalanceFragment;
 import com.monir.expensetracker.ui.fragment.CreditFragment;
 import com.monir.expensetracker.ui.fragment.DebitFragment;
 import com.monir.expensetracker.ui.fragment.HelpFragment;
+import com.monir.expensetracker.ui.fragment.HistoryFragment;
 import com.monir.expensetracker.ui.fragment.HomeFragment;
+import com.monir.expensetracker.ui.fragment.StatisticsFragment;
 import com.monir.expensetracker.util.CalendarCollection;
 
 import java.util.ArrayList;
@@ -77,25 +80,32 @@ public class MainActivity extends AppCompatActivity
     private void setFragment(int id) {
         if (id == R.id.nav_home) {
             HomeFragment homeFragment = new HomeFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, homeFragment, homeFragment.getTag()).commit();
+            fragmentManager.beginTransaction().replace(R.id.rlContent, homeFragment,
+                    homeFragment.getTag()).commit();
         } else if (id == R.id.nav_debit) {
             DebitFragment debitFragment = new DebitFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, debitFragment, debitFragment.getTag()).commit();
+            fragmentManager.beginTransaction().replace(R.id.rlContent, debitFragment,
+                    debitFragment.getTag()).commit();
         } else if (id == R.id.nav_credit) {
             CreditFragment creditFragment = new CreditFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, creditFragment, creditFragment.getTag()).commit();
-        }/* else if (id == R.id.nav_balance) {
-            BalanceFragment balanceFragment = new BalanceFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, balanceFragment, balanceFragment.getTag()).commit();
-        } else if (id == R.id.nav_history) {
+            fragmentManager.beginTransaction().replace(R.id.rlContent, creditFragment,
+                    creditFragment.getTag()).commit();
+        } else if (id == R.id.nav_statistics) {
+            StatisticsFragment statisticsFragment = new StatisticsFragment();
+            fragmentManager.beginTransaction().replace(R.id.rlContent, statisticsFragment,
+                    statisticsFragment.getTag()).commit();
+        }/* else if (id == R.id.nav_history) {
             HistoryFragment historyFragment = new HistoryFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, historyFragment, historyFragment.getTag()).commit();
+            fragmentManager.beginTransaction().replace(R.id.rlContent, historyFragment,
+            historyFragment.getTag()).commit();
         }*/ else if (id == R.id.nav_about) {
             AboutFragment aboutFragment = new AboutFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, aboutFragment, aboutFragment.getTag()).commit();
+            fragmentManager.beginTransaction().replace(R.id.rlContent, aboutFragment,
+                    aboutFragment.getTag()).commit();
         } else if (id == R.id.nav_help) {
             HelpFragment helpFragment = new HelpFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, helpFragment, helpFragment.getTag()).commit();
+            fragmentManager.beginTransaction().replace(R.id.rlContent, helpFragment,
+                    helpFragment.getTag()).commit();
         }
     }
 

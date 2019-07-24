@@ -33,11 +33,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.ScanActivity"
-            android:label="@string/scan"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ui.activity.CreditEditorActivity"
             android:label="@string/add_credit"
             android:screenOrientation="portrait"

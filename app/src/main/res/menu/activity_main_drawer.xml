@@ -15,10 +15,10 @@
             android:id="@+id/nav_debit"
             android:icon="@drawable/ic_remove_circle_outline_gray_24dp"
             android:title="@string/debit" />
-        <!--<item
-            android:id="@+id/nav_balance"
-            android:icon="@drawable/ic_balance_gray_24dp"
-            android:title="@string/balance" />-->
+        <item
+            android:id="@+id/nav_statistics"
+            android:icon="@drawable/ic_show_chart_gray_24dp"
+            android:title="@string/statistics" />
         <!--<item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_history_gray_24dp"
