@@ -33,6 +33,16 @@ public class StatisticsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
 
+        init(view);
+
+        return view;
+    }
+
+    private void init(View view) {
+        initViews(view);
+    }
+
+    private void initViews(View view) {
         BarChart barChart = view.findViewById(R.id.barChart);
 
         ArrayList<BarEntry> entries = new ArrayList<>();
@@ -80,7 +90,5 @@ public class StatisticsFragment extends Fragment {
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
         barChart.animateY(5000);*/
-
-        return view;
     }
 }
