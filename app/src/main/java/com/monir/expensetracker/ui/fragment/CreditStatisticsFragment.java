@@ -112,6 +112,9 @@ public class CreditStatisticsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int year = calendar.get(Calendar.YEAR);
+                if (year == Calendar.getInstance().get(Calendar.YEAR)) {
+                    return;
+                }
                 calendar.set(Calendar.YEAR, year + 1);
                 yearTextView.setText(String.valueOf(year + 1));
                 setData(year + 1);

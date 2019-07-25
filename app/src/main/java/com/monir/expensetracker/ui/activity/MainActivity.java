@@ -21,6 +21,7 @@ import com.monir.expensetracker.ui.fragment.DebitFragment;
 import com.monir.expensetracker.ui.fragment.HelpFragment;
 import com.monir.expensetracker.ui.fragment.HomeFragment;
 import com.monir.expensetracker.ui.fragment.DebitStatisticsFragment;
+import com.monir.expensetracker.ui.fragment.StatisticsFragment;
 import com.monir.expensetracker.util.CalendarCollection;
 
 import java.util.ArrayList;
@@ -90,9 +91,9 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.rlContent, creditFragment,
                     creditFragment.getTag()).commit();
         } else if (id == R.id.nav_statistics) {
-            CreditStatisticsFragment debitStatisticsFragment = new CreditStatisticsFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, debitStatisticsFragment,
-                    debitStatisticsFragment.getTag()).commit();
+            StatisticsFragment statisticsFragment = new StatisticsFragment();
+            fragmentManager.beginTransaction().replace(R.id.rlContent, statisticsFragment,
+                    statisticsFragment.getTag()).commit();
         }/* else if (id == R.id.nav_history) {
             HistoryFragment historyFragment = new HistoryFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, historyFragment,
