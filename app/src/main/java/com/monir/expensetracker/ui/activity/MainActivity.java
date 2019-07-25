@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.ui.fragment.AboutFragment;
 import com.monir.expensetracker.ui.fragment.CreditFragment;
+import com.monir.expensetracker.ui.fragment.CreditStatisticsFragment;
 import com.monir.expensetracker.ui.fragment.DebitFragment;
 import com.monir.expensetracker.ui.fragment.HelpFragment;
 import com.monir.expensetracker.ui.fragment.HomeFragment;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.rlContent, creditFragment,
                     creditFragment.getTag()).commit();
         } else if (id == R.id.nav_statistics) {
-            DebitStatisticsFragment debitStatisticsFragment = new DebitStatisticsFragment();
+            CreditStatisticsFragment debitStatisticsFragment = new CreditStatisticsFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, debitStatisticsFragment,
                     debitStatisticsFragment.getTag()).commit();
         }/* else if (id == R.id.nav_history) {

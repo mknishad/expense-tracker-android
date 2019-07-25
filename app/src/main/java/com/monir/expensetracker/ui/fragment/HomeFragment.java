@@ -268,7 +268,7 @@ public class HomeFragment extends Fragment {
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
         pieChart.invalidate();
-        pieChart.animateY(3000, Easing.EasingOption.Linear);
+        pieChart.animateY(2000, Easing.EasingOption.Linear);
     }
 
     private String getMonthString(int i) {
