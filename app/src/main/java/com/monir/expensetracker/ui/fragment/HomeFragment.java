@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -263,6 +264,9 @@ public class HomeFragment extends Fragment {
         colors.add(ResourcesCompat.getColor(getResources(), android.R.color.holo_red_light, null));
 
         pieDataSet.setColors(colors);
+
+        Legend l = pieChart.getLegend();
+        l.setForm(Legend.LegendForm.CIRCLE);
 
         //create pie data object
         PieData pieData = new PieData(pieDataSet);

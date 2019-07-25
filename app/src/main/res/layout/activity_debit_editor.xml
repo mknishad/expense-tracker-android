@@ -111,7 +111,7 @@
                     android:layout_height="160dp"
                     android:gravity="start"
                     android:hint="@string/description"
-                    android:inputType="textMultiLine"
+                    android:inputType="text|textCapSentences"
                     android:textSize="20sp" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
