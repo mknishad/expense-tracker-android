@@ -197,7 +197,7 @@ public class CreditStatisticsFragment extends Fragment {
         entries.add(new BarEntry(11, (float) dataSource.getTotalCreditAmountByMonth(11, year)));
         entries.add(new BarEntry(12, (float) dataSource.getTotalCreditAmountByMonth(12, year)));
 
-        BarDataSet barDataSet = new BarDataSet(entries, getResources().getString(R.string.year_expenses, year));
+        BarDataSet barDataSet = new BarDataSet(entries, getResources().getString(R.string.year_credits, year));
         barDataSet.setColor(ContextCompat.getColor(context, android.R.color.holo_green_light));
         ArrayList<IBarDataSet> iBarDataSets = new ArrayList<>();
         iBarDataSets.add(barDataSet);
