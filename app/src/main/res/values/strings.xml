@@ -52,6 +52,34 @@
     <!-- Dialog button text for the option to confirm deleting the current credit [CHAR LIMIT=20] -->
     <string name="delete">Delete</string>
 
+    <string name="title_activity_add_debit">AddDebitActivity</string>
+
+    <string name="home">Home</string>
+
+    <string name="debit">Debit</string>
+    <string name="credit">Credit</string>
+    <string name="balance">Balance</string>
+    <string name="history">History</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="debit_">DEBIT:</string>
+    <string name="credit_">CREDIT:</string>
+    <string name="balance_">BALANCE:</string>
+    <string name="date">Date</string>
+    <string name="category">Category</string>
+    <string name="amount">Amount</string>
+    <string name="description">Description</string>
+    <string name="debit_categories">Debit Categories</string>
+    <string name="credit_categories">Credit Categories</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="statistics">Statistics</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="year_debits">%d Debits</string>
+    <string name="year_credits">%d Credits</string>
+    <string name="privacy_policy">
+        <a href="https://mknishad.github.io/expense-tracker-android/">Privacy Policy</a>
+    </string>
     <string-array name="debit_categories">
         <item>Select a category</item>
         <item>Car</item>
@@ -77,35 +105,11 @@
         <item>Utility Bills</item>
         <item>Vacation</item>
     </string-array>
-
+    <!--    <string name="privacy_policy">Privacy Policy</string>-->
     <string-array name="credit_categories">
         <item>Select a category</item>
         <item>Salary</item>
         <item>Deposits</item>
         <item>Savings</item>
     </string-array>
-
-    <string name="title_activity_add_debit">AddDebitActivity</string>
-    <string name="home">Home</string>
-    <string name="debit">Debit</string>
-    <string name="credit">Credit</string>
-    <string name="balance">Balance</string>
-    <string name="history">History</string>
-    <string name="about">About</string>
-    <string name="help">Help</string>
-    <string name="debit_">DEBIT:</string>
-    <string name="credit_">CREDIT:</string>
-    <string name="balance_">BALANCE:</string>
-    <string name="date">Date</string>
-    <string name="category">Category</string>
-    <string name="amount">Amount</string>
-    <string name="description">Description</string>
-    <string name="debit_categories">Debit Categories</string>
-    <string name="credit_categories">Credit Categories</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="statistics">Statistics</string>
-    <string name="year_debits">%d Debits</string>
-    <string name="year_credits">%d Credits</string>
 </resources>
