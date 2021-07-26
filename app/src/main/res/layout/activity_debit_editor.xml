@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.DebitEditorActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_debit_date"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -53,9 +53,9 @@
                     android:hint="@string/date"
                     android:inputType="text|date"
                     android:textSize="20sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:visibility="gone"
                 android:id="@+id/input_layout_debit_category"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -71,7 +71,7 @@
                     android:hint="@string/category"
                     android:inputType="textCapWords"
                     android:textSize="20sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Spinner
                 android:id="@+id/categorySpinner"
@@ -80,7 +80,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_spinner" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_debit_amount"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -96,9 +96,9 @@
                     android:maxLines="1"
                     android:inputType="numberDecimal"
                     android:textSize="20sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_debit_description"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -113,11 +113,11 @@
                     android:hint="@string/description"
                     android:inputType="text|textCapSentences"
                     android:textSize="20sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </ScrollView>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_scan_debit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

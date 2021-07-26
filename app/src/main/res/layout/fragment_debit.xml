@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.DebitFragment">
 
-    <android.support.design.card.MaterialCardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/monthCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_chevron_right_gray_40dp" />
         </LinearLayout>
-    </android.support.design.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <ListView
         android:id="@+id/lv_debits"
@@ -91,7 +91,7 @@
         android:text="            No debit found!\nTap the button below to add."
         android:textSize="22sp" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_debit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.design.card.MaterialCardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/monthCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_chevron_right_gray_40dp" />
             </LinearLayout>
-        </android.support.design.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <ListView
             android:id="@+id/lv_credits"
@@ -98,7 +98,7 @@
         android:textSize="22sp"
         android:visibility="invisible" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_credit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
