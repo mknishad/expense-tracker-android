@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cropper/cropper.iml" filepath="$PROJECT_DIR$/cropper/cropper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/expense-tracker-android.iml" filepath="$PROJECT_DIR$/expense-tracker-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tess-two/tess-two.iml" filepath="$PROJECT_DIR$/tess-two/tess-two.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/expense-tracker-android.iml" filepath="$PROJECT_DIR$/.idea/modules/expense-tracker-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/expense-tracker-android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/expense-tracker-android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cropper/expense-tracker-android.cropper.iml" filepath="$PROJECT_DIR$/.idea/modules/cropper/expense-tracker-android.cropper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tess-two/expense-tracker-android.tess-two.iml" filepath="$PROJECT_DIR$/.idea/modules/tess-two/expense-tracker-android.tess-two.iml" />
     </modules>
   </component>
 </project>

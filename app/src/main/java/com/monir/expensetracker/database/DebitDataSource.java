@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.monir.expensetracker.model.Category;
-import com.monir.expensetracker.model.Credit;
 import com.monir.expensetracker.model.Debit;
 import com.monir.expensetracker.util.Constant;
 
@@ -16,391 +14,391 @@ import java.util.List;
 
 public class DebitDataSource {
 
-    private DatabaseHelper databaseHelper;
-    private SQLiteDatabase database;
+  private DatabaseHelper databaseHelper;
+  private SQLiteDatabase database;
 
-    public DebitDataSource(Context context) {
-        databaseHelper = new DatabaseHelper(context);
-    }
+  public DebitDataSource(Context context) {
+    databaseHelper = new DatabaseHelper(context);
+  }
 
-    // open the database for operation
-    private void open() {
-        database = databaseHelper.getWritableDatabase();
-    }
+  // open the database for operation
+  private void open() {
+    database = databaseHelper.getWritableDatabase();
+  }
 
-    // close the database
-    private void close() {
-        database.close();
-    }
+  // close the database
+  private void close() {
+    database.close();
+  }
 
-    // add a debit to Debit table
-    public boolean insertDebit(Debit debit) {
-        this.open();
+  // add a debit to Debit table
+  public boolean insertDebit(Debit debit) {
+    this.open();
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Constant.COL_DEBIT_DATE, debit.getDebitDate());
-        contentValues.put(Constant.COL_DEBIT_CATEGORY, debit.getDebitCategory());
-        contentValues.put(Constant.COL_DEBIT_DESCRIPTION, debit.getDebitDescription());
-        contentValues.put(Constant.COL_DEBIT_AMOUNT, debit.getDebitAmount());
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(Constant.COL_DEBIT_DATE, debit.getDebitDate());
+    contentValues.put(Constant.COL_DEBIT_CATEGORY, debit.getDebitCategory());
+    contentValues.put(Constant.COL_DEBIT_DESCRIPTION, debit.getDebitDescription());
+    contentValues.put(Constant.COL_DEBIT_AMOUNT, debit.getDebitAmount());
 
-        long inserted = database.insert(
-                Constant.TABLE_DEBIT,
-                null,
-                contentValues);
+    long inserted = database.insert(
+        Constant.TABLE_DEBIT,
+        null,
+        contentValues);
 
-        this.close();
+    this.close();
 
-        return inserted > 0;
-    }
+    return inserted > 0;
+  }
 
-    // get a single debit from the debit table by debit id
-    public Debit getDebit(int id) {
-        this.open();
+  // get a single debit from the debit table by debit id
+  public Debit getDebit(int id) {
+    this.open();
 
-        Cursor cursor = database.query(
-                Constant.TABLE_DEBIT,
-                new String[]{Constant.COL_ID,
-                        Constant.COL_DEBIT_DATE,
-                        Constant.COL_DEBIT_CATEGORY,
-                        Constant.COL_DEBIT_DESCRIPTION,
-                        Constant.COL_DEBIT_AMOUNT},
-                Constant.COL_ID + " = " + id,
-                null,
-                null,
-                null,
-                null);
+    Cursor cursor = database.query(
+        Constant.TABLE_DEBIT,
+        new String[]{Constant.COL_ID,
+            Constant.COL_DEBIT_DATE,
+            Constant.COL_DEBIT_CATEGORY,
+            Constant.COL_DEBIT_DESCRIPTION,
+            Constant.COL_DEBIT_AMOUNT},
+        Constant.COL_ID + " = " + id,
+        null,
+        null,
+        null,
+        null);
 
-        cursor.moveToFirst();
+    cursor.moveToFirst();
+    Debit debit = createDebit(cursor);
+    cursor.close();
+    this.close();
+
+    return debit;
+  }
+
+  // return all debits from debit table
+  public ArrayList<Debit> getAllDebits() {
+    ArrayList<Debit> debits = new ArrayList<>();
+    this.open();
+
+    Cursor cursor = database.rawQuery(
+        "SELECT * FROM " + Constant.TABLE_DEBIT,
+        null);
+
+    if (cursor != null && cursor.getCount() > 0) {
+      cursor.moveToFirst();
+      for (int i = 0; i < cursor.getCount(); i++) {
         Debit debit = createDebit(cursor);
-        cursor.close();
-        this.close();
-
-        return debit;
+        debits.add(debit);
+        cursor.moveToNext();
+      }
+    }
+    if (cursor != null) {
+      cursor.close();
+    }
+    if (database != null) {
+      database.close();
     }
 
-    // return all debits from debit table
-    public ArrayList<Debit> getAllDebits() {
-        ArrayList<Debit> debits = new ArrayList<>();
-        this.open();
+    return debits;
+  }
 
-        Cursor cursor = database.rawQuery(
-                "SELECT * FROM " + Constant.TABLE_DEBIT,
-                null);
+  // return debits by category from debit table
+  public ArrayList<Debit> getDebitsByCategory(String category) {
+    ArrayList<Debit> debits = new ArrayList<>();
+    this.open();
 
-        if (cursor != null && cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                Debit debit = createDebit(cursor);
-                debits.add(debit);
-                cursor.moveToNext();
-            }
-        }
-        if (cursor != null) {
-            cursor.close();
-        }
-        if (database != null) {
-            database.close();
-        }
+    Cursor cursor = database.rawQuery(
+        "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
+            Constant.COL_DEBIT_CATEGORY + " = ?",
+        new String[]{category});
 
-        return debits;
+    if (cursor != null && cursor.getCount() > 0) {
+      cursor.moveToFirst();
+      for (int i = 0; i < cursor.getCount(); i++) {
+        Debit debit = createDebit(cursor);
+        debits.add(debit);
+        cursor.moveToNext();
+      }
+    }
+    if (cursor != null) {
+      cursor.close();
+    }
+    if (database != null) {
+      database.close();
     }
 
-    // return debits by category from debit table
-    public ArrayList<Debit> getDebitsByCategory(String category) {
-        ArrayList<Debit> debits = new ArrayList<>();
-        this.open();
+    return debits;
+  }
 
-        Cursor cursor = database.rawQuery(
-                "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
-                        Constant.COL_DEBIT_CATEGORY + " = ?",
-                new String[]{category});
 
-        if (cursor != null && cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                Debit debit = createDebit(cursor);
-                debits.add(debit);
-                cursor.moveToNext();
-            }
-        }
-        if (cursor != null) {
-            cursor.close();
-        }
-        if (database != null) {
-            database.close();
-        }
+  // return credit by category from credit table
+  public List<Debit> getDebitsByCategoryAndMonth(String category, int month, int year) {
+    ArrayList<Debit> debits = new ArrayList<>();
+    this.open();
 
-        return debits;
+    Cursor cursor = database.rawQuery(
+        "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
+            Constant.COL_DEBIT_CATEGORY + " = ?",
+        new String[]{category});
+
+    if (cursor != null && cursor.getCount() > 0) {
+      cursor.moveToFirst();
+      for (int i = 0; i < cursor.getCount(); i++) {
+        Debit credit = createDebit(cursor);
+        debits.add(credit);
+        cursor.moveToNext();
+      }
+    }
+    if (cursor != null) {
+      cursor.close();
+    }
+    if (database != null) {
+      this.close();
     }
 
+    List<Debit> foundDebits = new ArrayList<>(debits);
 
-    // return credit by category from credit table
-    public List<Debit> getDebitsByCategoryAndMonth(String category, int month, int year) {
-        ArrayList<Debit> debits = new ArrayList<>();
-        this.open();
+    for (Debit d : debits) {
+      int firstIndex = d.getDebitDate().indexOf('-');
+      int lastIndex = d.getDebitDate().lastIndexOf('-');
+      int m = Integer.parseInt(d.getDebitDate().substring(firstIndex + 1, lastIndex));
+      int y = Integer.parseInt(d.getDebitDate().substring(lastIndex + 1));
 
-        Cursor cursor = database.rawQuery(
-                "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
-                        Constant.COL_DEBIT_CATEGORY + " = ?",
-                new String[]{category});
-
-        if (cursor != null && cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                Debit credit = createDebit(cursor);
-                debits.add(credit);
-                cursor.moveToNext();
-            }
-        }
-        if (cursor != null) {
-            cursor.close();
-        }
-        if (database != null) {
-            this.close();
-        }
-
-        List<Debit> foundDebits = new ArrayList<>(debits);
-
-        for (Debit d : debits) {
-            int firstIndex = d.getDebitDate().indexOf('-');
-            int lastIndex = d.getDebitDate().lastIndexOf('-');
-            int m = Integer.parseInt(d.getDebitDate().substring(firstIndex + 1, lastIndex));
-            int y = Integer.parseInt(d.getDebitDate().substring(lastIndex + 1));
-
-            if (m != month || y != year) {
-                foundDebits.remove(d);
-            }
-        }
-
-        return foundDebits;
+      if (m != month || y != year) {
+        foundDebits.remove(d);
+      }
     }
 
-    // return credit by category from debit table
-    public List<Debit> getDebitsByMonth(int month, int year) {
-        List<Debit> debits = new LinkedList<>();
-        this.open();
+    return foundDebits;
+  }
 
-        Cursor cursor = database.rawQuery(
-                "SELECT * FROM " + Constant.TABLE_DEBIT,
-                null);
+  // return credit by category from debit table
+  public List<Debit> getDebitsByMonth(int month, int year) {
+    List<Debit> debits = new LinkedList<>();
+    this.open();
 
-        if (cursor != null && cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                Debit debit = createDebit(cursor);
-                debits.add(debit);
-                cursor.moveToNext();
-            }
-        }
-        if (cursor != null) {
-            cursor.close();
-        }
-        if (database != null) {
-            database.close();
-        }
+    Cursor cursor = database.rawQuery(
+        "SELECT * FROM " + Constant.TABLE_DEBIT,
+        null);
 
-        List<Debit> foundDebits = new LinkedList<>(debits);
-
-        for (Debit d : debits) {
-            String date = d.getDebitDate();
-            int firstIndex = date.indexOf('-');
-            int lastIndex = date.lastIndexOf('-');
-            int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
-            int y = Integer.parseInt(date.substring(lastIndex + 1));
-
-            if (m != month || y != year) {
-                foundDebits.remove(d);
-            }
-        }
-
-        return foundDebits;
+    if (cursor != null && cursor.getCount() > 0) {
+      cursor.moveToFirst();
+      for (int i = 0; i < cursor.getCount(); i++) {
+        Debit debit = createDebit(cursor);
+        debits.add(debit);
+        cursor.moveToNext();
+      }
+    }
+    if (cursor != null) {
+      cursor.close();
+    }
+    if (database != null) {
+      database.close();
     }
 
-    // return all debit amounts from a specific date
-    public List<Debit> getDebitsInThisDate(String date) {
-        List<Debit> debits = new ArrayList<>();
-        this.open();
+    List<Debit> foundDebits = new LinkedList<>(debits);
 
-        Cursor cursor = database.rawQuery(
-                "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
-                        Constant.COL_DEBIT_DATE + " = ?",
-                new String[]{date});
+    for (Debit d : debits) {
+      String date = d.getDebitDate();
+      int firstIndex = date.indexOf('-');
+      int lastIndex = date.lastIndexOf('-');
+      int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
+      int y = Integer.parseInt(date.substring(lastIndex + 1));
 
-        if (cursor != null && cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                Debit debit = createDebit(cursor);
-                debits.add(debit);
-                cursor.moveToNext();
-            }
-        }
-
-        if (cursor != null)
-            cursor.close();
-        if (database != null)
-            database.close();
-
-        return debits;
+      if (m != month || y != year) {
+        foundDebits.remove(d);
+      }
     }
 
-    // update a debit with a given value
-    public boolean updateDebit(int id, Debit debit) {
-        this.open();
+    return foundDebits;
+  }
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Constant.COL_DEBIT_DATE, debit.getDebitDate());
-        contentValues.put(Constant.COL_DEBIT_CATEGORY, debit.getDebitCategory());
-        contentValues.put(Constant.COL_DEBIT_DESCRIPTION, debit.getDebitDescription());
-        contentValues.put(Constant.COL_DEBIT_AMOUNT, debit.getDebitAmount());
+  // return all debit amounts from a specific date
+  public List<Debit> getDebitsInThisDate(String date) {
+    List<Debit> debits = new ArrayList<>();
+    this.open();
 
-        int updated = database.update(
-                Constant.TABLE_DEBIT,
-                contentValues,
-                Constant.COL_ID + " = ?",
-                new String[]{String.valueOf(id)});
-        this.close();
+    Cursor cursor = database.rawQuery(
+        "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
+            Constant.COL_DEBIT_DATE + " = ?",
+        new String[]{date});
 
-        return updated > 0;
+    if (cursor != null && cursor.getCount() > 0) {
+      cursor.moveToFirst();
+      for (int i = 0; i < cursor.getCount(); i++) {
+        Debit debit = createDebit(cursor);
+        debits.add(debit);
+        cursor.moveToNext();
+      }
     }
 
-    // delete a debit from debit table by debit id
-    public boolean deleteDebit(int id) {
-        this.open();
+    if (cursor != null)
+      cursor.close();
+    if (database != null)
+      database.close();
 
-        int deleted = database.delete(
-                Constant.TABLE_DEBIT, Constant.COL_ID + " = ?",
-                new String[]{String.valueOf(id)});
-        this.close();
+    return debits;
+  }
 
-        return deleted > 0;
+  // update a debit with a given value
+  public boolean updateDebit(int id, Debit debit) {
+    this.open();
+
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(Constant.COL_DEBIT_DATE, debit.getDebitDate());
+    contentValues.put(Constant.COL_DEBIT_CATEGORY, debit.getDebitCategory());
+    contentValues.put(Constant.COL_DEBIT_DESCRIPTION, debit.getDebitDescription());
+    contentValues.put(Constant.COL_DEBIT_AMOUNT, debit.getDebitAmount());
+
+    int updated = database.update(
+        Constant.TABLE_DEBIT,
+        contentValues,
+        Constant.COL_ID + " = ?",
+        new String[]{String.valueOf(id)});
+    this.close();
+
+    return updated > 0;
+  }
+
+  // delete a debit from debit table by debit id
+  public boolean deleteDebit(int id) {
+    this.open();
+
+    int deleted = database.delete(
+        Constant.TABLE_DEBIT, Constant.COL_ID + " = ?",
+        new String[]{String.valueOf(id)});
+    this.close();
+
+    return deleted > 0;
+  }
+
+  // return total amount of debits
+  public double getTotalDebitAmount() {
+    this.open();
+    Cursor c = database.rawQuery(
+        "SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT,
+        null);
+    c.moveToFirst();
+    double amount = c.getDouble(0);
+    c.close();
+    return amount;
+  }
+
+  public double getTotalDebitAmountByCategory(String category) {
+    this.open();
+    Cursor c = database.rawQuery(
+        "SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT +
+            " WHERE " + Constant.COL_DEBIT_CATEGORY + " = ?",
+        new String[]{category});
+    c.moveToFirst();
+    double amount = c.getDouble(0);
+    c.close();
+    return amount;
+  }
+
+  // return total credit amount by category and month
+  public double getTotalDebitAmountByCategoryAndMonth(String category, int month, int year) {
+    List<Debit> debits = new LinkedList<>();
+    double totalDebit = 0;
+    this.open();
+    Cursor cursor = database.rawQuery(
+        "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
+            Constant.COL_DEBIT_CATEGORY + " = ?",
+        new String[]{category});
+
+    if (cursor != null && cursor.getCount() > 0) {
+      cursor.moveToFirst();
+      for (int i = 0; i < cursor.getCount(); i++) {
+        Debit debit = createDebit(cursor);
+        debits.add(debit);
+        cursor.moveToNext();
+      }
     }
 
-    // return total amount of debits
-    public double getTotalDebitAmount() {
-        this.open();
-        Cursor c = database.rawQuery(
-                "SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT,
-                null);
-        c.moveToFirst();
-        double amount = c.getDouble(0);
-        c.close();
-        return amount;
+    if (cursor != null) {
+      cursor.close();
+    }
+    if (database != null) {
+      database.close();
     }
 
-    public double getTotalDebitAmountByCategory(String category) {
-        this.open();
-        Cursor c = database.rawQuery(
-                "SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT +
-                        " WHERE " + Constant.COL_DEBIT_CATEGORY + " = ?",
-                new String[]{category});
-        c.moveToFirst();
-        double amount = c.getDouble(0);
-        c.close();
-        return amount;
+    for (Debit d : debits) {
+      String date = d.getDebitDate();
+      int firstIndex = date.indexOf('-');
+      int lastIndex = date.lastIndexOf('-');
+      int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
+      int y = Integer.parseInt(date.substring(lastIndex + 1));
+      if (m != month || y != year) {
+        continue;
+      }
+      totalDebit += d.getDebitAmount();
     }
 
-    // return total credit amount by category and month
-    public double getTotalDebitAmountByCategoryAndMonth(String category, int month, int year) {
-        List<Debit> debits = new LinkedList<>();
-        double totalDebit = 0;
-        this.open();
-        Cursor cursor = database.rawQuery(
-                "SELECT * FROM " + Constant.TABLE_DEBIT + " WHERE " +
-                        Constant.COL_DEBIT_CATEGORY + " = ?",
-                new String[]{category});
+    return totalDebit;
+  }
 
-        if (cursor != null && cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                Debit debit = createDebit(cursor);
-                debits.add(debit);
-                cursor.moveToNext();
-            }
-        }
+  // return total debit amount by month
+  public double getTotalDebitAmountByMonth(int month, int year) {
+    List<Debit> debits = new LinkedList<>();
+    double totalDebit = 0;
+    this.open();
 
-        if (cursor != null) {
-            cursor.close();
-        }
-        if (database != null) {
-            database.close();
-        }
+    Cursor cursor = database.rawQuery(
+        "SELECT * FROM " + Constant.TABLE_DEBIT,
+        null);
 
-        for (Debit d : debits) {
-            String date = d.getDebitDate();
-            int firstIndex = date.indexOf('-');
-            int lastIndex = date.lastIndexOf('-');
-            int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
-            int y = Integer.parseInt(date.substring(lastIndex + 1));
-            if (m != month || y != year) {
-                continue;
-            }
-            totalDebit += d.getDebitAmount();
-        }
-
-        return totalDebit;
+    if (cursor != null && cursor.getCount() > 0) {
+      cursor.moveToFirst();
+      for (int i = 0; i < cursor.getCount(); i++) {
+        Debit debit = createDebit(cursor);
+        debits.add(debit);
+        cursor.moveToNext();
+      }
+    }
+    if (cursor != null) {
+      cursor.close();
+    }
+    if (database != null) {
+      database.close();
     }
 
-    // return total debit amount by month
-    public double getTotalDebitAmountByMonth(int month, int year) {
-        List<Debit> debits = new LinkedList<>();
-        double totalDebit = 0;
-        this.open();
+    for (Debit d : debits) {
+      String date = d.getDebitDate();
+      int firstIndex = date.indexOf('-');
+      int lastIndex = date.lastIndexOf('-');
+      int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
+      int y = Integer.parseInt(date.substring(lastIndex + 1));
 
-        Cursor cursor = database.rawQuery(
-                "SELECT * FROM " + Constant.TABLE_DEBIT,
-                null);
-
-        if (cursor != null && cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                Debit debit = createDebit(cursor);
-                debits.add(debit);
-                cursor.moveToNext();
-            }
-        }
-        if (cursor != null) {
-            cursor.close();
-        }
-        if (database != null) {
-            database.close();
-        }
-
-        for (Debit d : debits) {
-            String date = d.getDebitDate();
-            int firstIndex = date.indexOf('-');
-            int lastIndex = date.lastIndexOf('-');
-            int m = Integer.parseInt(date.substring(firstIndex + 1, lastIndex));
-            int y = Integer.parseInt(date.substring(lastIndex + 1));
-
-            if (m != month || y != year) {
-                continue;
-            }
-            totalDebit += d.getDebitAmount();
-        }
-
-        return totalDebit;
+      if (m != month || y != year) {
+        continue;
+      }
+      totalDebit += d.getDebitAmount();
     }
 
-    // return total amount of debits
-    public double getTotalDebitAmountOnThisYear(int year) {
-        this.open();
-        Cursor c = database.rawQuery(
-                "SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT,
-                null);
-        c.moveToFirst();
-        double amount = c.getDouble(0);
-        c.close();
-        return amount;
-    }
+    return totalDebit;
+  }
 
-    // create a debit from cursor data
-    private Debit createDebit(Cursor cursor) {
-        int id = cursor.getInt(cursor.getColumnIndex(Constant.COL_ID));
-        String debitDate = cursor.getString(cursor.getColumnIndex(Constant.COL_DEBIT_DATE));
-        String debitCategory = cursor.getString(cursor.getColumnIndex(Constant.COL_DEBIT_CATEGORY));
-        String debitDescription = cursor.getString(cursor.getColumnIndex(Constant.COL_DEBIT_DESCRIPTION));
-        Double debitAmount = cursor.getDouble(cursor.getColumnIndex(Constant.COL_DEBIT_AMOUNT));
+  // return total amount of debits
+  public double getTotalDebitAmountOnThisYear(int year) {
+    this.open();
+    Cursor c = database.rawQuery(
+        "SELECT SUM(" + Constant.COL_DEBIT_AMOUNT + ") FROM " + Constant.TABLE_DEBIT,
+        null);
+    c.moveToFirst();
+    double amount = c.getDouble(0);
+    c.close();
+    return amount;
+  }
 
-        return new Debit(id, debitDate, debitCategory, debitDescription, debitAmount);
-    }
+  // create a debit from cursor data
+  private Debit createDebit(Cursor cursor) {
+    int id = cursor.getInt(cursor.getColumnIndex(Constant.COL_ID));
+    String debitDate = cursor.getString(cursor.getColumnIndex(Constant.COL_DEBIT_DATE));
+    String debitCategory = cursor.getString(cursor.getColumnIndex(Constant.COL_DEBIT_CATEGORY));
+    String debitDescription = cursor.getString(cursor.getColumnIndex(Constant.COL_DEBIT_DESCRIPTION));
+    Double debitAmount = cursor.getDouble(cursor.getColumnIndex(Constant.COL_DEBIT_AMOUNT));
+
+    return new Debit(id, debitDate, debitCategory, debitDescription, debitAmount);
+  }
 }

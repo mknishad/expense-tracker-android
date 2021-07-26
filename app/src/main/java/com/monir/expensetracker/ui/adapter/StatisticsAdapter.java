@@ -16,34 +16,36 @@ import com.monir.expensetracker.ui.fragment.DebitStatisticsFragment;
 
 public class StatisticsAdapter extends FragmentPagerAdapter {
 
-    /** Context of the app */
-    private Context mContext;
+  /**
+   * Context of the app
+   */
+  private Context mContext;
 
-    public StatisticsAdapter(Context context, FragmentManager fm) {
-        super(fm);
-        mContext = context;
-    }
+  public StatisticsAdapter(Context context, FragmentManager fm) {
+    super(fm);
+    mContext = context;
+  }
 
-    @Override
-    public Fragment getItem(int position) {
-        if (position == 0) {
-            return new CreditStatisticsFragment();
-        } else {
-            return new DebitStatisticsFragment();
-        }
+  @Override
+  public Fragment getItem(int position) {
+    if (position == 0) {
+      return new CreditStatisticsFragment();
+    } else {
+      return new DebitStatisticsFragment();
     }
+  }
 
-    @Override
-    public int getCount() {
-        return 2;
-    }
+  @Override
+  public int getCount() {
+    return 2;
+  }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        if (position == 0) {
-            return mContext.getString(R.string.credit);
-        }else {
-            return mContext.getString(R.string.debit);
-        }
+  @Override
+  public CharSequence getPageTitle(int position) {
+    if (position == 0) {
+      return mContext.getString(R.string.credit);
+    } else {
+      return mContext.getString(R.string.debit);
     }
+  }
 }

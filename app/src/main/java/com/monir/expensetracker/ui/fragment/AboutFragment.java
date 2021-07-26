@@ -17,27 +17,27 @@ import com.monir.expensetracker.R;
  */
 public class AboutFragment extends Fragment {
 
-    private Context context;
+  private Context context;
 
-    public AboutFragment() {
-        // Required empty public constructor
-    }
+  public AboutFragment() {
+    // Required empty public constructor
+  }
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
 
-        context = getActivity().getApplicationContext();
+    context = getActivity().getApplicationContext();
 
-        getActivity().setTitle("About");
+    getActivity().setTitle("About");
 
-        View view = inflater.inflate(R.layout.fragment_about, container, false);
+    View view = inflater.inflate(R.layout.fragment_about, container, false);
 
-        TextView privacyPolicyTextView = view.findViewById(R.id.privacyPolicyTextView);
-        privacyPolicyTextView.setMovementMethod(LinkMovementMethod.getInstance());
+    TextView privacyPolicyTextView = view.findViewById(R.id.privacyPolicyTextView);
+    privacyPolicyTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        return view;
-    }
+    return view;
+  }
 }

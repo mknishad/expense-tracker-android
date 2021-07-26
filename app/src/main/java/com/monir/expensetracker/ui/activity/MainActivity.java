@@ -16,123 +16,121 @@ import android.view.MenuItem;
 import com.monir.expensetracker.R;
 import com.monir.expensetracker.ui.fragment.AboutFragment;
 import com.monir.expensetracker.ui.fragment.CreditFragment;
-import com.monir.expensetracker.ui.fragment.CreditStatisticsFragment;
 import com.monir.expensetracker.ui.fragment.DebitFragment;
 import com.monir.expensetracker.ui.fragment.HelpFragment;
 import com.monir.expensetracker.ui.fragment.HomeFragment;
-import com.monir.expensetracker.ui.fragment.DebitStatisticsFragment;
 import com.monir.expensetracker.ui.fragment.StatisticsFragment;
 import com.monir.expensetracker.util.CalendarCollection;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+    implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    FragmentManager fragmentManager;
-    NavigationView navigationView;
-    DrawerLayout drawer;
+  FragmentManager fragmentManager;
+  NavigationView navigationView;
+  DrawerLayout drawer;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    Toolbar toolbar = findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
 
-        drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+    drawer = findViewById(R.id.drawer_layout);
+    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+    drawer.addDrawerListener(toggle);
+    toggle.syncState();
 
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+    navigationView = findViewById(R.id.nav_view);
+    navigationView.setNavigationItemSelectedListener(this);
 
-        fragmentManager = getSupportFragmentManager();
+    fragmentManager = getSupportFragmentManager();
 
-        //Add the calendar list
-        CalendarCollection.calendarCollections = new ArrayList<>();
-        CalendarCollection.calendarCollections.add(new CalendarCollection("2019-05-01", "John Birthday"));
-        CalendarCollection.calendarCollections.add(new CalendarCollection("2015-04-04", "Client Meeting at 5 p.m."));
-        CalendarCollection.calendarCollections.add(new CalendarCollection("2015-04-06", "A Small Party at my office"));
-        CalendarCollection.calendarCollections.add(new CalendarCollection("2015-05-02", "Marriage Anniversary"));
-        CalendarCollection.calendarCollections.add(new CalendarCollection("2015-04-11", "Live Event and Concert of sonu"));
+    //Add the calendar list
+    CalendarCollection.calendarCollections = new ArrayList<>();
+    CalendarCollection.calendarCollections.add(new CalendarCollection("2019-05-01", "John Birthday"));
+    CalendarCollection.calendarCollections.add(new CalendarCollection("2015-04-04", "Client Meeting at 5 p.m."));
+    CalendarCollection.calendarCollections.add(new CalendarCollection("2015-04-06", "A Small Party at my office"));
+    CalendarCollection.calendarCollections.add(new CalendarCollection("2015-05-02", "Marriage Anniversary"));
+    CalendarCollection.calendarCollections.add(new CalendarCollection("2015-04-11", "Live Event and Concert of sonu"));
 
 
-        // set debit as home fragment
-        setFragment(R.id.nav_home);
-    }
+    // set debit as home fragment
+    setFragment(R.id.nav_home);
+  }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+  @Override
+  public boolean onNavigationItemSelected(MenuItem item) {
+    // Handle navigation view item clicks here.
+    int id = item.getItemId();
 
-        setFragment(id);
+    setFragment(id);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+    drawer.closeDrawer(GravityCompat.START);
+    return true;
+  }
 
-    private void setFragment(int id) {
-        if (id == R.id.nav_home) {
-            HomeFragment homeFragment = new HomeFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, homeFragment,
-                    homeFragment.getTag()).commit();
-        } else if (id == R.id.nav_debit) {
-            DebitFragment debitFragment = new DebitFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, debitFragment,
-                    debitFragment.getTag()).commit();
-        } else if (id == R.id.nav_credit) {
-            CreditFragment creditFragment = new CreditFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, creditFragment,
-                    creditFragment.getTag()).commit();
-        } else if (id == R.id.nav_statistics) {
-            StatisticsFragment statisticsFragment = new StatisticsFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, statisticsFragment,
-                    statisticsFragment.getTag()).commit();
-        }/* else if (id == R.id.nav_history) {
+  private void setFragment(int id) {
+    if (id == R.id.nav_home) {
+      HomeFragment homeFragment = new HomeFragment();
+      fragmentManager.beginTransaction().replace(R.id.rlContent, homeFragment,
+          homeFragment.getTag()).commit();
+    } else if (id == R.id.nav_debit) {
+      DebitFragment debitFragment = new DebitFragment();
+      fragmentManager.beginTransaction().replace(R.id.rlContent, debitFragment,
+          debitFragment.getTag()).commit();
+    } else if (id == R.id.nav_credit) {
+      CreditFragment creditFragment = new CreditFragment();
+      fragmentManager.beginTransaction().replace(R.id.rlContent, creditFragment,
+          creditFragment.getTag()).commit();
+    } else if (id == R.id.nav_statistics) {
+      StatisticsFragment statisticsFragment = new StatisticsFragment();
+      fragmentManager.beginTransaction().replace(R.id.rlContent, statisticsFragment,
+          statisticsFragment.getTag()).commit();
+    }/* else if (id == R.id.nav_history) {
             HistoryFragment historyFragment = new HistoryFragment();
             fragmentManager.beginTransaction().replace(R.id.rlContent, historyFragment,
             historyFragment.getTag()).commit();
         }*/ else if (id == R.id.nav_about) {
-            AboutFragment aboutFragment = new AboutFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, aboutFragment,
-                    aboutFragment.getTag()).commit();
-        } else if (id == R.id.nav_help) {
-            HelpFragment helpFragment = new HelpFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, helpFragment,
-                    helpFragment.getTag()).commit();
-        }
+      AboutFragment aboutFragment = new AboutFragment();
+      fragmentManager.beginTransaction().replace(R.id.rlContent, aboutFragment,
+          aboutFragment.getTag()).commit();
+    } else if (id == R.id.nav_help) {
+      HelpFragment helpFragment = new HelpFragment();
+      fragmentManager.beginTransaction().replace(R.id.rlContent, helpFragment,
+          helpFragment.getTag()).commit();
     }
+  }
 
-    @Override
-    public void onBackPressed() {
-        drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (checkNavigationMenuItem() != 0) {
-            navigationView.setCheckedItem(R.id.nav_home);
-            HomeFragment homeFragment = new HomeFragment();
-            fragmentManager.beginTransaction().replace(R.id.rlContent, homeFragment, homeFragment.getTag()).commit();
-        } else
-            super.onBackPressed();
-    }
+  @Override
+  public void onBackPressed() {
+    drawer = findViewById(R.id.drawer_layout);
+    if (drawer.isDrawerOpen(GravityCompat.START)) {
+      drawer.closeDrawer(GravityCompat.START);
+    } else if (checkNavigationMenuItem() != 0) {
+      navigationView.setCheckedItem(R.id.nav_home);
+      HomeFragment homeFragment = new HomeFragment();
+      fragmentManager.beginTransaction().replace(R.id.rlContent, homeFragment, homeFragment.getTag()).commit();
+    } else
+      super.onBackPressed();
+  }
 
-    private int checkNavigationMenuItem() {
-        Menu menu = navigationView.getMenu();
-        for (int i = 0; i < menu.size(); i++) {
-            if (menu.getItem(i).isChecked())
-                return i;
-        }
-        return -1;
+  private int checkNavigationMenuItem() {
+    Menu menu = navigationView.getMenu();
+    for (int i = 0; i < menu.size(); i++) {
+      if (menu.getItem(i).isChecked())
+        return i;
     }
+    return -1;
+  }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+  }
 }
