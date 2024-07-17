@@ -5,7 +5,7 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-  compileSdk 33
+  compileSdk 34
   signingConfigs {
     release {
       keyAlias keystoreProperties['keyAlias']
@@ -17,7 +17,7 @@ android {
   defaultConfig {
     applicationId "com.monir.expensetracker"
     minSdk 21
-    targetSdk 33
+    targetSdk 34
     versionCode 4
     versionName "1.0.4"
     signingConfig signingConfigs.release
